@@ -7,7 +7,7 @@
 }
 
 window#waybar {
-    background: transparent;
+    background: linear-gradient(to bottom, rgba(54, 58, 79, 0.8), rgba(54, 58, 79, 0));
     color: white;
 }
 
@@ -51,7 +51,7 @@ window#waybar {
     border-bottom: 3px solid white;
 }
 
-#clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode {
+#clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode, #temperature {
     padding: 0 12px;
     margin: 0 2px;
 }
@@ -61,14 +61,14 @@ window#waybar {
 }
 
 
-@keyframes blink {
+/*@keyframes blink {
     to {
         background-color: #ffffff;
         color: black;
     }
 
 }
-
+*/
 #cpu {
 }
 
