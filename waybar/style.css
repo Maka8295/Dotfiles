@@ -1,0 +1,97 @@
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "azukifontB";
+    font-size: 19px;
+    min-height: 0;
+}
+
+window#waybar {
+    background: transparent;
+    color: white;
+}
+
+#window {
+    font-weight: bold;
+    font-family: "azukifontB";
+}
+/*
+#workspaces {
+    padding: 0 5px;
+}
+*/
+
+#workspaces button {
+    padding: 4 8px;
+    background: transparent;
+    color: white;
+    border-top: 2px solid transparent;
+}
+
+#workspaces button.active {
+  background: #7abfff;
+  font-family: "azukifontB";
+  /*color: #ffffff;
+  border-radius: 13px;
+  border-color: #A020FF; */
+  border-radius: 0px 0px 10px 10px;/*
+  animation: gradient_f 20s ease-in infinite; */
+  transition: all 0.3s /*cubic-bezier(0.55, -0.68, 0.48, 1.682); */
+}
+/*
+#workspaces button:hover {
+  background: #d0ddd6;
+  color: #313244;
+  animation: gradient_f 20s ease-in infinite;
+  transition: all 0.3s cubic-bezier(0.55, -0.68, 0.48, 1.682);
+}
+*/
+#mode {
+    background: #64727D;
+    border-bottom: 3px solid white;
+}
+
+#clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode {
+    padding: 0 12px;
+    margin: 0 2px;
+}
+
+#clock {
+    font-weight: bold;
+}
+
+
+@keyframes blink {
+    to {
+        background-color: #ffffff;
+        color: black;
+    }
+
+}
+
+#cpu {
+}
+
+#memory {
+}
+
+#network {
+}
+
+#network.disconnected {
+    background: #f53c3c;
+}
+
+#pulseaudio {
+}
+
+#pulseaudio.muted {
+}
+
+#custom-spotify {
+    color: rgb(102, 220, 105);
+}
+
+#tray {
+}
+

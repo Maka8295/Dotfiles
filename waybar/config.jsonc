@@ -1,0 +1,86 @@
+{
+    "layer": "top", // Waybar at top layer
+    "output": "DP-3",
+    "position": "top", // Waybar at the bottom of your screen
+    "height": 20, // Waybar height
+
+    // "width": 1366, // Waybar width
+    // Choose the order of the modules
+   // "modules-right": ["hyprland/window"],
+    "modules-left": ["clock", "pulseaudio", "temperature", "cpu", "memory", "tray"],
+    "modules-center": ["hyprland/workspaces"],
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "format": "{icon}",
+        "format-icons": {
+            "1": "零",
+	    "2": "初",
+	    "3": "弐",
+	    "4": "参",
+	    "5": "四",
+	    "6": "五"
+        }
+    },
+    "hyprland/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10
+    },
+    "clock": {
+        "format": "{:%H:%M %m/%d}",
+	"tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+          "format": {
+            "months": "<span color='#7abfff'><b>{}</b></span>",
+            "today": "<span color='#7abfff'><b>{}</b></span>",
+	//"tooltip-format": "{tz_list}",
+	//"timezones": [
+	//	"Asia/Tokyo",
+	//	"Europe/London"
+	//]
+	  }
+	}
+    
+
+
+    },
+    "cpu": {
+        "format": "CPU {usage}% {max_frequency}GHz {avg_frequency}GHz"
+    },
+    "memory": {
+        "format": "RAM {}%"
+    },
+    "network": {
+        // "interface": "wlp2s0", // (Optional) To force the use of this interface
+        "format-wifi": "{essid} ({signalStrength}%) ",
+        "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
+        "format-disconnected": "Disconnected ⚠"
+    },
+    "pulseaudio": {
+        //"scroll-step": 1,
+        "format": "{volume}% {icon}",
+        "format-bluetooth": "{volume}% {icon}",
+        "format-muted": "",
+        "format-icons": {
+            "default": ["", ""]
+	},
+	"on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+	"on-click-right": "pavucontrol",
+
+    },
+    "temperature": {
+        "thermal-zone": 2,
+        "hwmon-path": "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon3/temp1_input",
+        "critical-threshold": 80,
+        "format-critical": "{temperatureC}°C {icon}",
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": [""],
+	"interval": 1
+    },
+}
+
+
+}
