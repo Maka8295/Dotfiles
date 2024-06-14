@@ -21,31 +21,39 @@ window#waybar {
 }
 */
 
-#workspaces button {
-    padding: 4 8px;
-    background: transparent;
+#workspaces /*button*/ {
+    /*padding: 4 8px;
+    background: #ed8796;
+    border: 3px solid #595959;
+    border-top: 0px;*/
     color: white;
-    border-top: 2px solid transparent;
+    border-radius: 0px 0px 10px 10px;
 }
 
+
+
 #workspaces button.active {
-  background: #7abfff;
+  background: #8aadf4;
   font-family: "azukifontB";
   /*color: #ffffff;
   border-radius: 13px;
   border-color: #A020FF; */
+  /*border: 2px solid #8aadf4;*/
   border-radius: 0px 0px 10px 10px;/*
   animation: gradient_f 20s ease-in infinite; */
+  transition: all 0.3s; /*cubic-bezier(0.55, -0.68, 0.48, 1.682); */
+}
+
+#workspaces button:hover {
+  background: #8aadf4;
+  color: white;
+  outline: none;
+  box-shadow: none;
+  border-radius: 0px 0px 10px 10px;
+  /*animation: gradient_f 20s ease-in infinite;*/
   transition: all 0.3s /*cubic-bezier(0.55, -0.68, 0.48, 1.682); */
 }
-/*
-#workspaces button:hover {
-  background: #d0ddd6;
-  color: #313244;
-  animation: gradient_f 20s ease-in infinite;
-  transition: all 0.3s cubic-bezier(0.55, -0.68, 0.48, 1.682);
-}
-*/
+
 #mode {
     background: #64727D;
     border-bottom: 3px solid white;
@@ -57,7 +65,10 @@ window#waybar {
 }
 
 #clock {
-    font-weight: bold;
+    /*font-weight: bold;
+    background: #f5a97f;
+    border-color: transparent;
+    border-radius: 0px 0px 10px 10px; */
 }
 
 
@@ -93,5 +104,7 @@ window#waybar {
 }
 
 #tray {
+   /* background: #c6a0f6;
+    border-radius: 0px 0px 10px 10px; */
 }
 
