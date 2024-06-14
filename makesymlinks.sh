@@ -13,6 +13,10 @@ sudo ln -sf ~/Dotfiles/cursor/miku-cursor-linux /usr/share/icons
 echo "Creating symbolic links for fonts..."
 ln -sf ~/Dotfiles/fonts ~/.local/share
 
+# font config
+echo "Creating symbolic links for font config..."
+ln -sf ~/Dotfiles/fontconfig ~/.config
+
 # fuzzel
 echo "Creating symbolic links for fuzzel..."
 ln -sf ~/Dotfiles/fuzzel ~/.config
@@ -24,6 +28,10 @@ ln -sf ~/Dotfiles/hypr ~/.config
 # kitty
 echo "Creating symbolic links for kitty..."
 ln -sf ~/Dotfiles/kitty ~/.config
+
+# alacritty
+echo "Creating symbolic links for alacritty..."
+ln -sf ~/Dotfiles/alacritty ~/.config
 
 # nvim
 echo "Creating symbolic links for nvim..."
