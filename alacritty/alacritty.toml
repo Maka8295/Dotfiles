@@ -12,5 +12,5 @@ opacity = 0.8
 #decorations = "Full"
 
 [font]
-normal = { family = "scientifica", style = "medium" }
+normal = { family = "mononoki", style = "regular" }
 size = 24
