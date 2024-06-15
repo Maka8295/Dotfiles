@@ -61,4 +61,8 @@ ln -sf ~/Dotfiles/neofetch ~/.config
 echo "Creating symbolic links for yazi..."
 ln -sf ~/Dotfiles/yazi ~/.config
 
+# cava
+echo "Creating symbolic links for cava..."
+ln -sf ~/Dotfiles/cava ~/.config
+
 echo "Finished!"
