@@ -65,4 +65,8 @@ ln -sf ~/Dotfiles/yazi ~/.config
 echo "Creating symbolic links for cava..."
 ln -sf ~/Dotfiles/cava ~/.config
 
+# fish
+echo "Creating symbolic links for fish..."
+ln -sf ~/Dotfiles/fish ~/.config
+
 echo "Finished!"
