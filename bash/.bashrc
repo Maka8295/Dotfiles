@@ -23,4 +23,19 @@ export SDL_IM_MODULE='fcitx'
 export XMODIFIERS='@im=fcitx'
 
 # setting default text editor
-export EDITOR=nvim 
+export EDITOR=nvim
+
+# turrning off translucency for nvim
+
+nvim() {
+
+    # Set background opacity to 1 (opaque)
+    kitty @ set-background-opacity 1
+
+    # Launch Neovim
+    command nvim "$@"
+
+    # Restore the original background opacity when Neovim exits
+    kitty @ set-background-opacity 0.8
+}
+
