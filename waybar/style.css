@@ -59,7 +59,7 @@ window#waybar {
     border-bottom: 3px solid white;
 }
 
-#clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode, #temperature {
+#clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode, #temperature, #temperature#temp2 {
     padding: 0 12px;
     margin: 0 2px;
 }
@@ -81,6 +81,12 @@ window#waybar {
 }
 */
 #cpu {
+}
+
+#temperature {
+}
+
+#temperature#temp2{
 }
 
 #memory {
