@@ -22,3 +22,6 @@ function nvim
     kitty @ set-background-opacity 1
 end
 
+
+# Created by `pipx` on 2024-07-16 11:13:12
+set PATH $PATH /home/maka/.local/bin
