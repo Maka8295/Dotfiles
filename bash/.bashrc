@@ -2,6 +2,9 @@
 # ~/.bashrc
 #
 
+# making RADV the default graphics driver to fix ZED
+export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radv_icd.json
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
