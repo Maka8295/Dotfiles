@@ -1,6 +1,6 @@
 {
     "layer": "top", // Waybar at top layer
-    "output": "DP-3",
+    "output": "HDMI-A-1",
     "position": "top", // Waybar at the bottom of your screen
     "height": 20, // Waybar height
 
