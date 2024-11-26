@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+
+
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>Home | Sanders of Oxford</title>
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
+
+    
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="/blog/feeds/rss/">
+        <link rel="alternate" type="application/atom+xml" title="Atom" href="/blog/feeds/atom/">
+    
+
+    
+        <!-- <link rel="stylesheet" href="/static/css/bootstrap.min.css"> -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/css/carousel.css">
+        <link rel="stylesheet" href="/static/css/mezzanine.css">
+        <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="stylesheet" href="/static/skins/default.css">
+
+        
+
+        
+            <link rel="stylesheet" href="/static/css/cartridge.css">
+            
+        
+        
+        
+
+            <meta property="twitter:card" content="summary_large_image"/>
+            <meta property="og:site_name" content="Sanders of Oxford"/>
+            <meta property="og:type" content="website"/>
+        
+    <meta property="og:url" content="https://www.sandersofoxford.com/"/>
+    <meta property="og:title" content="Welcome"/>
+    <meta property="og:image" content="http://www.sandersofoxford.com/static/media/uploads/front-of-shop.jpg"/>
+    <meta property="og:description" content="Sanders of Oxford is one of the largest print sellers in Britain, and features a varied and wide-ranging stock of more than 30,000 items. Our shop has long been a landmark on the High Street, continuing a tradition established in the middle of the 19th century of trading in antique prints, antique maps and drawings."/>
+
+
+    
+
+    
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        
+        
+        
+
+
+
+
+
+
+
+
+    
+
+    <link href='https://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    
+</head>
+
+<body id="body">
+<div id="wrapper">
+    <header>
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+
+                    <div class="btn-group pull-right">
+                        <a href="/shop/cart/" class="btn btn-default navbar-toggle">
+                            <i class="fa fa-shopping-cart"></i>
+                        </a>
+                        <a href="/search/" class="btn btn-default navbar-toggle">
+                            <i class="fa fa-search"></i>
+                        </a>
+              <button type="button" class="btn btn-default navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                    </div>
+
+                    <a class="navbar-brand" href="/">
+                        <img src="/media/uploads/.thumbnails/banner_full_small.jpg/banner_full_small-512x0.jpg" alt="Banner" />
+                    </a>
+
+                </div>
+
+                <div class="navbar-collapse collapse">
+
+                    
+                        
+                        <div class="navbar-cart pull-right hidden-xs">
+                            <a href="/shop/cart/"><i class="fa fa-shopping-cart"></i>
+                            0 items
+                            in basket:
+                                Â£0.00</a>
+                        </div>
+
+                        <div class="navbar-wishlist pull-right hidden-xs">
+                            
+                                
+                                    <a href="/shop/wishlist/" class="btn-wishlist">
+
+               Wishlist contains 0 items</a>
+                                
+                            
+
+                        </div>
+                    
+
+                    <div class="navbar-search pull-right hidden-xs">
+
+                        <form action="/search/" class="navbar-form navbar-right" role="search">
+                            <div class="form-group">
+                    <input class="form-control" placeholder="Search all stock..." type="text" name="q" value="">
+                            </div>
+                            <button type="submit" class="btn btn-default">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </form>
+
+                <p class="text-right" style="margin: 0 0px 0 0"><a href="/search/?mode=advanced"><small>Advanced search</small><span> &raquo;</span></a>&nbsp;</p>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <header class="navbar-container navbar-collapse collapse">
+        <div class="container">
+            
+<ul class="nav navbar-nav"><li class=""
+        id="catalogues"><a href="/catalogues/">
+            Catalogues &amp; Lists
+        </a></li><li class=""
+        id="new-acquisitions"><a href="/new-acquisitions/">
+            New Acquisitions
+        </a></li><li class=""
+        id="news-events"><a href="/news-events/">
+            News &amp; Events
+        </a></li><li class=""
+        id="about-us"><a href="/about-us/">
+            About Us
+        </a></li><li class=""
+        id="contactus"><a href="/contactus/">
+            Contact
+        </a></li><li class=""
+        id="-subscribe-"><a href="/subscribe/">
+            Subscribe
+        </a></li><li class=""
+        id="prints"><a href="/prints/">
+            Prints
+        </a></li><li class=""
+        id="maps"><a href="/maps/">
+            Maps
+        </a></li><li class=""
+        id="books"><a href="/books/">
+            Books
+        </a></li></ul>
+
+        </div>
+    </header>
+
+    
+
+   <!-- Carousel
+    ================================================== -->
+    <div id="carousel" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#carousel" data-slide-to="0"></li>
+        <li data-target="#carousel" data-slide-to="1" class="active"></li>
+        <li data-target="#carousel" data-slide-to="2"></li>
+        <li data-target="#carousel" data-slide-to="3"></li>
+      </ol>
+
+      
+      <div class="carousel-inner" role="listbox">
+        <div class="item">
+          <img src="/media/uploads/carousel/.thumbnails/slide-one.jpg/slide-one-1300x375.jpg" alt="Slide One" />
+            <div class="carousel-caption">
+              <h1>The Aesthetic Movement</h1>
+              <p></p>
+              <a class="btn btn-theme" href="https://mailchi.mp/2d50e149ee33/the-aesthetic-movement" role="button">Take a look.</a>
+            </div>
+        </div>
+        <div class="item active">
+          <img src="/media/uploads/carousel/.thumbnails/slide-two.jpg/slide-two-1300x375.jpg" alt="Slide Two" />
+            <div class="carousel-caption">
+              <h1>A Catalogue of recent acquisitions. Autumn 2024.</h1>
+              <p>A collection of our most interesting and unusual prints.</p>
+              <a class="btn btn-theme" href="https://mailchi.mp/596e6cb7503e/sanders-of-oxford-recent-acquisitions-autumn2024" role="button">Take a Look</a>
+            </div>
+        </div>
+        <div class="item">
+          <img src="/media/uploads/carousel/.thumbnails/slide-three.jpg/slide-three-1300x375.jpg" alt="Slide Three" />
+            <div class="carousel-caption">
+              <h1>Oxford.</h1>
+              <p>Rare Prints &amp; Maps of City &amp; County.</p>
+              <a class="btn btn-theme" href="https://mailchi.mp/887a5ea575af/oxford-prints-and-maps-of-the-city-and-county" role="button">Browse the list here.</a>
+            </div>
+        </div>
+        <div class="item">
+          <img src="/media/uploads/carousel/.thumbnails/slide-four.jpg/slide-four-1300x375.jpg" alt="Slide Four" />
+            <div class="carousel-caption">
+              <h1>Japanese Woodblock Prints</h1>
+              <p>Seasonal Shin-Hanga Landscapes</p>
+              <a class="btn btn-theme" href="https://mailchi.mp/0d89992508f5/winter-japanese-woodblock-prints" role="button">Out Now</a>
+            </div>
+        </div>
+      </div>
+      
+
+      <a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#carousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div><!-- /.carousel -->
+
+<section id="featured">
+
+
+
+
+
+<div class="col-md-none ">
+
+
+
+
+
+</div>
+
+
+
+</section>
+<section id="content" class="index-page-content">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="row aligncenter">
+                    <a href="/prints/">
+					    <div class="col-sm-4">
+                            <img src="/media/uploads/boxes/.thumbnails/box-1.jpg/box-1-618x382.jpg"
+                                 alt="Box One" />
+                            <h2>Prints</h2>
+					    </div>
+                    </a>
+                    <a href="/maps/">
+					    <div class="col-sm-4">
+                            <img src="/media/uploads/boxes/.thumbnails/box-2.jpg/box-2-618x382.jpg"
+                                 alt="Box One" />
+
+                            <h2>Maps</h2>
+					    </div>
+                    </a>
+                    <a href="/books/">
+					    <div class="col-sm-4">
+                            <img src="/media/uploads/boxes/.thumbnails/box-3.jpg/box-3-618x382.jpg" alt="Box One" />
+                            <h2>Books</h2>
+					    </div>
+                    </a>
+				</div>
+			</div>
+		</div>
+
+		<!-- richtext page content -->
+		<div class="row">
+			<div class="col-lg-12">
+
+
+<h3 style="text-align: center;">Please note that we are currently experiencing some technical issues with our website. Please bear with us.</h3>
+<h3 style="text-align: center;"><span style="color: inherit;">.</span></h3>
+<p style="text-align: center;">.</p>
+<h3 style="text-align: center;"><strong>CURRENT&nbsp;OPENING HOURS.</strong></h3>
+<p><strong></strong></p>
+<h3 style="text-align: center;">MONDAY - FRIDAY. 9am - 5pm</h3>
+<h3 style="text-align: center;">SATURDAY.&nbsp; 10am - 6pm&nbsp;</h3>
+<h3 style="text-align: center;">SUNDAY.&nbsp;&nbsp;11am - 5pm</h3>
+<h6 style="text-align: center;">.</h6>
+<h6 style="text-align: center;">.</h6>
+<p></p>
+<h3 style="text-align: center;"><strong>LAST POSTING DATES FOR CHRISTMAS</strong></h3>
+<h3 style="text-align: center;">via courier</h3>
+<h3 style="text-align: center;">&nbsp;<strong>Asia, Australasia, Middle East, South America</strong></h3>
+<h3 style="text-align: center;">Thursday 14<sup>th</sup> December</h3>
+<h3 style="text-align: center;">&nbsp;<strong>Europe &amp; USA</strong></h3>
+<h3 style="text-align: center;">Tuesday 17<sup>th</sup> December</h3>
+<h3 style="text-align: center;">&nbsp;<strong>UK</strong></h3>
+<h3 style="text-align: center;">Friday 20<sup>th</sup> December</h3>
+<h6 style="text-align: center;">.</h6>
+<p></p>
+<h4 style="text-align: left;">Sanders of Oxford continues a long tradition of selling antique prints and maps from our historic premises on Oxford&rsquo;s High Street. Our store, located in the 16<sup>th</sup><span>&nbsp;</span>century Salutation Inn, has been host to printsellers and booksellers since the 1830s. Sanders, the most recent of these, was founded in 1927 and in its most recent incarnation seeks to preserve the old world charm of the store while remaining accessible and welcoming to collectors and enthusiasts from all walks of life. Our friendly and knowledgeable staff are always on hand to assist. No question is too mundane or too bizarre, so please ask.</h4>
+<h4 style="text-align: left;">As one of the longest running, and last remaining, general antique print sellers left in the world the shop contains a vast array of stock. Operating somewhere between a shop and a gallery we aim to provide a less intimidating, and more inviting, backdrop to browse our varied and extensive collection of prints and maps than our history might suggest.</h4>
+<h4 style="text-align: left;">We sell antique prints and maps from the 15<sup>th</sup><span>&nbsp;</span>&ndash; 20<sup>th</sup><span>&nbsp;</span>century, covering virtually every subject and location you can think of. These sit alongside a collection of works by UK based contemporary printmakers, priced to suit every pocket. All of the prints and maps we sell are guaranteed original, with no reproductions, copies, or digital prints.</h4>
+<h4 style="text-align: left;"></h4>
+<p></p>
+<p style="text-align: center;"><strong></strong></p>
+
+
+			</div>
+		</div>
+		<!-- end divider -->
+
+		<!-- divider -->
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="solidline">
+				</div>
+			</div>
+		</div>
+		<!-- end divider -->
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="row aligncenter">
+                    <a href="/catalogues/">
+					    <div class="col-sm-4">
+                            <img src="/media/uploads/boxes/.thumbnails/box-4.jpg/box-4-618x382.jpg" alt="Box Four" />
+                            <h2>Catalogues</h2>
+					    </div>
+                    </a>
+                    <a href="/news-events/">
+					    <div class="col-sm-4">
+                            <img src="/media/uploads/boxes/.thumbnails/box-5.jpg/box-5-618x382.jpg" alt="Box Five" />
+                            <h2>News &amp; Events</h2>
+					    </div>
+                    </a>
+                    <a href="/contactus/">
+					    <div class="col-sm-4">
+                            <img src="/media/uploads/boxes/.thumbnails/box-6.jpg/box-6-618x382.jpg" alt="Box Six" />
+                            <h2>Contact</h2>
+					    </div>
+                    </a>
+				</div>
+			</div>
+		</div>
+		<!-- divider -->
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="solidline">
+				</div>
+			</div>
+		</div>
+		<!-- end divider -->
+
+
+	</div>
+	</section>
+
+
+
+    <footer>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-3">
+                    <div class="col-sm-4 col-md-12">
+                        <div class="nav-footer">
+                            <ul class="social-network">
+                                <li>
+                                    <strong>Sanders of Oxford</strong>
+                                    <br>
+                                    Salutation House,
+                                    <br>
+                                    104 High Street,
+                                    <br>
+                                    Oxford, OX1 4BW
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-md-12">
+                        <div class="nav-footer">
+                            <ul class="social-network">
+                                <li>
+                                    <strong>Opening Hours</strong>
+                                    <br>
+                                    Monday-Saturday 10:00 - 17:00
+                                    <br>
+                                    Sundays 11:00 - 17:00
+                                    <br>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-md-12">
+                        <div class="nav-footer">
+                            <ul class="social-network">
+                                <li>
+                                    <strong>Telephone</strong>
+                                    <br>
+                                    +44 (0) 1865 242590
+                                </li>
+                                <li>
+
+                                <a title="" data-placement="top" href="https://www.facebook.com/pages/Sanders-of-Oxford-Rare-Prints-Maps/339480346077449" data-original-title="Facebook"><i class="fa fa-facebook"></i></a>
+                                    &nbsp;
+                                    &nbsp;
+                                    &nbsp;
+                                    &nbsp;
+                                <a title="Twitter" data-placement="top" href="https://twitter.com/sandersofoxford" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                                    &nbsp;
+                                    &nbsp;
+                                    &nbsp;
+                                    &nbsp;
+                                <a title="Instagram" data-placement="top"
+                                   href="https://www.instagram.com/sanders_of_oxford/"
+                                   data-original-title="Instagram"><i class="fa fa-instagram"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-9">
+                    <div class="col-sm-4">
+                        <div class="nav-footer">
+                            <ul>
+                                <li><a href="/directions/">Directions</a></li>
+                                <li><a href="/contactus/">Contact Us</a></li>
+                                <li><a href="/faqs/">FAQs</a></li>
+                                <li><a href="/terms-conditions/">Terms & Conditions</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="nav-footer">
+                            <ul>
+                                <li><a href="/subscribe/">Subscribe</a></li>
+                                <li><a href="/shop/wishlist/">Wishlist</a></li>
+                                <li><a href="/shop/cart/">Basket</a></li>
+                                <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="nav-footer">
+                            <ul>
+                                <li><a href="/about-us/">About Us</a></li>
+                                <li><a href="http://www.pbfa.org/dealers/d/sanders-of-oxford-ltd/43688"
+                                       data-original-title="PBFA"
+                                       data-placement="top"><img height="40"
+                                                                 width="40"
+                                                                 src="/static/img/pbfa-logo-small.jpg"
+                                                                 alt=""/></a></li>
+                                <li><a href="http://www.aba.org.uk/featured-shops/112-aba-bookshops-the-thames-valley-/189-sanders-of-oxford-oxford"
+                                   data-original-title="ABA" data-placement="top"><img height="40" width="40" src="/static/img/aba-logo.jpg" alt="ABA"/></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row nav-footer">
+                <ul>
+                    <li>
+                        <small class="copyright">Copyright 2021 Sanders of Oxford.
+                            All rights reserved.</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+
+</div>
+
+<script src="/static/js/jquery.easing.1.3.js"></script>
+<script src="/static/js/jquery.fancybox.pack.js"></script>
+<script src="/static/js/jquery.fancybox-media.js"></script>
+<script src="/static/js/google-code-prettify/prettify.js"></script>
+<script src="/static/js/portfolio/jquery.quicksand.js"></script>
+<script src="/static/js/portfolio/setting.js"></script>
+<script src="/static/js/jquery.flexslider.js"></script>
+<script src="/static/js/animate.js"></script>
+<script src="/static/js/custom.js"></script>
+
+
+</body>
+</html>
+bÚú²rb           gD G”xìgD    R    O^partitionKey=%28https%2Csandersofoxford.com%29,:https://www.sandersofoxford.com/ strongly-framed 1 security-info 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 request-method GET request-Cookie acRVFe9MAnv8BAnMYOpAlPhExOs= request-Accept-Language en-US,en;q=0.5 response-head HTTP/2 200 
+server: gunicorn
+date: Mon, 25 Nov 2024 16:04:41 GMT
+content-type: text/html; charset=utf-8
+x-frame-options: SAMEORIGIN
+vary: Cookie, Accept-Language
+content-language: en
+content-length: 20883
+via: 1.1 google
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+X-Firefox-Spdy: h2
+ original-response-headers server: gunicorn
+date: Mon, 25 Nov 2024 16:04:41 GMT
+content-type: text/html; charset=utf-8
+x-frame-options: SAMEORIGIN
+vary: Cookie, Accept-Language
+content-language: en
+content-length: 20883
+set-cookie: csrftoken=dqssesVlPdp1JPr3ZbxCTTBnMMtpoAHMTof0PGSXSmUCrTfPMOmz8eeOHB2q9VRo; expires=Mon, 24-Nov-2025 16:04:41 GMT; Max-Age=31449600; Path=/; Secure
+via: 1.1 google
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+X-Firefox-Spdy: h2
+ ctid 1 uncompressed-len 0   Q“

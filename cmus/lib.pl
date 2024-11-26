@@ -25,23 +25,9 @@
 /home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/JINGLE/GROOVE_1.WAV
 /home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/JINGLE/GROOVE_2.WAV
 /home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/JINGLE/STATION.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/SE/BUZZ.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/SE/CURSOL.WAV
 /home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/SE/GRAFFITI.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/SE/KETTEI.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/SE/SCRATCH.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/SE/SPRAY.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/VOICE/BEAT.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/VOICE/BIS.WAV
 /home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/VOICE/COMBO.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/VOICE/CORN.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/VOICE/CUBE.WAV
 /home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/VOICE/DJ_K.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/VOICE/GARAM.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/VOICE/GUM.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/VOICE/SODA.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/VOICE/SUGAR.WAV
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/2000 - Jet Set Radio Original Sound Tracks/Extras/SOUND/VOICE/YOYO.WAV
 /home/maka/SSD1/Music/クロノクロス/A Light Already Lost.flac
 /home/maka/SSD1/Music/クロノクロス/A Narrow Space Between Dimensions.flac
 /home/maka/SSD1/Music/クロノクロス/Arni Village ~ Another World.flac
@@ -120,7 +106,6 @@
 /home/maka/SSD1/Music/Kotaeawase/(08) [40mP] タイムマシン.flac
 /home/maka/SSD1/Music/Kotaeawase/(09) [40mP] 君の手、僕の手.flac
 /home/maka/SSD1/Music/ReStart-F/Disc 1/04 Initial Song.flac
-cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/1999 - Nu-Fi Sounds/Nu-Fi Sounds.cue/8
 /home/maka/SSD1/Music/ソウルイーター/OPEND/01 - STRENGTH..mp3
 /home/maka/SSD1/Music/UNHAPPY REFRAIN/UNHAPPY REFRAIN Disc 2/02.とおせんぼ -天変地異編-.flac
 /home/maka/SSD1/Music/UNHAPPY REFRAIN/UNHAPPY REFRAIN Disc 2/03.ローリンガール -風林火山編-.flac
@@ -136,17 +121,6 @@ cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Serie
 /home/maka/SSD1/Music/NHKにようこそ/(10) [anime voice cast]  SCENE 09  Saigo no Onna ni Youkoso.flac
 /home/maka/SSD1/Music/NHKにようこそ/(11) [anime voice cast]  SCENE 10  HSP ni Youkoso.flac
 /home/maka/SSD1/Music/NHKにようこそ/(12) [anime voice cast]  SCENE 11  Epilogue ni Youkoso.flac
-cue:///home/maka/SSD1/Music/ペルソナ４ Reincarnation/Aniplex - Never More -ReincarnationFPERSONA4-.cue/1
-cue:///home/maka/SSD1/Music/ペルソナ４ Reincarnation/Aniplex - Never More -ReincarnationFPERSONA4-.cue/2
-cue:///home/maka/SSD1/Music/ペルソナ４ Reincarnation/Aniplex - Never More -ReincarnationFPERSONA4-.cue/3
-cue:///home/maka/SSD1/Music/ペルソナ４ Reincarnation/Aniplex - Never More -ReincarnationFPERSONA4-.cue/4
-cue:///home/maka/SSD1/Music/ペルソナ４ Reincarnation/Aniplex - Never More -ReincarnationFPERSONA4-.cue/5
-cue:///home/maka/SSD1/Music/ペルソナ４ Reincarnation/Aniplex - Never More -ReincarnationFPERSONA4-.cue/6
-cue:///home/maka/SSD1/Music/ペルソナ４ Reincarnation/Aniplex - Never More -ReincarnationFPERSONA4-.cue/7
-cue:///home/maka/SSD1/Music/ペルソナ４ Reincarnation/Aniplex - Never More -ReincarnationFPERSONA4-.cue/8
-cue:///home/maka/SSD1/Music/ペルソナ４ Reincarnation/Aniplex - Never More -ReincarnationFPERSONA4-.cue/9
-cue:///home/maka/SSD1/Music/ペルソナ４ Reincarnation/Aniplex - Never More -ReincarnationFPERSONA4-.cue/10
-cue:///home/maka/SSD1/Music/ペルソナ４ Reincarnation/Aniplex - Never More -ReincarnationFPERSONA4-.cue/11
 cue:///home/maka/SSD1/Music/ペルソナ４ Reincarnation/Aniplex - Never More -ReincarnationFPERSONA4-.cue/12
 /home/maka/SSD1/Music/ペルソナ４ Reincarnation/01. Pursuing My True Self.flac
 /home/maka/SSD1/Music/ペルソナ４ Reincarnation/02. Heartbeat, Heartbreak.flac
@@ -310,7 +284,6 @@ cue:///home/maka/SSD1/Music/Bee Gees - The Essential/Bee Gees - The Essential.cu
 /home/maka/SSD1/Music/YU-GI-OH! Duel Monsters DUEL VOCAL BEST!!/06 Rakuen.flac
 /home/maka/SSD1/Music/MISC/時を刻む唄.flac
 /home/maka/SSD1/Music/YU-GI-OH! Duel Monsters DUEL VOCAL BEST!!/01 voice.flac
-cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/1999 - Nu-Fi Sounds/Nu-Fi Sounds.cue/7
 /home/maka/SSD1/Music/ReStart-F/Disc 2/04 初音ミクの消失 -DEAD END-.flac
 /home/maka/SSD1/Music/Daft Punk Albums [FLAC,Tracks]/01 - Albums/(1997) Daft Punk - Homework/01 - Daftendirekt.flac
 /home/maka/SSD1/Music/Daft Punk Albums [FLAC,Tracks]/01 - Albums/(1997) Daft Punk - Homework/02 - Wdpk 83.7 fm.flac
@@ -1610,7 +1583,6 @@ cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Serie
 /home/maka/SSD1/Music/Fixed Music/Persona 3 Portable/04. Time.flac
 /home/maka/SSD1/Music/Fixed Music/Persona 3 Portable/10. A Way of Life -Deep inside my mind Remix-.flac
 /home/maka/SSD1/Music/Fixed Music/Persona 3 Portable/05. Wiping All Out.flac
-cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/1999 - Nu-Fi Sounds/Nu-Fi Sounds.cue/6
 /home/maka/SSD1/Music/ReStart-F/Disc 1/05 大江戸ジュリアナイト.flac
 /home/maka/SSD1/Music/ニーアオートマタ/1-01 意味 - 無 - ジュニーク・ニコール.flac
 /home/maka/SSD1/Music/ニーアオートマタ/1-02 遺サレタ場所 - 斜光.flac
@@ -2282,13 +2254,10 @@ cue:///home/maka/SSD1/Music/キャサリン/[MUSIC] ゲーム キャサリン �
 /home/maka/SSD1/Music/NHKにようこそ/(20) [Pearl Brothers] Owari wo Mitsumeru Shunkan.flac
 /home/maka/SSD1/Music/NHKにようこそ/(21) [Pearl Brothers] Moratoriamu ni Youkoso!.flac
 /home/maka/SSD1/Music/NHKにようこそ/(14) [Pearl Brothers featuring Shishidou Rumi] Happiness ni Youkoso!.flac
-cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/1999 - Nu-Fi Sounds/Nu-Fi Sounds.cue/2
 /home/maka/SSD1/Music/Fixed Music/Persona 4/Disc 1/13. Studio Backlot.flac
-cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/1999 - Nu-Fi Sounds/Nu-Fi Sounds.cue/1
 /home/maka/SSD1/Music/フェイトホロウアタラクシア/01 ataraxia.mp3
 /home/maka/SSD1/Music/フェイトホロウアタラクシア/14 hollow (short edit).mp3
 /home/maka/SSD1/Music/フェイトホロウアタラクシア/27 our future (short edit).mp3
-cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/1999 - Nu-Fi Sounds/Nu-Fi Sounds.cue/4
 /home/maka/SSD1/Music/クラナド/ソララド・アッペンド/01 Onaji Takami.flac
 /home/maka/SSD1/Music/クラナド/ソララド・アッペンド/02 Kaze no Shoujo.flac
 /home/maka/SSD1/Music/クラナド/オリジナル・サウンドトラック/03 Megumeru.flac
@@ -2326,9 +2295,6 @@ cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Serie
 /home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio Future/2013 - Jet Set Radio Future SEGA Original Tracks/14 - Grace and Glory (B.B.M.H.Mix).flac
 /home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio Future/2013 - Jet Set Radio Future SEGA Original Tracks/15 - Jet Set Groove #3.flac
 /home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio Future/2013 - Jet Set Radio Future SEGA Original Tracks/16 - Jet Set Groove #4.flac
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio Future/2013 - Jet Set Radio Future SEGA Original Tracks/17 - S.E. System01.flac
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio Future/2013 - Jet Set Radio Future SEGA Original Tracks/18 - S.E. System02.flac
-/home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio Future/2013 - Jet Set Radio Future SEGA Original Tracks/19 - S.E. System03.flac
 /home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio Future/2013 - Jet Set Radio Future SEGA Original Tracks/20 - S.E. Tape.flac
 /home/maka/SSD1/Music/Sonic Mania Plus Original Soundtrack/Disc 1/1.01 Flying Battery Zone Act 1.flac
 /home/maka/SSD1/Music/Sonic Mania Plus Original Soundtrack/Disc 1/1.02 Flying Battery Zone Act 2.flac
@@ -2384,8 +2350,6 @@ cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Serie
 /home/maka/SSD1/Music/Sonic Mania Plus Original Soundtrack/Disc 2/2.27 The Winner! - Competition Results.flac
 /home/maka/SSD1/Music/Sonic Mania Plus Original Soundtrack/Disc 2/2.28 Countdown to Continue.flac
 /home/maka/SSD1/Music/Sonic Mania Plus Original Soundtrack/Disc 2/2.29 Guided Tour - Credits.flac
-cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/1999 - Nu-Fi Sounds/Nu-Fi Sounds.cue/3
-cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/1999 - Nu-Fi Sounds/Nu-Fi Sounds.cue/10
 /home/maka/SSD1/Music/Fixed Music/Persona 4/Disc 1/01. Pursuing My True Self.flac
 /home/maka/SSD1/Music/Fixed Music/Persona 4/Disc 1/06. Signs of Love.flac
 /home/maka/SSD1/Music/Fixed Music/Persona 4/Disc 1/08. Your Affection.flac
@@ -4280,7 +4244,6 @@ cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Serie
 /home/maka/SSD1/Music/Fixed Music/Prodigy/Albums/2005.10 - Their Law - The Singles 1990-2005 (Sony SRCP 394~6)/2005.10 - Their Law - The Singles 1990-2005 (CD1 - Sony SRCP 394)/13 - Everybody In The Place.flac
 /home/maka/SSD1/Music/Fixed Music/Prodigy/Albums/2005.10 - Their Law - The Singles 1990-2005 (Sony SRCP 394~6)/2005.10 - Their Law - The Singles 1990-2005 (CD1 - Sony SRCP 394)/14 - One Love.flac
 /home/maka/SSD1/Music/Fixed Music/Prodigy/Albums/2005.10 - Their Law - The Singles 1990-2005 (Sony SRCP 394~6)/2005.10 - Their Law - The Singles 1990-2005 (CD1 - Sony SRCP 394)/15 - Hot Ride.flac
-cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/1999 - Nu-Fi Sounds/Nu-Fi Sounds.cue/5
 /home/maka/SSD1/Music/クラナド/オリジナル・サウンドトラック/01 Ushio.flac
 /home/maka/SSD1/Music/クラナド/オリジナル・サウンドトラック/02 Gensou.flac
 /home/maka/SSD1/Music/クラナド/オリジナル・サウンドトラック/07 Etude pour les petites supercordes.flac
@@ -4718,7 +4681,6 @@ cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Serie
 /home/maka/SSD1/Music/ファイナルファンタジーXIII/Drama Disc/05 - Chapter 05.flac
 /home/maka/SSD1/Music/ファイナルファンタジーXIII/Drama Disc/06 - Chapter 06.flac
 /home/maka/SSD1/Music/ファイナルファンタジーXIII/Drama Disc/07 - Chapter 07.flac
-cue:///home/maka/SSD1/Music/Fixed Music/Jet Set Radio Series/Jet Set Radio Series/Jet Set Radio/1999 - Nu-Fi Sounds/Nu-Fi Sounds.cue/9
 /home/maka/SSD1/Music/UNHAPPY REFRAIN/UNHAPPY REFRAIN Disc 2/06.ずれていく -Postrock Mix-.flac
 /home/maka/SSD1/Music/UNHAPPY REFRAIN/UNHAPPY REFRAIN Disc 1/01.アンハッピーリフレイン.flac
 /home/maka/SSD1/Music/UNHAPPY REFRAIN/UNHAPPY REFRAIN Disc 1/02.ローリンガール.flac

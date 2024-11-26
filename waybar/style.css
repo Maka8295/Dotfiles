@@ -35,6 +35,7 @@ window#waybar {
 #workspaces button.active {
   background: #8aadf4;
   font-family: "azukifontB";
+  color: white;
   /*color: #ffffff;
   border-radius: 13px;
   border-color: #A020FF; */

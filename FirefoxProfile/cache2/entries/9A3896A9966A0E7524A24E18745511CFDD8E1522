@@ -1,0 +1,1997 @@
+/*! Magnific Popup - v0.9.6 - 2013-09-29
+* http://dimsemenov.com/plugins/magnific-popup/
+* Copyright (c) 2013 Dmitry Semenov; */
+(function ($) {
+  var CLOSE_EVENT = "Close",
+    BEFORE_CLOSE_EVENT = "BeforeClose",
+    AFTER_CLOSE_EVENT = "AfterClose",
+    BEFORE_APPEND_EVENT = "BeforeAppend",
+    MARKUP_PARSE_EVENT = "MarkupParse",
+    OPEN_EVENT = "Open",
+    CHANGE_EVENT = "Change",
+    NS = "mfp",
+    EVENT_NS = "." + NS,
+    READY_CLASS = "mfp-ready",
+    REMOVING_CLASS = "mfp-removing",
+    PREVENT_CLOSE_CLASS = "mfp-prevent-close";
+  var mfp, MagnificPopup = function () {},
+    _isJQ = !! window.jQuery,
+    _prevStatus, _window = $(window),
+    _body, _document, _prevContentType, _wrapClasses, _currPopupType;
+  var _mfpOn = function (name, f) {
+      mfp.ev.on(NS + name + EVENT_NS, f)
+    },
+    _getEl = function (className, appendTo, html, raw) {
+      var el = document.createElement("div");
+      el.className = "mfp-" + className;
+      if (html) el.innerHTML = html;
+      if (!raw) {
+        el = $(el);
+        if (appendTo) el.appendTo(appendTo)
+      } else if (appendTo) appendTo.appendChild(el);
+      return el
+    },
+    _mfpTrigger = function (e, data) {
+      mfp.ev.triggerHandler(NS + e, data);
+      if (mfp.st.callbacks) {
+        e = e.charAt(0).toLowerCase() + e.slice(1);
+        if (mfp.st.callbacks[e]) mfp.st.callbacks[e].apply(mfp, $.isArray(data) ? data : [data])
+      }
+    },
+    _setFocus = function () {
+      (mfp.st.focus ? mfp.content.find(mfp.st.focus).eq(0) : mfp.wrap).focus()
+    },
+    _getCloseBtn = function (type) {
+      if (type !== _currPopupType || !mfp.currTemplate.closeBtn) {
+        mfp.currTemplate.closeBtn = $(mfp.st.closeMarkup.replace("%title%", mfp.st.tClose));
+        _currPopupType = type
+      }
+      return mfp.currTemplate.closeBtn
+    },
+    _checkInstance = function () {
+      if (!$.magnificPopup.instance) {
+        mfp = new MagnificPopup;
+        mfp.init();
+        $.magnificPopup.instance = mfp
+      }
+    },
+    _checkIfClose = function (target) {
+      if ($(target).hasClass(PREVENT_CLOSE_CLASS)) return;
+      var closeOnContent = mfp.st.closeOnContentClick;
+      var closeOnBg = mfp.st.closeOnBgClick;
+      if (closeOnContent && closeOnBg) return true;
+      else {
+        if (!mfp.content || ($(target).hasClass("mfp-close") || mfp.preloader && target === mfp.preloader[0])) return true;
+        if (target !== mfp.content[0] && !$.contains(mfp.content[0], target)) {
+          if (closeOnBg) if ($.contains(document, target)) return true
+        } else if (closeOnContent) return true
+      }
+      return false
+    },
+    supportsTransitions = function () {
+      var s = document.createElement("p").style,
+        v = ["ms", "O", "Moz", "Webkit"];
+      if (s["transition"] !== undefined) return true;
+      while (v.length) if (v.pop() + "Transition" in s) return true;
+      return false
+    };
+  MagnificPopup.prototype = {
+    constructor: MagnificPopup,
+    init: function () {
+      var appVersion = navigator.appVersion;
+      mfp.isIE7 = appVersion.indexOf("MSIE 7.") !== -1;
+      mfp.isIE8 = appVersion.indexOf("MSIE 8.") !== -1;
+      mfp.isLowIE = mfp.isIE7 || mfp.isIE8;
+      mfp.isAndroid = /android/gi.test(appVersion);
+      mfp.isIOS = /iphone|ipad|ipod/gi.test(appVersion);
+      mfp.supportsTransition = supportsTransitions();
+      mfp.probablyMobile = mfp.isAndroid || (mfp.isIOS || /(Opera Mini)|Kindle|webOS|BlackBerry|(Opera Mobi)|(Windows Phone)|IEMobile/i.test(navigator.userAgent));
+      _body = $(document.body);
+      _document = $(document);
+      mfp.popupsCache = {}
+    },
+    open: function (data) {
+      var i;
+      if (data.isObj === false) {
+        mfp.items = data.items.toArray();
+        mfp.index = 0;
+        var items = data.items,
+          item;
+        for (i = 0; i < items.length; i++) {
+          item = items[i];
+          if (item.parsed) item = item.el[0];
+          if (item === data.el[0]) {
+            mfp.index = i;
+            break
+          }
+        }
+      } else {
+        mfp.items = $.isArray(data.items) ? data.items : [data.items];
+        mfp.index = data.index || 0
+      }
+      if (mfp.isOpen) {
+        mfp.updateItemHTML();
+        return
+      }
+      mfp.types = [];
+      _wrapClasses = "";
+      if (data.mainEl && data.mainEl.length) mfp.ev = data.mainEl.eq(0);
+      else mfp.ev = _document;
+      if (data.key) {
+        if (!mfp.popupsCache[data.key]) mfp.popupsCache[data.key] = {};
+        mfp.currTemplate = mfp.popupsCache[data.key]
+      } else mfp.currTemplate = {};
+      mfp.st = $.extend(true, {}, $.magnificPopup.defaults, data);
+      mfp.fixedContentPos = mfp.st.fixedContentPos === "auto" ? !mfp.probablyMobile : mfp.st.fixedContentPos;
+      if (mfp.st.modal) {
+        mfp.st.closeOnContentClick = false;
+        mfp.st.closeOnBgClick = false;
+        mfp.st.showCloseBtn = false;
+        mfp.st.enableEscapeKey = false
+      }
+      if (!mfp.bgOverlay) {
+        mfp.bgOverlay = _getEl("bg").on("click" + EVENT_NS, function () {
+          mfp.close()
+        });
+        mfp.wrap = _getEl("wrap").attr("tabindex", -1).on("click" + EVENT_NS, function (e) {
+          if (_checkIfClose(e.target)) mfp.close()
+        });
+        mfp.container = _getEl("container", mfp.wrap)
+      }
+      mfp.contentContainer = _getEl("content");
+      if (mfp.st.preloader) mfp.preloader = _getEl("preloader", mfp.container, mfp.st.tLoading);
+      var modules = $.magnificPopup.modules;
+      for (i = 0; i < modules.length; i++) {
+        var n = modules[i];
+        n = n.charAt(0).toUpperCase() + n.slice(1);
+        mfp["init" + n].call(mfp)
+      }
+      _mfpTrigger("BeforeOpen");
+      if (mfp.st.showCloseBtn) if (!mfp.st.closeBtnInside) mfp.wrap.append(_getCloseBtn());
+      else {
+        _mfpOn(MARKUP_PARSE_EVENT, function (e, template, values, item) {
+          values.close_replaceWith = _getCloseBtn(item.type)
+        });
+        _wrapClasses += " mfp-close-btn-in"
+      }
+      if (mfp.st.alignTop) _wrapClasses += " mfp-align-top";
+      if (mfp.fixedContentPos) mfp.wrap.css({
+        overflow: mfp.st.overflowY,
+        overflowX: "hidden",
+        overflowY: mfp.st.overflowY
+      });
+      else mfp.wrap.css({
+        top: _window.scrollTop(),
+        position: "absolute"
+      });
+      if (mfp.st.fixedBgPos === false || mfp.st.fixedBgPos === "auto" && !mfp.fixedContentPos) mfp.bgOverlay.css({
+        height: _document.height(),
+        position: "absolute"
+      });
+      if (mfp.st.enableEscapeKey) _document.on("keyup" + EVENT_NS, function (e) {
+        if (e.keyCode === 27) mfp.close()
+      });
+      _window.on("resize" + EVENT_NS, function () {
+        mfp.updateSize()
+      });
+      if (!mfp.st.closeOnContentClick) _wrapClasses += " mfp-auto-cursor";
+      if (_wrapClasses) mfp.wrap.addClass(_wrapClasses);
+      var windowHeight = mfp.wH = _window.height();
+      var windowStyles = {};
+      if (mfp.fixedContentPos) if (mfp._hasScrollBar(windowHeight)) {
+        var s = mfp._getScrollbarSize();
+        if (s) windowStyles.paddingRight = s
+      }
+      if (mfp.fixedContentPos) if (!mfp.isIE7) windowStyles.overflow = "hidden";
+      else $("body, html").css("overflow", "hidden");
+      var classesToadd = mfp.st.mainClass;
+      if (mfp.isIE7) classesToadd += " mfp-ie7";
+      if (classesToadd) mfp._addClassToMFP(classesToadd);
+      mfp.updateItemHTML();
+      _mfpTrigger("BuildControls");
+      $("html").css(windowStyles);
+      mfp.bgOverlay.add(mfp.wrap).prependTo(document.body);
+      mfp._lastFocusedEl = document.activeElement;
+      setTimeout(function () {
+        if (mfp.content) {
+          mfp._addClassToMFP(READY_CLASS);
+          _setFocus()
+        } else mfp.bgOverlay.addClass(READY_CLASS);
+        _document.on("focusin" + EVENT_NS, function (e) {
+          if (e.target !== mfp.wrap[0] && !$.contains(mfp.wrap[0], e.target)) {
+            _setFocus();
+            return false
+          }
+        })
+      }, 16);
+      mfp.isOpen = true;
+      mfp.updateSize(windowHeight);
+      _mfpTrigger(OPEN_EVENT);
+      return data
+    },
+    close: function () {
+      if (!mfp.isOpen) return;
+      _mfpTrigger(BEFORE_CLOSE_EVENT);
+      mfp.isOpen = false;
+      if (mfp.st.removalDelay && (!mfp.isLowIE && mfp.supportsTransition)) {
+        mfp._addClassToMFP(REMOVING_CLASS);
+        setTimeout(function () {
+          mfp._close()
+        }, mfp.st.removalDelay)
+      } else mfp._close()
+    },
+    _close: function () {
+      _mfpTrigger(CLOSE_EVENT);
+      var classesToRemove = REMOVING_CLASS + " " + READY_CLASS + " ";
+      mfp.bgOverlay.detach();
+      mfp.wrap.detach();
+      mfp.container.empty();
+      if (mfp.st.mainClass) classesToRemove += mfp.st.mainClass + " ";
+      mfp._removeClassFromMFP(classesToRemove);
+      if (mfp.fixedContentPos) {
+        var windowStyles = {
+          paddingRight: ""
+        };
+        if (mfp.isIE7) $("body, html").css("overflow", "");
+        else windowStyles.overflow = "";
+        $("html").css(windowStyles)
+      }
+      _document.off("keyup" + EVENT_NS + " focusin" + EVENT_NS);
+      mfp.ev.off(EVENT_NS);
+      mfp.wrap.attr("class", "mfp-wrap").removeAttr("style");
+      mfp.bgOverlay.attr("class", "mfp-bg");
+      mfp.container.attr("class", "mfp-container");
+      if (mfp.st.showCloseBtn && (!mfp.st.closeBtnInside || mfp.currTemplate[mfp.currItem.type] === true)) if (mfp.currTemplate.closeBtn) mfp.currTemplate.closeBtn.detach();
+      if (mfp._lastFocusedEl) $(mfp._lastFocusedEl).focus();
+      mfp.currItem = null;
+      mfp.content = null;
+      mfp.currTemplate = null;
+      mfp.prevHeight = 0;
+      _mfpTrigger(AFTER_CLOSE_EVENT)
+    },
+    updateSize: function (winHeight) {
+      if (mfp.isIOS) {
+        var zoomLevel = document.documentElement.clientWidth / window.innerWidth;
+        var height = window.innerHeight * zoomLevel;
+        mfp.wrap.css("height", height);
+        mfp.wH = height
+      } else mfp.wH = winHeight || _window.height();
+      if (!mfp.fixedContentPos) mfp.wrap.css("height", mfp.wH);
+      _mfpTrigger("Resize")
+    },
+    updateItemHTML: function () {
+      var item = mfp.items[mfp.index];
+      mfp.contentContainer.detach();
+      if (mfp.content) mfp.content.detach();
+      if (!item.parsed) item = mfp.parseEl(mfp.index);
+      var type = item.type;
+      _mfpTrigger("BeforeChange", [mfp.currItem ? mfp.currItem.type : "", type]);
+      mfp.currItem = item;
+      if (!mfp.currTemplate[type]) {
+        var markup = mfp.st[type] ? mfp.st[type].markup : false;
+        _mfpTrigger("FirstMarkupParse", markup);
+        if (markup) mfp.currTemplate[type] = $(markup);
+        else mfp.currTemplate[type] = true
+      }
+      if (_prevContentType && _prevContentType !== item.type) mfp.container.removeClass("mfp-" + _prevContentType + "-holder");
+      var newContent = mfp["get" + type.charAt(0).toUpperCase() + type.slice(1)](item, mfp.currTemplate[type]);
+      mfp.appendContent(newContent, type);
+      item.preloaded = true;
+      _mfpTrigger(CHANGE_EVENT, item);
+      _prevContentType = item.type;
+      mfp.container.prepend(mfp.contentContainer);
+      _mfpTrigger("AfterChange")
+    },
+    appendContent: function (newContent, type) {
+      mfp.content = newContent;
+      if (newContent) if (mfp.st.showCloseBtn && (mfp.st.closeBtnInside && mfp.currTemplate[type] === true)) {
+        if (!mfp.content.find(".mfp-close").length) mfp.content.append(_getCloseBtn())
+      } else mfp.content = newContent;
+      else mfp.content = "";
+      _mfpTrigger(BEFORE_APPEND_EVENT);
+      mfp.container.addClass("mfp-" + type + "-holder");
+      mfp.contentContainer.append(mfp.content)
+    },
+    parseEl: function (index) {
+      var item = mfp.items[index],
+        type = item.type;
+      if (item.tagName) item = {
+        el: $(item)
+      };
+      else item = {
+        data: item,
+        src: item.src
+      };
+      if (item.el) {
+        var types = mfp.types;
+        for (var i = 0; i < types.length; i++) if (item.el.hasClass("mfp-" + types[i])) {
+          type = types[i];
+          break
+        }
+        item.src = item.el.attr("data-mfp-src");
+        if (!item.src) item.src = item.el.attr("href")
+      }
+      item.type = type || (mfp.st.type || "inline");
+      item.index = index;
+      item.parsed = true;
+      mfp.items[index] = item;
+      _mfpTrigger("ElementParse", item);
+      return mfp.items[index]
+    },
+    addGroup: function (el, options) {
+      var eHandler = function (e) {
+          e.mfpEl = this;
+          mfp._openClick(e, el, options)
+        };
+      if (!options) options = {};
+      var eName = "click.magnificPopup";
+      options.mainEl = el;
+      if (options.items) {
+        options.isObj = true;
+        el.off(eName).on(eName, eHandler)
+      } else {
+        options.isObj = false;
+        if (options.delegate) el.off(eName).on(eName, options.delegate, eHandler);
+        else {
+          options.items = el;
+          el.off(eName).on(eName, eHandler)
+        }
+      }
+    },
+    _openClick: function (e, el, options) {
+      var midClick = options.midClick !== undefined ? options.midClick : $.magnificPopup.defaults.midClick;
+      if (!midClick && (e.which === 2 || (e.ctrlKey || e.metaKey))) return;
+      var disableOn = options.disableOn !== undefined ? options.disableOn : $.magnificPopup.defaults.disableOn;
+      if (disableOn) if ($.isFunction(disableOn)) {
+        if (!disableOn.call(mfp)) return true
+      } else if (_window.width() < disableOn) return true;
+      if (e.type) {
+        e.preventDefault();
+        if (mfp.isOpen) e.stopPropagation()
+      }
+      options.el = $(e.mfpEl);
+      if (options.delegate) options.items = el.find(options.delegate);
+      mfp.open(options)
+    },
+    updateStatus: function (status, text) {
+      if (mfp.preloader) {
+        if (_prevStatus !== status) mfp.container.removeClass("mfp-s-" + _prevStatus);
+        if (!text && status === "loading") text = mfp.st.tLoading;
+        var data = {
+          status: status,
+          text: text
+        };
+        _mfpTrigger("UpdateStatus", data);
+        status = data.status;
+        text = data.text;
+        mfp.preloader.html(text);
+        mfp.preloader.find("a").on("click", function (e) {
+          e.stopImmediatePropagation()
+        });
+        mfp.container.addClass("mfp-s-" + status);
+        _prevStatus = status
+      }
+    },
+    _addClassToMFP: function (cName) {
+      mfp.bgOverlay.addClass(cName);
+      mfp.wrap.addClass(cName)
+    },
+    _removeClassFromMFP: function (cName) {
+      this.bgOverlay.removeClass(cName);
+      mfp.wrap.removeClass(cName)
+    },
+    _hasScrollBar: function (winHeight) {
+      return (mfp.isIE7 ? _document.height() : document.body.scrollHeight) > (winHeight || _window.height())
+    },
+    _parseMarkup: function (template, values, item) {
+      var arr;
+      if (item.data) values = $.extend(item.data, values);
+      _mfpTrigger(MARKUP_PARSE_EVENT, [template, values, item]);
+      $.each(values, function (key, value) {
+        if (value === undefined || value === false) return true;
+        arr = key.split("_");
+        if (arr.length > 1) {
+          var el = template.find(EVENT_NS + "-" + arr[0]);
+          if (el.length > 0) {
+            var attr = arr[1];
+            if (attr === "replaceWith") {
+              if (el[0] !== value[0]) el.replaceWith(value)
+            } else if (attr === "img") if (el.is("img")) el.attr("src", value);
+            else el.replaceWith('<img src="' + value + '" class="' + el.attr("class") + '" />');
+            else el.attr(arr[1], value)
+          }
+        } else template.find(EVENT_NS + "-" + key).html(value)
+      })
+    },
+    _getScrollbarSize: function () {
+      if (mfp.scrollbarSize === undefined) {
+        var scrollDiv = document.createElement("div");
+        scrollDiv.id = "mfp-sbm";
+        scrollDiv.style.cssText = "width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;";
+        document.body.appendChild(scrollDiv);
+        mfp.scrollbarSize = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+        document.body.removeChild(scrollDiv)
+      }
+      return mfp.scrollbarSize
+    }
+  };
+  $.magnificPopup = {
+    instance: null,
+    proto: MagnificPopup.prototype,
+    modules: [],
+    open: function (options, index) {
+      _checkInstance();
+      if (!options) options = {};
+      else options = $.extend(true, {}, options);
+      options.isObj = true;
+      options.index = index || 0;
+      return this.instance.open(options)
+    },
+    close: function () {
+      return $.magnificPopup.instance && $.magnificPopup.instance.close()
+    },
+    registerModule: function (name, module) {
+      if (module.options) $.magnificPopup.defaults[name] = module.options;
+      $.extend(this.proto, module.proto);
+      this.modules.push(name)
+    },
+    defaults: {
+      disableOn: 0,
+      key: null,
+      midClick: false,
+      mainClass: "",
+      preloader: true,
+      focus: "",
+      closeOnContentClick: false,
+      closeOnBgClick: true,
+      closeBtnInside: true,
+      showCloseBtn: true,
+      enableEscapeKey: true,
+      modal: false,
+      alignTop: false,
+      removalDelay: 0,
+      fixedContentPos: "auto",
+      fixedBgPos: "auto",
+      overflowY: "auto",
+      closeMarkup: '<button title="%title%" type="button" class="mfp-close">&times;</button>',
+      tClose: "Close (Esc)",
+      tLoading: "Loading..."
+    }
+  };
+  $.fn.magnificPopup = function (options) {
+    _checkInstance();
+    var jqEl = $(this);
+    if (typeof options === "string") if (options === "open") {
+      var items, itemOpts = _isJQ ? jqEl.data("magnificPopup") : jqEl[0].magnificPopup,
+        index = parseInt(arguments[1], 10) || 0;
+      if (itemOpts.items) items = itemOpts.items[index];
+      else {
+        items = jqEl;
+        if (itemOpts.delegate) items = items.find(itemOpts.delegate);
+        items = items.eq(index)
+      }
+      mfp._openClick({
+        mfpEl: items
+      }, jqEl, itemOpts)
+    } else {
+      if (mfp.isOpen) mfp[options].apply(mfp, Array.prototype.slice.call(arguments, 1))
+    } else {
+      options = $.extend(true, {}, options);
+      if (_isJQ) jqEl.data("magnificPopup", options);
+      else jqEl[0].magnificPopup = options;
+      mfp.addGroup(jqEl, options)
+    }
+    return jqEl
+  };
+  var _imgInterval, _getTitle = function (item) {
+      if (item.data && item.data.title !== undefined) return item.data.title;
+      var src = mfp.st.image.titleSrc;
+      if (src) if ($.isFunction(src)) return src.call(mfp, item);
+      else if (item.el) return item.el.attr(src) || "";
+      return ""
+    };
+  $.magnificPopup.registerModule("image", {
+    options: {
+      markup: '<div class="mfp-figure">' + '<div class="mfp-close"></div>' + '<div class="mfp-img"></div>' + '<div class="mfp-bottom-bar">' + '<div class="mfp-title"></div>' + '<div class="mfp-counter"></div>' + "</div>" + "</div>",
+      cursor: "mfp-zoom-out-cur",
+      titleSrc: "title",
+      verticalFit: true,
+      tError: '<a href="%url%">The image</a> could not be loaded.'
+    },
+    proto: {
+      initImage: function () {
+        var imgSt = mfp.st.image,
+          ns = ".image";
+        mfp.types.push("image");
+        _mfpOn(OPEN_EVENT + ns, function () {
+          if (mfp.currItem.type === "image" && imgSt.cursor) _body.addClass(imgSt.cursor)
+        });
+        _mfpOn(CLOSE_EVENT + ns, function () {
+          if (imgSt.cursor) _body.removeClass(imgSt.cursor);
+          _window.off("resize" + EVENT_NS)
+        });
+        _mfpOn("Resize" + ns, mfp.resizeImage);
+        if (mfp.isLowIE) _mfpOn("AfterChange", mfp.resizeImage)
+      },
+      resizeImage: function () {
+        var item = mfp.currItem;
+        if (!item || !item.img) return;
+        if (mfp.st.image.verticalFit) {
+          var decr = 0;
+          if (mfp.isLowIE) decr = parseInt(item.img.css("padding-top"), 10) + parseInt(item.img.css("padding-bottom"), 10);
+          item.img.css("max-height", mfp.wH - decr)
+        }
+      },
+      _onImageHasSize: function (item) {
+        if (item.img) {
+          item.hasSize = true;
+          if (_imgInterval) clearInterval(_imgInterval);
+          item.isCheckingImgSize = false;
+          _mfpTrigger("ImageHasSize", item);
+          if (item.imgHidden) {
+            if (mfp.content) mfp.content.removeClass("mfp-loading");
+            item.imgHidden = false
+          }
+        }
+      },
+      findImageSize: function (item) {
+        var counter = 0,
+          img = item.img[0],
+          mfpSetInterval = function (delay) {
+            if (_imgInterval) clearInterval(_imgInterval);
+            _imgInterval = setInterval(function () {
+              if (img.naturalWidth > 0) {
+                mfp._onImageHasSize(item);
+                return
+              }
+              if (counter > 200) clearInterval(_imgInterval);
+              counter++;
+              if (counter === 3) mfpSetInterval(10);
+              else if (counter === 40) mfpSetInterval(50);
+              else if (counter === 100) mfpSetInterval(500)
+            }, delay)
+          };
+        mfpSetInterval(1)
+      },
+      getImage: function (item, template) {
+        var guard = 0,
+          onLoadComplete = function () {
+            if (item) if (item.img[0].complete) {
+              item.img.off(".mfploader");
+              if (item === mfp.currItem) {
+                mfp._onImageHasSize(item);
+                mfp.updateStatus("ready")
+              }
+              item.hasSize = true;
+              item.loaded = true;
+              _mfpTrigger("ImageLoadComplete")
+            } else {
+              guard++;
+              if (guard < 200) setTimeout(onLoadComplete, 100);
+              else onLoadError()
+            }
+          },
+          onLoadError = function () {
+            if (item) {
+              item.img.off(".mfploader");
+              if (item === mfp.currItem) {
+                mfp._onImageHasSize(item);
+                mfp.updateStatus("error", imgSt.tError.replace("%url%", item.src))
+              }
+              item.hasSize = true;
+              item.loaded = true;
+              item.loadError = true
+            }
+          },
+          imgSt = mfp.st.image;
+        var el = template.find(".mfp-img");
+        if (el.length) {
+          var img = document.createElement("img");
+          img.className = "mfp-img";
+          item.img = $(img).on("load.mfploader", onLoadComplete).on("error.mfploader", onLoadError);
+          img.src = item.src;
+          if (el.is("img")) item.img = item.img.clone();
+          if (item.img[0].naturalWidth > 0) item.hasSize = true
+        }
+        mfp._parseMarkup(template, {
+          title: _getTitle(item),
+          img_replaceWith: item.img
+        }, item);
+        mfp.resizeImage();
+        if (item.hasSize) {
+          if (_imgInterval) clearInterval(_imgInterval);
+          if (item.loadError) {
+            template.addClass("mfp-loading");
+            mfp.updateStatus("error", imgSt.tError.replace("%url%", item.src))
+          } else {
+            template.removeClass("mfp-loading");
+            mfp.updateStatus("ready")
+          }
+          return template
+        }
+        mfp.updateStatus("loading");
+        item.loading = true;
+        if (!item.hasSize) {
+          item.imgHidden = true;
+          template.addClass("mfp-loading");
+          mfp.findImageSize(item)
+        }
+        return template
+      }
+    }
+  });
+  var hasMozTransform, getHasMozTransform = function () {
+      if (hasMozTransform === undefined) hasMozTransform = document.createElement("p").style.MozTransform !== undefined;
+      return hasMozTransform
+    };
+  $.magnificPopup.registerModule("zoom", {
+    options: {
+      enabled: false,
+      easing: "ease-in-out",
+      duration: 300,
+      opener: function (element) {
+        return element.is("img") ? element : element.find("img")
+      }
+    },
+    proto: {
+      initZoom: function () {
+        var zoomSt = mfp.st.zoom,
+          ns = ".zoom",
+          image;
+        if (!zoomSt.enabled || !mfp.supportsTransition) return;
+        var duration = zoomSt.duration,
+          getElToAnimate = function (image) {
+            var newImg = image.clone().removeAttr("style").removeAttr("class").addClass("mfp-animated-image"),
+              transition = "all " + zoomSt.duration / 1E3 + "s " + zoomSt.easing,
+              cssObj = {
+                position: "fixed",
+                zIndex: 9999,
+                left: 0,
+                top: 0,
+                "-webkit-backface-visibility": "hidden"
+              },
+              t = "transition";
+            cssObj["-webkit-" + t] = cssObj["-moz-" + t] = cssObj["-o-" + t] = cssObj[t] = transition;
+            newImg.css(cssObj);
+            return newImg
+          },
+          showMainContent = function () {
+            mfp.content.css("visibility", "visible")
+          },
+          openTimeout, animatedImg;
+        _mfpOn("BuildControls" + ns, function () {
+          if (mfp._allowZoom()) {
+            clearTimeout(openTimeout);
+            mfp.content.css("visibility", "hidden");
+            image = mfp._getItemToZoom();
+            if (!image) {
+              showMainContent();
+              return
+            }
+            animatedImg = getElToAnimate(image);
+            animatedImg.css(mfp._getOffset());
+            mfp.wrap.append(animatedImg);
+            openTimeout = setTimeout(function () {
+              animatedImg.css(mfp._getOffset(true));
+              openTimeout = setTimeout(function () {
+                showMainContent();
+                setTimeout(function () {
+                  animatedImg.remove();
+                  image = animatedImg = null;
+                  _mfpTrigger("ZoomAnimationEnded")
+                }, 16)
+              }, duration)
+            }, 16)
+          }
+        });
+        _mfpOn(BEFORE_CLOSE_EVENT + ns, function () {
+          if (mfp._allowZoom()) {
+            clearTimeout(openTimeout);
+            mfp.st.removalDelay = duration;
+            if (!image) {
+              image = mfp._getItemToZoom();
+              if (!image) return;
+              animatedImg = getElToAnimate(image)
+            }
+            animatedImg.css(mfp._getOffset(true));
+            mfp.wrap.append(animatedImg);
+            mfp.content.css("visibility", "hidden");
+            setTimeout(function () {
+              animatedImg.css(mfp._getOffset())
+            }, 16)
+          }
+        });
+        _mfpOn(CLOSE_EVENT + ns, function () {
+          if (mfp._allowZoom()) {
+            showMainContent();
+            if (animatedImg) animatedImg.remove();
+            image = null
+          }
+        })
+      },
+      _allowZoom: function () {
+        return mfp.currItem.type === "image"
+      },
+      _getItemToZoom: function () {
+        if (mfp.currItem.hasSize) return mfp.currItem.img;
+        else return false
+      },
+      _getOffset: function (isLarge) {
+        var el;
+        if (isLarge) el = mfp.currItem.img;
+        else el = mfp.st.zoom.opener(mfp.currItem.el || mfp.currItem);
+        var offset = el.offset();
+        var paddingTop = parseInt(el.css("padding-top"), 10);
+        var paddingBottom = parseInt(el.css("padding-bottom"), 10);
+        offset.top -= $(window).scrollTop() - paddingTop;
+        var obj = {
+          width: el.width(),
+          height: (_isJQ ? el.innerHeight() : el[0].offsetHeight) - paddingBottom - paddingTop
+        };
+        if (getHasMozTransform()) obj["-moz-transform"] = obj["transform"] = "translate(" + offset.left + "px," + offset.top + "px)";
+        else {
+          obj.left = offset.left;
+          obj.top = offset.top
+        }
+        return obj
+      }
+    }
+  });
+  var _getLoopedId = function (index) {
+      var numSlides = mfp.items.length;
+      if (index > numSlides - 1) return index - numSlides;
+      else if (index < 0) return numSlides + index;
+      return index
+    },
+    _replaceCurrTotal = function (text, curr, total) {
+      return text.replace("%curr%", curr + 1).replace("%total%", total)
+    };
+  $.magnificPopup.registerModule("gallery", {
+    options: {
+      enabled: false,
+      arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>',
+      preload: [0, 2],
+      navigateByImgClick: true,
+      arrows: true,
+      tPrev: "Previous (Left arrow key)",
+      tNext: "Next (Right arrow key)",
+      tCounter: "%curr% of %total%"
+    },
+    proto: {
+      initGallery: function () {
+        var gSt = mfp.st.gallery,
+          ns = ".mfp-gallery",
+          supportsFastClick = Boolean($.fn.mfpFastClick);
+        mfp.direction = true;
+        if (!gSt || !gSt.enabled) return false;
+        _wrapClasses += " mfp-gallery";
+        _mfpOn(OPEN_EVENT + ns, function () {
+          if (gSt.navigateByImgClick) mfp.wrap.on("click" + ns, ".mfp-img", function () {
+            if (mfp.items.length > 1) {
+              mfp.next();
+              return false
+            }
+          });
+          _document.on("keydown" + ns, function (e) {
+            if (e.keyCode === 37) mfp.prev();
+            else if (e.keyCode === 39) mfp.next()
+          })
+        });
+        _mfpOn("UpdateStatus" + ns, function (e, data) {
+          if (data.text) data.text = _replaceCurrTotal(data.text, mfp.currItem.index, mfp.items.length)
+        });
+        _mfpOn(MARKUP_PARSE_EVENT + ns, function (e, element, values, item) {
+          var l = mfp.items.length;
+          values.counter = l > 1 ? _replaceCurrTotal(gSt.tCounter, item.index, l) : ""
+        });
+        _mfpOn("BuildControls" + ns, function () {
+          if (mfp.items.length > 1 && (gSt.arrows && !mfp.arrowLeft)) {
+            var markup = gSt.arrowMarkup,
+              arrowLeft = mfp.arrowLeft = $(markup.replace("%title%", gSt.tPrev).replace("%dir%", "left")).addClass(PREVENT_CLOSE_CLASS),
+              arrowRight = mfp.arrowRight = $(markup.replace("%title%", gSt.tNext).replace("%dir%", "right")).addClass(PREVENT_CLOSE_CLASS);
+            var eName = supportsFastClick ? "mfpFastClick" : "click";
+            arrowLeft[eName](function () {
+              mfp.prev()
+            });
+            arrowRight[eName](function () {
+              mfp.next()
+            });
+            if (mfp.isIE7) {
+              _getEl("b", arrowLeft[0], false, true);
+              _getEl("a", arrowLeft[0], false, true);
+              _getEl("b", arrowRight[0], false, true);
+              _getEl("a", arrowRight[0], false, true)
+            }
+            mfp.container.append(arrowLeft.add(arrowRight))
+          }
+        });
+        _mfpOn(CHANGE_EVENT + ns, function () {
+          if (mfp._preloadTimeout) clearTimeout(mfp._preloadTimeout);
+          mfp._preloadTimeout = setTimeout(function () {
+            mfp.preloadNearbyImages();
+            mfp._preloadTimeout = null
+          }, 16)
+        });
+        _mfpOn(CLOSE_EVENT + ns, function () {
+          _document.off(ns);
+          mfp.wrap.off("click" + ns);
+          if (mfp.arrowLeft && supportsFastClick) mfp.arrowLeft.add(mfp.arrowRight).destroyMfpFastClick();
+          mfp.arrowRight = mfp.arrowLeft = null
+        })
+      },
+      next: function () {
+        mfp.direction = true;
+        mfp.index = _getLoopedId(mfp.index + 1);
+        mfp.updateItemHTML()
+      },
+      prev: function () {
+        mfp.direction = false;
+        mfp.index = _getLoopedId(mfp.index - 1);
+        mfp.updateItemHTML()
+      },
+      goTo: function (newIndex) {
+        mfp.direction = newIndex >= mfp.index;
+        mfp.index = newIndex;
+        mfp.updateItemHTML()
+      },
+      preloadNearbyImages: function () {
+        var p = mfp.st.gallery.preload,
+          preloadBefore = Math.min(p[0], mfp.items.length),
+          preloadAfter = Math.min(p[1], mfp.items.length),
+          i;
+        for (i = 1; i <= (mfp.direction ? preloadAfter : preloadBefore); i++) mfp._preloadItem(mfp.index + i);
+        for (i = 1; i <= (mfp.direction ? preloadBefore : preloadAfter); i++) mfp._preloadItem(mfp.index - i)
+      },
+      _preloadItem: function (index) {
+        index = _getLoopedId(index);
+        if (mfp.items[index].preloaded) return;
+        var item = mfp.items[index];
+        if (!item.parsed) item = mfp.parseEl(index);
+        _mfpTrigger("LazyLoad", item);
+        if (item.type === "image") item.img = $('<img class="mfp-img" />').on("load.mfploader", function () {
+          item.hasSize = true
+        }).on("error.mfploader", function () {
+          item.hasSize = true;
+          item.loadError = true;
+          _mfpTrigger("LazyLoadError", item)
+        }).attr("src", item.src);
+        item.preloaded = true
+      }
+    }
+  })
+})(window.jQuery || window.Zepto);
+        ∞V x ˇˇ     20241112225620-8lìV h¨î«E   https://www.sandersofoxford.com/static/mezzanine/js/magnific-popup.js      ü  /*! Magnific Popup - v0.9.6 - 2013-09-29
+* http://dimsemenov.com/plugins/magnific-popup/
+* Copyright (c) 2013 Dmitry Semenov; */
+(function ($) {
+  var CLOSE_EVENT = "Close",
+    BEFORE_CLOSE_EVENT = "BeforeClose",
+    AFTER_CLOSE_EVENT = "AfterClose",
+    BEFORE_APPEND_EVENT = "BeforeAppend",
+    MARKUP_PARSE_EVENT = "MarkupParse",
+    OPEN_EVENT = "Open",
+    CHANGE_EVENT = "Change",
+    NS = "mfp",
+    EVENT_NS = "." + NS,
+    READY_CLASS = "mfp-ready",
+    REMOVING_CLASS = "mfp-removing",
+    PREVENT_CLOSE_CLASS = "mfp-prevent-close";
+  var mfp, MagnificPopup = function () {},
+    _isJQ = !! window.jQuery,
+    _prevStatus, _window = $(window),
+    _body, _document, _prevContentType, _wrapClasses, _currPopupType;
+  var _mfpOn = function (name, f) {
+      mfp.ev.on(NS + name + EVENT_NS, f)
+    },
+    _getEl = function (className, appendTo, html, raw) {
+      var el = document.createElement("div");
+      el.className = "mfp-" + className;
+      if (html) el.innerHTML = html;
+      if (!raw) {
+        el = $(el);
+        if (appendTo) el.appendTo(appendTo)
+      } else if (appendTo) appendTo.appendChild(el);
+      return el
+    },
+    _mfpTrigger = function (e, data) {
+      mfp.ev.triggerHandler(NS + e, data);
+      if (mfp.st.callbacks) {
+        e = e.charAt(0).toLowerCase() + e.slice(1);
+        if (mfp.st.callbacks[e]) mfp.st.callbacks[e].apply(mfp, $.isArray(data) ? data : [data])
+      }
+    },
+    _setFocus = function () {
+      (mfp.st.focus ? mfp.content.find(mfp.st.focus).eq(0) : mfp.wrap).focus()
+    },
+    _getCloseBtn = function (type) {
+      if (type !== _currPopupType || !mfp.currTemplate.closeBtn) {
+        mfp.currTemplate.closeBtn = $(mfp.st.closeMarkup.replace("%title%", mfp.st.tClose));
+        _currPopupType = type
+      }
+      return mfp.currTemplate.closeBtn
+    },
+    _checkInstance = function () {
+      if (!$.magnificPopup.instance) {
+        mfp = new MagnificPopup;
+        mfp.init();
+        $.magnificPopup.instance = mfp
+      }
+    },
+    _checkIfClose = function (target) {
+      if ($(target).hasClass(PREVENT_CLOSE_CLASS)) return;
+      var closeOnContent = mfp.st.closeOnContentClick;
+      var closeOnBg = mfp.st.closeOnBgClick;
+      if (closeOnContent && closeOnBg) return true;
+      else {
+        if (!mfp.content || ($(target).hasClass("mfp-close") || mfp.preloader && target === mfp.preloader[0])) return true;
+        if (target !== mfp.content[0] && !$.contains(mfp.content[0], target)) {
+          if (closeOnBg) if ($.contains(document, target)) return true
+        } else if (closeOnContent) return true
+      }
+      return false
+    },
+    supportsTransitions = function () {
+      var s = document.createElement("p").style,
+        v = ["ms", "O", "Moz", "Webkit"];
+      if (s["transition"] !== undefined) return true;
+      while (v.length) if (v.pop() + "Transition" in s) return true;
+      return false
+    };
+  MagnificPopup.prototype = {
+    constructor: MagnificPopup,
+    init: function () {
+      var appVersion = navigator.appVersion;
+      mfp.isIE7 = appVersion.indexOf("MSIE 7.") !== -1;
+      mfp.isIE8 = appVersion.indexOf("MSIE 8.") !== -1;
+      mfp.isLowIE = mfp.isIE7 || mfp.isIE8;
+      mfp.isAndroid = /android/gi.test(appVersion);
+      mfp.isIOS = /iphone|ipad|ipod/gi.test(appVersion);
+      mfp.supportsTransition = supportsTransitions();
+      mfp.probablyMobile = mfp.isAndroid || (mfp.isIOS || /(Opera Mini)|Kindle|webOS|BlackBerry|(Opera Mobi)|(Windows Phone)|IEMobile/i.test(navigator.userAgent));
+      _body = $(document.body);
+      _document = $(document);
+      mfp.popupsCache = {}
+    },
+    open: function (data) {
+      var i;
+      if (data.isObj === false) {
+        mfp.items = data.items.toArray();
+        mfp.index = 0;
+        var items = data.items,
+          item;
+        for (i = 0; i < items.length; i++) {
+          item = items[i];
+          if (item.parsed) item = item.el[0];
+          if (item === data.el[0]) {
+            mfp.index = i;
+            break
+          }
+        }
+      } else {
+        mfp.items = $.isArray(data.items) ? data.items : [data.items];
+        mfp.index = data.index || 0
+      }
+      if (mfp.isOpen) {
+        mfp.updateItemHTML();
+        return
+      }
+      mfp.types = [];
+      _wrapClasses = "";
+      if (data.mainEl && data.mainEl.length) mfp.ev = data.mainEl.eq(0);
+      else mfp.ev = _document;
+      if (data.key) {
+        if (!mfp.popupsCache[data.key]) mfp.popupsCache[data.key] = {};
+        mfp.currTemplate = mfp.popupsCache[data.key]
+      } else mfp.currTemplate = {};
+      mfp.st = $.extend(true, {}, $.magnificPopup.defaults, data);
+      mfp.fixedContentPos = mfp.st.fixedContentPos === "auto" ? !mfp.probablyMobile : mfp.st.fixedContentPos;
+      if (mfp.st.modal) {
+        mfp.st.closeOnContentClick = false;
+        mfp.st.closeOnBgClick = false;
+        mfp.st.showCloseBtn = false;
+        mfp.st.enableEscapeKey = false
+      }
+      if (!mfp.bgOverlay) {
+        mfp.bgOverlay = _getEl("bg").on("click" + EVENT_NS, function () {
+          mfp.close()
+        });
+        mfp.wrap = _getEl("wrap").attr("tabindex", -1).on("click" + EVENT_NS, function (e) {
+          if (_checkIfClose(e.target)) mfp.close()
+        });
+        mfp.container = _getEl("container", mfp.wrap)
+      }
+      mfp.contentContainer = _getEl("content");
+      if (mfp.st.preloader) mfp.preloader = _getEl("preloader", mfp.container, mfp.st.tLoading);
+      var modules = $.magnificPopup.modules;
+      for (i = 0; i < modules.length; i++) {
+        var n = modules[i];
+        n = n.charAt(0).toUpperCase() + n.slice(1);
+        mfp["init" + n].call(mfp)
+      }
+      _mfpTrigger("BeforeOpen");
+      if (mfp.st.showCloseBtn) if (!mfp.st.closeBtnInside) mfp.wrap.append(_getCloseBtn());
+      else {
+        _mfpOn(MARKUP_PARSE_EVENT, function (e, template, values, item) {
+          values.close_replaceWith = _getCloseBtn(item.type)
+        });
+        _wrapClasses += " mfp-close-btn-in"
+      }
+      if (mfp.st.alignTop) _wrapClasses += " mfp-align-top";
+      if (mfp.fixedContentPos) mfp.wrap.css({
+        overflow: mfp.st.overflowY,
+        overflowX: "hidden",
+        overflowY: mfp.st.overflowY
+      });
+      else mfp.wrap.css({
+        top: _window.scrollTop(),
+        position: "absolute"
+      });
+      if (mfp.st.fixedBgPos === false || mfp.st.fixedBgPos === "auto" && !mfp.fixedContentPos) mfp.bgOverlay.css({
+        height: _document.height(),
+        position: "absolute"
+      });
+      if (mfp.st.enableEscapeKey) _document.on("keyup" + EVENT_NS, function (e) {
+        if (e.keyCode === 27) mfp.close()
+      });
+      _window.on("resize" + EVENT_NS, function () {
+        mfp.updateSize()
+      });
+      if (!mfp.st.closeOnContentClick) _wrapClasses += " mfp-auto-cursor";
+      if (_wrapClasses) mfp.wrap.addClass(_wrapClasses);
+      var windowHeight = mfp.wH = _window.height();
+      var windowStyles = {};
+      if (mfp.fixedContentPos) if (mfp._hasScrollBar(windowHeight)) {
+        var s = mfp._getScrollbarSize();
+        if (s) windowStyles.paddingRight = s
+      }
+      if (mfp.fixedContentPos) if (!mfp.isIE7) windowStyles.overflow = "hidden";
+      else $("body, html").css("overflow", "hidden");
+      var classesToadd = mfp.st.mainClass;
+      if (mfp.isIE7) classesToadd += " mfp-ie7";
+      if (classesToadd) mfp._addClassToMFP(classesToadd);
+      mfp.updateItemHTML();
+      _mfpTrigger("BuildControls");
+      $("html").css(windowStyles);
+      mfp.bgOverlay.add(mfp.wrap).prependTo(document.body);
+      mfp._lastFocusedEl = document.activeElement;
+      setTimeout(function () {
+        if (mfp.content) {
+          mfp._addClassToMFP(READY_CLASS);
+          _setFocus()
+        } else mfp.bgOverlay.addClass(READY_CLASS);
+        _document.on("focusin" + EVENT_NS, function (e) {
+          if (e.target !== mfp.wrap[0] && !$.contains(mfp.wrap[0], e.target)) {
+            _setFocus();
+            return false
+          }
+        })
+      }, 16);
+      mfp.isOpen = true;
+      mfp.updateSize(windowHeight);
+      _mfpTrigger(OPEN_EVENT);
+      return data
+    },
+    close: function () {
+      if (!mfp.isOpen) return;
+      _mfpTrigger(BEFORE_CLOSE_EVENT);
+      mfp.isOpen = false;
+      if (mfp.st.removalDelay && (!mfp.isLowIE && mfp.supportsTransition)) {
+        mfp._addClassToMFP(REMOVING_CLASS);
+        setTimeout(function () {
+          mfp._close()
+        }, mfp.st.removalDelay)
+      } else mfp._close()
+    },
+    _close: function () {
+      _mfpTrigger(CLOSE_EVENT);
+      var classesToRemove = REMOVING_CLASS + " " + READY_CLASS + " ";
+      mfp.bgOverlay.detach();
+      mfp.wrap.detach();
+      mfp.container.empty();
+      if (mfp.st.mainClass) classesToRemove += mfp.st.mainClass + " ";
+      mfp._removeClassFromMFP(classesToRemove);
+      if (mfp.fixedContentPos) {
+        var windowStyles = {
+          paddingRight: ""
+        };
+        if (mfp.isIE7) $("body, html").css("overflow", "");
+        else windowStyles.overflow = "";
+        $("html").css(windowStyles)
+      }
+      _document.off("keyup" + EVENT_NS + " focusin" + EVENT_NS);
+      mfp.ev.off(EVENT_NS);
+      mfp.wrap.attr("class", "mfp-wrap").removeAttr("style");
+      mfp.bgOverlay.attr("class", "mfp-bg");
+      mfp.container.attr("class", "mfp-container");
+      if (mfp.st.showCloseBtn && (!mfp.st.closeBtnInside || mfp.currTemplate[mfp.currItem.type] === true)) if (mfp.currTemplate.closeBtn) mfp.currTemplate.closeBtn.detach();
+      if (mfp._lastFocusedEl) $(mfp._lastFocusedEl).focus();
+      mfp.currItem = null;
+      mfp.content = null;
+      mfp.currTemplate = null;
+      mfp.prevHeight = 0;
+      _mfpTrigger(AFTER_CLOSE_EVENT)
+    },
+    updateSize: function (winHeight) {
+      if (mfp.isIOS) {
+        var zoomLevel = document.documentElement.clientWidth / window.innerWidth;
+        var height = window.innerHeight * zoomLevel;
+        mfp.wrap.css("height", height);
+        mfp.wH = height
+      } else mfp.wH = winHeight || _window.height();
+      if (!mfp.fixedContentPos) mfp.wrap.css("height", mfp.wH);
+      _mfpTrigger("Resize")
+    },
+    updateItemHTML: function () {
+      var item = mfp.items[mfp.index];
+      mfp.contentContainer.detach();
+      if (mfp.content) mfp.content.detach();
+      if (!item.parsed) item = mfp.parseEl(mfp.index);
+      var type = item.type;
+      _mfpTrigger("BeforeChange", [mfp.currItem ? mfp.currItem.type : "", type]);
+      mfp.currItem = item;
+      if (!mfp.currTemplate[type]) {
+        var markup = mfp.st[type] ? mfp.st[type].markup : false;
+        _mfpTrigger("FirstMarkupParse", markup);
+        if (markup) mfp.currTemplate[type] = $(markup);
+        else mfp.currTemplate[type] = true
+      }
+      if (_prevContentType && _prevContentType !== item.type) mfp.container.removeClass("mfp-" + _prevContentType + "-holder");
+      var newContent = mfp["get" + type.charAt(0).toUpperCase() + type.slice(1)](item, mfp.currTemplate[type]);
+      mfp.appendContent(newContent, type);
+      item.preloaded = true;
+      _mfpTrigger(CHANGE_EVENT, item);
+      _prevContentType = item.type;
+      mfp.container.prepend(mfp.contentContainer);
+      _mfpTrigger("AfterChange")
+    },
+    appendContent: function (newContent, type) {
+      mfp.content = newContent;
+      if (newContent) if (mfp.st.showCloseBtn && (mfp.st.closeBtnInside && mfp.currTemplate[type] === true)) {
+        if (!mfp.content.find(".mfp-close").length) mfp.content.append(_getCloseBtn())
+      } else mfp.content = newContent;
+      else mfp.content = "";
+      _mfpTrigger(BEFORE_APPEND_EVENT);
+      mfp.container.addClass("mfp-" + type + "-holder");
+      mfp.contentContainer.append(mfp.content)
+    },
+    parseEl: function (index) {
+      var item = mfp.items[index],
+        type = item.type;
+      if (item.tagName) item = {
+        el: $(item)
+      };
+      else item = {
+        data: item,
+        src: item.src
+      };
+      if (item.el) {
+        var types = mfp.types;
+        for (var i = 0; i < types.length; i++) if (item.el.hasClass("mfp-" + types[i])) {
+          type = types[i];
+          break
+        }
+        item.src = item.el.attr("data-mfp-src");
+        if (!item.src) item.src = item.el.attr("href")
+      }
+      item.type = type || (mfp.st.type || "inline");
+      item.index = index;
+      item.parsed = true;
+      mfp.items[index] = item;
+      _mfpTrigger("ElementParse", item);
+      return mfp.items[index]
+    },
+    addGroup: function (el, options) {
+      var eHandler = function (e) {
+          e.mfpEl = this;
+          mfp._openClick(e, el, options)
+        };
+      if (!options) options = {};
+      var eName = "click.magnificPopup";
+      options.mainEl = el;
+      if (options.items) {
+        options.isObj = true;
+        el.off(eName).on(eName, eHandler)
+      } else {
+        options.isObj = false;
+        if (options.delegate) el.off(eName).on(eName, options.delegate, eHandler);
+        else {
+          options.items = el;
+          el.off(eName).on(eName, eHandler)
+        }
+      }
+    },
+    _openClick: function (e, el, options) {
+      var midClick = options.midClick !== undefined ? options.midClick : $.magnificPopup.defaults.midClick;
+      if (!midClick && (e.which === 2 || (e.ctrlKey || e.metaKey))) return;
+      var disableOn = options.disableOn !== undefined ? options.disableOn : $.magnificPopup.defaults.disableOn;
+      if (disableOn) if ($.isFunction(disableOn)) {
+        if (!disableOn.call(mfp)) return true
+      } else if (_window.width() < disableOn) return true;
+      if (e.type) {
+        e.preventDefault();
+        if (mfp.isOpen) e.stopPropagation()
+      }
+      options.el = $(e.mfpEl);
+      if (options.delegate) options.items = el.find(options.delegate);
+      mfp.open(options)
+    },
+    updateStatus: function (status, text) {
+      if (mfp.preloader) {
+        if (_prevStatus !== status) mfp.container.removeClass("mfp-s-" + _prevStatus);
+        if (!text && status === "loading") text = mfp.st.tLoading;
+        var data = {
+          status: status,
+          text: text
+        };
+        _mfpTrigger("UpdateStatus", data);
+        status = data.status;
+        text = data.text;
+        mfp.preloader.html(text);
+        mfp.preloader.find("a").on("click", function (e) {
+          e.stopImmediatePropagation()
+        });
+        mfp.container.addClass("mfp-s-" + status);
+        _prevStatus = status
+      }
+    },
+    _addClassToMFP: function (cName) {
+      mfp.bgOverlay.addClass(cName);
+      mfp.wrap.addClass(cName)
+    },
+    _removeClassFromMFP: function (cName) {
+      this.bgOverlay.removeClass(cName);
+      mfp.wrap.removeClass(cName)
+    },
+    _hasScrollBar: function (winHeight) {
+      return (mfp.isIE7 ? _document.height() : document.body.scrollHeight) > (winHeight || _window.height())
+    },
+    _parseMarkup: function (template, values, item) {
+      var arr;
+      if (item.data) values = $.extend(item.data, values);
+      _mfpTrigger(MARKUP_PARSE_EVENT, [template, values, item]);
+      $.each(values, function (key, value) {
+        if (value === undefined || value === false) return true;
+        arr = key.split("_");
+        if (arr.length > 1) {
+          var el = template.find(EVENT_NS + "-" + arr[0]);
+          if (el.length > 0) {
+            var attr = arr[1];
+            if (attr === "replaceWith") {
+              if (el[0] !== value[0]) el.replaceWith(value)
+            } else if (attr === "img") if (el.is("img")) el.attr("src", value);
+            else el.replaceWith('<img src="' + value + '" class="' + el.attr("class") + '" />');
+            else el.attr(arr[1], value)
+          }
+        } else template.find(EVENT_NS + "-" + key).html(value)
+      })
+    },
+    _getScrollbarSize: function () {
+      if (mfp.scrollbarSize === undefined) {
+        var scrollDiv = document.createElement("div");
+        scrollDiv.id = "mfp-sbm";
+        scrollDiv.style.cssText = "width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;";
+        document.body.appendChild(scrollDiv);
+        mfp.scrollbarSize = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+        document.body.removeChild(scrollDiv)
+      }
+      return mfp.scrollbarSize
+    }
+  };
+  $.magnificPopup = {
+    instance: null,
+    proto: MagnificPopup.prototype,
+    modules: [],
+    open: function (options, index) {
+      _checkInstance();
+      if (!options) options = {};
+      else options = $.extend(true, {}, options);
+      options.isObj = true;
+      options.index = index || 0;
+      return this.instance.open(options)
+    },
+    close: function () {
+      return $.magnificPopup.instance && $.magnificPopup.instance.close()
+    },
+    registerModule: function (name, module) {
+      if (module.options) $.magnificPopup.defaults[name] = module.options;
+      $.extend(this.proto, module.proto);
+      this.modules.push(name)
+    },
+    defaults: {
+      disableOn: 0,
+      key: null,
+      midClick: false,
+      mainClass: "",
+      preloader: true,
+      focus: "",
+      closeOnContentClick: false,
+      closeOnBgClick: true,
+      closeBtnInside: true,
+      showCloseBtn: true,
+      enableEscapeKey: true,
+      modal: false,
+      alignTop: false,
+      removalDelay: 0,
+      fixedContentPos: "auto",
+      fixedBgPos: "auto",
+      overflowY: "auto",
+      closeMarkup: '<button title="%title%" type="button" class="mfp-close">&times;</button>',
+      tClose: "Close (Esc)",
+      tLoading: "Loading..."
+    }
+  };
+  $.fn.magnificPopup = function (options) {
+    _checkInstance();
+    var jqEl = $(this);
+    if (typeof options === "string") if (options === "open") {
+      var items, itemOpts = _isJQ ? jqEl.data("magnificPopup") : jqEl[0].magnificPopup,
+        index = parseInt(arguments[1], 10) || 0;
+      if (itemOpts.items) items = itemOpts.items[index];
+      else {
+        items = jqEl;
+        if (itemOpts.delegate) items = items.find(itemOpts.delegate);
+        items = items.eq(index)
+      }
+      mfp._openClick({
+        mfpEl: items
+      }, jqEl, itemOpts)
+    } else {
+      if (mfp.isOpen) mfp[options].apply(mfp, Array.prototype.slice.call(arguments, 1))
+    } else {
+      options = $.extend(true, {}, options);
+      if (_isJQ) jqEl.data("magnificPopup", options);
+      else jqEl[0].magnificPopup = options;
+      mfp.addGroup(jqEl, options)
+    }
+    return jqEl
+  };
+  var _imgInterval, _getTitle = function (item) {
+      if (item.data && item.data.title !== undefined) return item.data.title;
+      var src = mfp.st.image.titleSrc;
+      if (src) if ($.isFunction(src)) return src.call(mfp, item);
+      else if (item.el) return item.el.attr(src) || "";
+      return ""
+    };
+  $.magnificPopup.registerModule("image", {
+    options: {
+      markup: '<div class="mfp-figure">' + '<div class="mfp-close"></div>' + '<div class="mfp-img"></div>' + '<div class="mfp-bottom-bar">' + '<div class="mfp-title"></div>' + '<div class="mfp-counter"></div>' + "</div>" + "</div>",
+      cursor: "mfp-zoom-out-cur",
+      titleSrc: "title",
+      verticalFit: true,
+      tError: '<a href="%url%">The image</a> could not be loaded.'
+    },
+    proto: {
+      initImage: function () {
+        var imgSt = mfp.st.image,
+          ns = ".image";
+        mfp.types.push("image");
+        _mfpOn(OPEN_EVENT + ns, function () {
+          if (mfp.currItem.type === "image" && imgSt.cursor) _body.addClass(imgSt.cursor)
+        });
+        _mfpOn(CLOSE_EVENT + ns, function () {
+          if (imgSt.cursor) _body.removeClass(imgSt.cursor);
+          _window.off("resize" + EVENT_NS)
+        });
+        _mfpOn("Resize" + ns, mfp.resizeImage);
+        if (mfp.isLowIE) _mfpOn("AfterChange", mfp.resizeImage)
+      },
+      resizeImage: function () {
+        var item = mfp.currItem;
+        if (!item || !item.img) return;
+        if (mfp.st.image.verticalFit) {
+          var decr = 0;
+          if (mfp.isLowIE) decr = parseInt(item.img.css("padding-top"), 10) + parseInt(item.img.css("padding-bottom"), 10);
+          item.img.css("max-height", mfp.wH - decr)
+        }
+      },
+      _onImageHasSize: function (item) {
+        if (item.img) {
+          item.hasSize = true;
+          if (_imgInterval) clearInterval(_imgInterval);
+          item.isCheckingImgSize = false;
+          _mfpTrigger("ImageHasSize", item);
+          if (item.imgHidden) {
+            if (mfp.content) mfp.content.removeClass("mfp-loading");
+            item.imgHidden = false
+          }
+        }
+      },
+      findImageSize: function (item) {
+        var counter = 0,
+          img = item.img[0],
+          mfpSetInterval = function (delay) {
+            if (_imgInterval) clearInterval(_imgInterval);
+            _imgInterval = setInterval(function () {
+              if (img.naturalWidth > 0) {
+                mfp._onImageHasSize(item);
+                return
+              }
+              if (counter > 200) clearInterval(_imgInterval);
+              counter++;
+              if (counter === 3) mfpSetInterval(10);
+              else if (counter === 40) mfpSetInterval(50);
+              else if (counter === 100) mfpSetInterval(500)
+            }, delay)
+          };
+        mfpSetInterval(1)
+      },
+      getImage: function (item, template) {
+        var guard = 0,
+          onLoadComplete = function () {
+            if (item) if (item.img[0].complete) {
+              item.img.off(".mfploader");
+              if (item === mfp.currItem) {
+                mfp._onImageHasSize(item);
+                mfp.updateStatus("ready")
+              }
+              item.hasSize = true;
+              item.loaded = true;
+              _mfpTrigger("ImageLoadComplete")
+            } else {
+              guard++;
+              if (guard < 200) setTimeout(onLoadComplete, 100);
+              else onLoadError()
+            }
+          },
+          onLoadError = function () {
+            if (item) {
+              item.img.off(".mfploader");
+              if (item === mfp.currItem) {
+                mfp._onImageHasSize(item);
+                mfp.updateStatus("error", imgSt.tError.replace("%url%", item.src))
+              }
+              item.hasSize = true;
+              item.loaded = true;
+              item.loadError = true
+            }
+          },
+          imgSt = mfp.st.image;
+        var el = template.find(".mfp-img");
+        if (el.length) {
+          var img = document.createElement("img");
+          img.className = "mfp-img";
+          item.img = $(img).on("load.mfploader", onLoadComplete).on("error.mfploader", onLoadError);
+          img.src = item.src;
+          if (el.is("img")) item.img = item.img.clone();
+          if (item.img[0].naturalWidth > 0) item.hasSize = true
+        }
+        mfp._parseMarkup(template, {
+          title: _getTitle(item),
+          img_replaceWith: item.img
+        }, item);
+        mfp.resizeImage();
+        if (item.hasSize) {
+          if (_imgInterval) clearInterval(_imgInterval);
+          if (item.loadError) {
+            template.addClass("mfp-loading");
+            mfp.updateStatus("error", imgSt.tError.replace("%url%", item.src))
+          } else {
+            template.removeClass("mfp-loading");
+            mfp.updateStatus("ready")
+          }
+          return template
+        }
+        mfp.updateStatus("loading");
+        item.loading = true;
+        if (!item.hasSize) {
+          item.imgHidden = true;
+          template.addClass("mfp-loading");
+          mfp.findImageSize(item)
+        }
+        return template
+      }
+    }
+  });
+  var hasMozTransform, getHasMozTransform = function () {
+      if (hasMozTransform === undefined) hasMozTransform = document.createElement("p").style.MozTransform !== undefined;
+      return hasMozTransform
+    };
+  $.magnificPopup.registerModule("zoom", {
+    options: {
+      enabled: false,
+      easing: "ease-in-out",
+      duration: 300,
+      opener: function (element) {
+        return element.is("img") ? element : element.find("img")
+      }
+    },
+    proto: {
+      initZoom: function () {
+        var zoomSt = mfp.st.zoom,
+          ns = ".zoom",
+          image;
+        if (!zoomSt.enabled || !mfp.supportsTransition) return;
+        var duration = zoomSt.duration,
+          getElToAnimate = function (image) {
+            var newImg = image.clone().removeAttr("style").removeAttr("class").addClass("mfp-animated-image"),
+              transition = "all " + zoomSt.duration / 1E3 + "s " + zoomSt.easing,
+              cssObj = {
+                position: "fixed",
+                zIndex: 9999,
+                left: 0,
+                top: 0,
+                "-webkit-backface-visibility": "hidden"
+              },
+              t = "transition";
+            cssObj["-webkit-" + t] = cssObj["-moz-" + t] = cssObj["-o-" + t] = cssObj[t] = transition;
+            newImg.css(cssObj);
+            return newImg
+          },
+          showMainContent = function () {
+            mfp.content.css("visibility", "visible")
+          },
+          openTimeout, animatedImg;
+        _mfpOn("BuildControls" + ns, function () {
+          if (mfp._allowZoom()) {
+            clearTimeout(openTimeout);
+            mfp.content.css("visibility", "hidden");
+            image = mfp._getItemToZoom();
+            if (!image) {
+              showMainContent();
+              return
+            }
+            animatedImg = getElToAnimate(image);
+            animatedImg.css(mfp._getOffset());
+            mfp.wrap.append(animatedImg);
+            openTimeout = setTimeout(function () {
+              animatedImg.css(mfp._getOffset(true));
+              openTimeout = setTimeout(function () {
+                showMainContent();
+                setTimeout(function () {
+                  animatedImg.remove();
+                  image = animatedImg = null;
+                  _mfpTrigger("ZoomAnimationEnded")
+                }, 16)
+              }, duration)
+            }, 16)
+          }
+        });
+        _mfpOn(BEFORE_CLOSE_EVENT + ns, function () {
+          if (mfp._allowZoom()) {
+            clearTimeout(openTimeout);
+            mfp.st.removalDelay = duration;
+            if (!image) {
+              image = mfp._getItemToZoom();
+              if (!image) return;
+              animatedImg = getElToAnimate(image)
+            }
+            animatedImg.css(mfp._getOffset(true));
+            mfp.wrap.append(animatedImg);
+            mfp.content.css("visibility", "hidden");
+            setTimeout(function () {
+              animatedImg.css(mfp._getOffset())
+            }, 16)
+          }
+        });
+        _mfpOn(CLOSE_EVENT + ns, function () {
+          if (mfp._allowZoom()) {
+            showMainContent();
+            if (animatedImg) animatedImg.remove();
+            image = null
+          }
+        })
+      },
+      _allowZoom: function () {
+        return mfp.currItem.type === "image"
+      },
+      _getItemToZoom: function () {
+        if (mfp.currItem.hasSize) return mfp.currItem.img;
+        else return false
+      },
+      _getOffset: function (isLarge) {
+        var el;
+        if (isLarge) el = mfp.currItem.img;
+        else el = mfp.st.zoom.opener(mfp.currItem.el || mfp.currItem);
+        var offset = el.offset();
+        var paddingTop = parseInt(el.css("padding-top"), 10);
+        var paddingBottom = parseInt(el.css("padding-bottom"), 10);
+        offset.top -= $(window).scrollTop() - paddingTop;
+        var obj = {
+          width: el.width(),
+          height: (_isJQ ? el.innerHeight() : el[0].offsetHeight) - paddingBottom - paddingTop
+        };
+        if (getHasMozTransform()) obj["-moz-transform"] = obj["transform"] = "translate(" + offset.left + "px," + offset.top + "px)";
+        else {
+          obj.left = offset.left;
+          obj.top = offset.top
+        }
+        return obj
+      }
+    }
+  });
+  var _getLoopedId = function (index) {
+      var numSlides = mfp.items.length;
+      if (index > numSlides - 1) return index - numSlides;
+      else if (index < 0) return numSlides + index;
+      return index
+    },
+    _replaceCurrTotal = function (text, curr, total) {
+      return text.replace("%curr%", curr + 1).replace("%total%", total)
+    };
+  $.magnificPopup.registerModule("gallery", {
+    options: {
+      enabled: false,
+      arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>',
+      preload: [0, 2],
+      navigateByImgClick: true,
+      arrows: true,
+      tPrev: "Previous (Left arrow key)",
+      tNext: "Next (Right arrow key)",
+      tCounter: "%curr% of %total%"
+    },
+    proto: {
+      initGallery: function () {
+        var gSt = mfp.st.gallery,
+          ns = ".mfp-gallery",
+          supportsFastClick = Boolean($.fn.mfpFastClick);
+        mfp.direction = true;
+        if (!gSt || !gSt.enabled) return false;
+        _wrapClasses += " mfp-gallery";
+        _mfpOn(OPEN_EVENT + ns, function () {
+          if (gSt.navigateByImgClick) mfp.wrap.on("click" + ns, ".mfp-img", function () {
+            if (mfp.items.length > 1) {
+              mfp.next();
+              return false
+            }
+          });
+          _document.on("keydown" + ns, function (e) {
+            if (e.keyCode === 37) mfp.prev();
+            else if (e.keyCode === 39) mfp.next()
+          })
+        });
+        _mfpOn("UpdateStatus" + ns, function (e, data) {
+          if (data.text) data.text = _replaceCurrTotal(data.text, mfp.currItem.index, mfp.items.length)
+        });
+        _mfpOn(MARKUP_PARSE_EVENT + ns, function (e, element, values, item) {
+          var l = mfp.items.length;
+          values.counter = l > 1 ? _replaceCurrTotal(gSt.tCounter, item.index, l) : ""
+        });
+        _mfpOn("BuildControls" + ns, function () {
+          if (mfp.items.length > 1 && (gSt.arrows && !mfp.arrowLeft)) {
+            var markup = gSt.arrowMarkup,
+              arrowLeft = mfp.arrowLeft = $(markup.replace("%title%", gSt.tPrev).replace("%dir%", "left")).addClass(PREVENT_CLOSE_CLASS),
+              arrowRight = mfp.arrowRight = $(markup.replace("%title%", gSt.tNext).replace("%dir%", "right")).addClass(PREVENT_CLOSE_CLASS);
+            var eName = supportsFastClick ? "mfpFastClick" : "click";
+            arrowLeft[eName](function () {
+              mfp.prev()
+            });
+            arrowRight[eName](function () {
+              mfp.next()
+            });
+            if (mfp.isIE7) {
+              _getEl("b", arrowLeft[0], false, true);
+              _getEl("a", arrowLeft[0], false, true);
+              _getEl("b", arrowRight[0], false, true);
+              _getEl("a", arrowRight[0], false, true)
+            }
+            mfp.container.append(arrowLeft.add(arrowRight))
+          }
+        });
+        _mfpOn(CHANGE_EVENT + ns, function () {
+          if (mfp._preloadTimeout) clearTimeout(mfp._preloadTimeout);
+          mfp._preloadTimeout = setTimeout(function () {
+            mfp.preloadNearbyImages();
+            mfp._preloadTimeout = null
+          }, 16)
+        });
+        _mfpOn(CLOSE_EVENT + ns, function () {
+          _document.off(ns);
+          mfp.wrap.off("click" + ns);
+          if (mfp.arrowLeft && supportsFastClick) mfp.arrowLeft.add(mfp.arrowRight).destroyMfpFastClick();
+          mfp.arrowRight = mfp.arrowLeft = null
+        })
+      },
+      next: function () {
+        mfp.direction = true;
+        mfp.index = _getLoopedId(mfp.index + 1);
+        mfp.updateItemHTML()
+      },
+      prev: function () {
+        mfp.direction = false;
+        mfp.index = _getLoopedId(mfp.index - 1);
+        mfp.updateItemHTML()
+      },
+      goTo: function (newIndex) {
+        mfp.direction = newIndex >= mfp.index;
+        mfp.index = newIndex;
+        mfp.updateItemHTML()
+      },
+      preloadNearbyImages: function () {
+        var p = mfp.st.gallery.preload,
+          preloadBefore = Math.min(p[0], mfp.items.length),
+          preloadAfter = Math.min(p[1], mfp.items.length),
+          i;
+        for (i = 1; i <= (mfp.direction ? preloadAfter : preloadBefore); i++) mfp._preloadItem(mfp.index + i);
+        for (i = 1; i <= (mfp.direction ? preloadBefore : preloadAfter); i++) mfp._preloadItem(mfp.index - i)
+      },
+      _preloadItem: function (index) {
+        index = _getLoopedId(index);
+        if (mfp.items[index].preloaded) return;
+        var item = mfp.items[index];
+        if (!item.parsed) item = mfp.parseEl(index);
+        _mfpTrigger("LazyLoad", item);
+        if (item.type === "image") item.img = $('<img class="mfp-img" />').on("load.mfploader", function () {
+          item.hasSize = true
+        }).on("error.mfploader", function () {
+          item.hasSize = true;
+          item.loadError = true;
+          _mfpTrigger("LazyLoadError", item)
+        }).attr("src", item.src);
+        item.preloaded = true
+      }
+    }
+  })
+})(window.jQuery || window.Zepto);
+”ò¿Ÿ®  õ       ÀÜz      CLOSE_EVENT    ï&      Close      1ÒÒÂ      BEFORE_CLOSE_EVENT     ∑ÉΩ      BeforeClose    ﬁQ)      AFTER_CLOSE_EVENT      r∑¶w
+      AfterClose     [VØ]      BEFORE_APPEND_EVENT    ”Ó£      BeforeAppend   âé”T      MARKUP_PARSE_EVENT	     êeîÔ      MarkupParse
+    ¬ÌÙ
+      OPEN_EVENT     [:4„      Open   ‡.üÁ      CHANGE_EVENT   +áÌ      Change     )¸Ÿ      mfp    ‹ÛZ0      EVENT_NS   •±„      READY_CLASS    ›oìN	      mfp-ready      °Ïö      REMOVING_CLASS     Œ]	ü      mfp-removing   n<ó€      PREVENT_CLOSE_CLASS    &\Ì”      mfp-prevent-close      ©=+º      MagnificPopup      _ï!       _isJQ      ¯2áâ      window     >Â/      jQuery     `ÏÖ∞      _prevStatus    ¯g\‘      _window    ⁄ƒ™      _body      ;©	      _document      ¨5ª˘      _prevContentType   Ù„íd      _wrapClasses    :„‹˘      _currPopupType!     (      _mfpOn"     Óıxf      _getEl#     6CY>	      className$      †Á„V      appendTo%   ‘„X      html&   ∏OÄ      document'   DC      createElement(      ú≥ÊŸ      div)    ∆âñ+      mfp-*   Q√:	      innerHTML+      ≠$~      appendChild,    &‘ w      _mfpTrigger-    6ó(Å      data.   ÖñWî      triggerHandler/     Ø®	      callbacks0      våƒ      charAt1     RâDo      toLowerCase2    ÿÖ Ã      slice3      ¢]¡Ï      isArray4    ªπÁ	      _setFocus5      KÃÌ      focus6      4W»      content7    —Íc      wrap8   tÿ"Ï      _getCloseBtn9   àTƒw      currTemplate:   ﬁM[      closeBtn;   π£øE      closeMarkup<    JkƒÂ      %title%=    RÉæ_      tClose>     ìˇ‹      _checkInstance?     °QÒö      magnificPopup@      ‰§ÎÙ      instanceA   íu`      initB   Ÿ+ª      _checkIfCloseC      7ÑÉz      hasClassD   GÌL      closeOnContentE     %∆[      closeOnContentClickF    ån)'	      closeOnBgG      6"Ö       closeOnBgClickH     -ú…	      mfp-closeI      ﬁ]»&	      preloaderJ      µœê^      containsK   ™*>       supportsTransitionsL    —ı      MozM    éJC      WebkitN     Ã∏
+      transitionO     ¶i4      popP    ãXìa
+      TransitionQ     Bøı'
+      appVersionR     π„+	      navigatorS      ˛Oq√      isIE7T      ⁄Eú¡      indexOfU    ›ﬂA˛      MSIE 7.V    ô!†∫      isIE8W      [ù]˝      MSIE 8.X    Ü◊f}      isLowIEY    È;#√	      isAndroidZ       (›      android[    ÎÃD      isIOS\      ª"Ì      iphone|ipad|ipod]   dçÿM      supportsTransition^     ∞%E®      probablyMobile_     @aMtJ      (Opera Mini)|Kindle|webOS|BlackBerry|(Opera Mobi)|(Windows Phone)|IEMobile`     ìãà	      userAgenta      òh;      bodyb   Ã-Có      popupsCachec    óx5      opend   „>ÆÃ      isObje      §#`      itemsf      Ø†ÀÌ      toArrayg    ˝ÑÃ∫      itemh   ¸ê(      parsedi     ˜_       isOpenj     =I]—      updateItemHTMLk     â;°      typesl      l¬À¥      mainElm     B¸ø;      keyn    ªl‡Ù      extendo     {!~K      defaultsp   P°4£      fixedContentPosq    z¡≤S      autor    ∫˚      modals      Q¬+ˇ      showCloseBtnt   ™=ö      enableEscapeKeyu    Pj˛/	      bgOverlayv      ü™‚X      clickw      A¢Ωê      attrx   ≤Rz‘      tabindexy   -‚
+Ë	      containerz      î˚      contentContainer{   …îC      tLoading|   I≤V      modules}    ¨‚s◊      toUpperCase~    TxNÍ
+      BeforeOpen     ƒv¸`      closeBtnInsideÄ     ‹B-      appendÅ     êséÍ      templateÇ   b® ‹      close_replaceWithÉ      ƒ—x;       mfp-close-btn-inÑ      ~.‚ñ      alignTopÖ   ıò†ê       mfp-align-topÜ     >ü      cssá    6e\	      overflowYà      Ô|ú˙	      overflowXâ      Ñ€ËW      hiddenä     $√Á      topã    ìGÎ	      scrollTopå      »Åí      positionç   H<*ê      absoluteé   ,∏
+      fixedBgPosè     ∑…≈      heightê     KH`      keyupë      ≠5      keyCodeí    *U^¶
+      updateSizeì     "‚ƒù       mfp-auto-cursorî   Bå|      addClassï   ©f      windowHeightñ   i\u      windowStylesó   .˘cÌ      _hasScrollBarò      ?æÎÃ      _getScrollbarSizeô      }™Ô      paddingRightö   ˝å˜#
+      body, htmlõ     Z†œ      classesToaddú   7 'ï	      mainClassù      aQá       mfp-ie7û   ‹∂ã      _addClassToMFPü     ≠¡¯`      BuildControls†      ©8GR	      prependTo°      }?â      _lastFocusedEl¢     U4ÆÜ      activeElement£      3AtŸ
+      setTimeout§     Ò‚M      focusin•    º∞a      removalDelay¶   ∑aó      _closeß     xXìç      classesToRemove®    vﬂY…      detach©     ∏™˝      empty™      0„Î      _removeClassFromMFP´    ˙¯Öﬂ      off¨    ≠˙˘)       focusin≠   /–∆0      mfp-wrapÆ   Ûûí
+      removeAttrØ     d–ª|      mfp-bg∞     QaNP      mfp-container±      €¢å      currItem≤   YWt‚
+      prevHeight≥     ?øN«	      winHeight¥      dv”™	      zoomLevelµ      ï,Øp      documentElement∂    ïß˘G      clientWidth∑    Uü
+      innerWidth∏     0Uó      innerHeightπ    v%	¡      Resize∫     yÆ
+      parseElª    ÉLyç      BeforeChangeº   áìæê      markupΩ     ≈‡+      FirstMarkupParseæ   ˆ+      removeClassø    rº72      -holder¿    jKa
+      newContent¡     \Ωí      appendContent¬      ÛT	      preloaded√      ı£$      prependƒ    ëh`      AfterChange≈    ç´˜·
+      .mfp-close∆     ﬁﬁÿ      tagName«    ú∑»õ      src»    q÷}¯      data-mfp-src…   ª©`X      href    Tünì      inlineÀ     Ü(      ElementParseÃ   Ê˘ u      addGroupÕ    :yã      optionsŒ    µÄÏÄ      eHandlerœ   ÕÏm≥      mfpEl–      fäÊı
+      _openClick—     ò◊≥      eName“       ˚œë      click.magnificPopup”    €dAb      delegate‘   ﬂ£Wñ      midClick’   ≈∏0      which÷      
+@•&      ctrlKey◊    `$ü˝      metaKeyÿ    Cp|	      disableOnŸ      ãè@i
+      isFunction⁄     ÎƒJ˚      width€      B9∫¿      preventDefault‹     ı/F/      stopPropagation›    J=À      updateStatusﬁ   à3¿µ      textﬂ   ô´‘      mfp-s-‡     cÅÁÙ      loading·    d◊+(      UpdateStatus‚   ˛e      stopImmediatePropagation„   «±÷†      cName‰      LsAø      scrollHeightÂ   Û˛ø      _parseMarkupÊ   õcà      arrÁ    ¶Sæ∏      replaceWithË    e ú      imgÈ    ÅòÎ›
+      <img src="Í     ˜AÒà	      " class="Î      ¬F1      " />Ï   µGåY      scrollbarSizeÌ      Gl!ê	      scrollDivÓ      ‹bó"      mfp-sbmÔ    dMCæ      cssText    Ì˘N      width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;Ò     ≥Z÷¶      offsetWidthÚ    ˘˙K      removeChildÛ    ´       protoÙ      _Âp0      registerModuleı     Ñu2      pushˆ   >8©MH      <button title="%title%" type="button" class="mfp-close">&times;</button>˜   çÜf®      Close (Esc)¯    cvn˝
+      Loading...˘     €Ó˙      jqEl˙   U;L@      itemOpts˚   2)V      _imgInterval¸   ∑∑û	      _getTitle˝      “E      title˛      µ¥â·      imageˇ      6Èö      titleSrc  ˇ∆N      cursor    S0m´      mfp-zoom-out-cur	  ˚…ä#      verticalFit
+   ô«≠(      tError    ,UÒ2      <a href="%url%">The image</a> could not be loaded.    >N⁄≠	      initImage     ˝≠jO      imgSt     Ç"Bd      .image    º∑⁄ˆ      resizeImage   åPå      decr  ˙ π      padding-top   A/+◊      padding-bottom    ˜E
+      max-height    Ωdf       _onImageHasSize   å      hasSize   bPk      clearInterval     ÌÕ:      isCheckingImgSize     …I≤J      ImageHasSize  ∑ı≠£	      imgHidden     H#ò7      mfp-loading   ÉP‡      findImageSize     JDè®      counter   %#lp      mfpSetInterval    ãC±¿      delay     Ïà       setInterval    –À˛      naturalWidth!  &÷]      getImage"  D∫Ù˘      guard#     v⁄       onLoadComplete$    Dï»á      complete%  tAO∫
+      .mfploader&    ¢Ñ
+      ready'     ƒM      loaded(    8¥b\      ImageLoadComplete)     t
+ì      onLoadError*   ˛tuW      error+     ≥       %url%,     (Ø	      loadError-     ÛN™      .mfp-img.  -få|      mfp-img/   ™B»}      load.mfploader0    n¿\      error.mfploader1   ±4çÆ      clone2     w
+1      img_replaceWith3   π&©˘      hasMozTransform4   §ÎC”      getHasMozTransform5    ıv5Ä      MozTransform6  •{¯       zoom7  hË?D      enabled8   fò„`      easing9    mÅ„      ease-in-out:   ¿
+7      duration;  ıVã¶      opener<    ÖÆ      initZoom=  ◊úfo      zoomSt>    √
+      .zoom?     :Ae      getElToAnimate@    Õ·6      newImgA    Ötì       mfp-animated-imageB    |“/˘      all C  ≤Lí‚      s D    #ë'Ç      cssObjE    å≤ÜX      fixedF     f˜      zIndexG    ı]á      leftH  p[◊      -webkit-backface-visibilityI   á9Ç˘      -webkit-J  \2π§      -moz-K     ÔI™      -o-L   ô°yã      showMainContentM   1“— 
+      visibilityN    ?Iqõ      visibleO   g°™t      openTimeoutP   <ˆâ      animatedImgQ   Ñ∫U∆
+      _allowZoomR    QÔ8u      clearTimeoutS  Q∑@      _getItemToZoomT    ›A:q
+      _getOffsetU    *N∑∆      removeV    *g\9      ZoomAnimationEndedW    2B      isLargeX   lâçµ
+      paddingTopY    ˙ûÍC      paddingBottomZ     ﬂN#9      obj[   Bãwå      offsetHeight\  "ú¥      -moz-transform]    RË|	      transform^     ûB{z
+      translate(_           px,`   µlﬂ)      px)a   Ôö X      _getLoopedIdb  Öbˆ	      numSlidesc      s¨±      _replaceCurrTotald     Œ∆Ò      curre  T˝ªW      totalf     F äL      %curr%g    ∂⁄ÓK      %total%h   z£ √      galleryi   ›∂3      arrowMarkupj   [øÄQ      <button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>k     Øô      preloadl   ™˙vÙ      navigateByImgClickm    O¶Í÷      arrowsn    ~àî/      tPrevo     ;p      Previous (Left arrow key)p     >√lY      tNextq     ©H`      Next (Right arrow key)r    ¿Óâ“      tCounters  ∏l£∆      %curr% of %total%t     ÎÜõ      initGalleryu   ÑË˘q      gStv   -Ó      .mfp-galleryw  2–ia      supportsFastClickx     ˜ÈQ(      mfpFastClicky  î’	ñ	      directionz     êÊ∞¢       mfp-gallery{  ù∫”      keydown|   >∆ß"      prev}  ‚Qà„	      arrowLeft~     ∑G§j      %dir%     ÜK
+      arrowRightÄ     ë∏.      rightÅ     ∆Ú≠Ü      _preloadTimeoutÇ   =,÷      preloadNearbyImagesÉ   Y°      destroyMfpFastClickÑ   d~ôI      goToÖ  *ó6˘      newIndexÜ  }^¢õ      preloadBeforeá     €U ≥      minà   ‡∫ì/      preloadAfterâ  §¡zç      _preloadItemä  Ä¬£      LazyLoadã  ?∏X      <img class="mfp-img" />å   3ﬁ.£      LazyLoadErrorç     ;≈áR      Zeptoé     3ÔÕ“¥      <div class="mfp-figure"><div class="mfp-close"></div><div class="mfp-img"></div><div class="mfp-bottom-bar"><div class="mfp-title"></div><div class="mfp-counter"></div></div></div>è  ÊµÉ      open/mfp.bgOverlay<ê   "
+OR      open/mfp.wrap<ë    ÛÇéé      open/<í    pÚú      open/</<ì  a;§      close/<ï   T‡âˇ      updateStatus/<ñ    €ö—ä      _parseMarkup/<ó    ê˜      $.fn.magnificPopupò    {®≠      initImage/<ö   ò≠Ò*      findImageSize/mfpSetInterval/_imgInterval<ü    ∂úm
+      initZoom/<†    crl      initZoom/</openTimeout<°   c[±–$      initZoom/</openTimeout</openTimeout<¢  ÙÉ©Ô&      initZoom/</openTimeout</openTimeout</<£    ÎΩßà      initZoom/</<§  ï˛      initGallery/<•     µNu•      initGallery/</<¶   Èjc"      initGallery/</mfp._preloadTimeout<ß    ˛x<      _preloadItem/item.img<     Z   7  Z   Z              Ô%,â                           '                                                                                                                                           	                 
+                                                                                                                                                                                                                                                                                                                                                                                                       !                 "                #      #           $                 %                 &                 '                 (                 )                 *                +      +           ,      +           -                 .                 /                0      0           1      1           2                3      3           4      3           5                 6                 7             	   8      8           9      8           :      8           ;      ;           <      <           =      =           >      8           ?      ?           @      8           A                 B                 C                 D                 E                 F                G      G           H      H           I      H           J      G           K      G           L      G           M      M           N      M           O      G           P      P           Q      G           R                 S                 T                 U                 V                W      W           X      W           Y      ≥Oåc            %             $ `K  P  P  Pa P  P8  P  Pc P  P  P¸  P   PB  P  P3 P  P  P   P˚  Pv`  P  P4  P  P
+  P,  P  P  P  P  P>  P4 P"  P  P!  P  P                             p  f              #  $  %  ª  ï              e  -                                                             ˇ  D  F                s  v                Q  
+   	         -  i  e  g  |  n  ï  ñ  s  õ                               e               e  Å  @  g               e                                               e                                                ß  ñ              ≥  ¥  è                g    º  ¿               ¿                ˝   g    k  i              ï`Õ  PŒ  —              e  Ö               e  ï Õ  ‘  ÿ              ı  ﬁ  -               e               „              „  Ö                ≥               Å  P@  g  Ê  P            m  >  ï w                Ì              Õ  ˝   Ö                               p  e  Ö               Õ  ˘  e  ˙  ˝      Ö               g  «                 P‹                                               g                g               g  P PË  P P                                          g  PÅ  " P# P) P Pï Ë                                                               á                 = P‹ ˛  P: P? PL PO PP P            ˛  @ N  D t                                                                                                                                                                              W ï ô  X Y Z             ˝   b              ﬁ  d e                u P‹`w P                                             e               e  -              e  á   @  g  l                º  }  —                                                                                                                               Ö               p  Ü à i               ˝   g  P                                Ø¬0∞Z     \     _     IÙ$KEÆ˙ö   U      N   A  c  @   ¶  í  j  ¡  ∫  Ã  –  ›  û  ™  ó  Â  ò                                          †  à  á     
+   ä  å     
+    è  å                ô          ï    
+     -  «             
+   ı  ﬁ     #    @  Û  |  c  @   Ù  o                     d     ÿ  m  ‘  ú  I  5  E  G    s  t  r  Ñ  •  p  é  á  ;  =  {           œ             
+    Õ  Û         º   ˇ  	 
+             !    
+     ˝  2    
+    Õ  Û         7 8 : ;          < Q S T          å  F G ä  H    
+     ⁄  è     
+    Õ  Û     (    7 i k l m n p r          t w  | Ñ Ç â á&’™ç!´!Z   d     ¬äud   /                          m    ª   J   ù   ó   ﬂª   J   ó   w ﬂ•@`FÄ ]§ ˇˇˇˇPPÄ–  ≠Ëùó–  ◊  	              u       Ω  Œ   ﬂ   Œ   ﬂ   Œ   ﬂ   Œ   ﬂ   Œ   ﬂ   Œ   ﬂ   Œ   ﬂ   Œ &  ﬂ   Œ   ﬂ	   ¡   &Œ   ﬂ
+   Œ   ﬂ   Œ   ﬂ   Œ $  ﬂm   Œ   ﬂª   J   Œ   ﬂ¡    ª   s Œ   ﬂm   Œ %  ﬂm   Œ #  ﬂm   Œ   ﬂm   Œ   ﬂm   Œ   ﬂm   Œ !  ﬂm   Œ   ﬂm   Œ   ﬂ¡   9   ¡   <   m   <   m   <   m   <   m    <!   m"   <#   m$   <%   m&   <'   m(   <)   m*   <+   m,   <-   m.   </   m0   <1   m2   <3   m4   <5   m6   <7   m8   <9   L:   ﬂ¡   9;   <<   ¡   J:   <=   h    <>   m?   <   m@   <   mA   <B   9C   <D   <E   <F   G   <H   <I   G   <J   <K   <L   <M   <N   <O   <P   <Q   <R   S   <T   S   <U   S   <V   W   <X   Y   <Z   [   <\   <]   L^   ﬂ¡   J_   m`   L^   ﬂma   Œ   ﬂ¡   J^   ·JB   ‰b   9c   9d   e   <f   g   <h   i   <j   <k   l   <m   <n   9o   mp   <q   mr   <s   mt   <u   mv   <w   mx   <y   <=   w ﬂmz   Œ "  ﬂ¡   J^   ·JB   ‰{   9|   9}   <~      <Ä   ,<Å   mÇ   <É   <n   9Ñ   mÖ   <Ü   má   <à   mâ   <ä   mã   <å   <=   w ﬂmç   Œ   ﬂmé   Œ 
+  ﬂ¡   J^   ·JB   ‰è   9ê   9ë   <~   í   <ì   h   i    i   <î   <ï   <ñ   ó   <ò   ô   <ö   õ   <ú   <n   9ù   mû   <ü   m†   <°   m¢   <£   m§   <•   m¶   <ß   m®   <©   <=   w ﬂ•)`+`+`+`+`+`+`+
+`+`,`+`+`+`+` í `ˇˇˇˇPI`K`K`K%`K(`K/`K6`KC`KJ`**JYJÄ  –JÄ  €JÄ  ¯JÄ JÄ JÄ #JÄ =JÄ QJÄ `JÄ s   JÄ íê@Ä û`*&/*JÄ ™ JÄ ≤%&&&*&*&&&&&&&&*****ï `ï@Ä ‚!`KÄ È`ñ (%%***& %JÄ  JÄ 	JÄ JÄ (OÄ ÈPDÄ k-` `ñ '%%&*( %JÄ ƒ  OÄ oPDÄ ‡`KÄ Ê` `ñ *%%&*ó &&** %JÄ 2JÄ 7JÄ <JÄ AJÄ IOÄ ÈP4Ä ZPÄÄÄ$   5õ9$                               • `   Éì‹`   (                         ¡ 	  J   ·J   ‰¡   º  &¡   &º w ﬂ• `ë 
+
+ˇˇˇÁP$PÄÄ(  7«Ì(  ¬                        ª   ·J   ‰   s Õ   ﬂæ      º  &L   ﬂº ö   ó   æ   º L   ﬂó   º õE   ó   ¡    æ   s Õ   ﬂº ö   ó
+   æ   ·J   ‰º w ﬂó   ô)   ó   º ö   ó   º ·J   ‰æ   w ﬂó   æ   ¢• `ë 	P(`	*``í `-	`ˇˇˇ˛P(`
+`ˇˇˇ˜Pì `
+`
+ˇˇˇÙP)`$QÄL  ´ùﬁ/L  Ê                         ¡ 	  J   ·J   ‰¡   º  &º w ﬂ¡ 	  J   J   ö∞   ó   º  ·J   ‰s ·J   ‰s  º  ·J   ‰s &Ã  ﬂ¡ 	  J   J   º  Köh   ó   ¡ 	  J   J   º  K·J   ‰¡ 	  ¡   ·J	   ‰º s ö   ó   º ô   ó   h   º i    ó   w ﬂó   • `ë ˇˇˇÈP$`ô 	`P
+
+PP(`ù `ö 
+ˇˇˇ¯Pü ˇˇˇ€PIPÄÄ§   ◊B§   l                          ¡ 	  J   J   ö=   ó   ¡ 	  J   ·J   ‰¡ 	  J   J   s ·J   ‰s ô   ó
+   ¡ 	  J   ó   ·J   ‰w  ﬂ• `™  ˇˇˇ˚PP£ P$PÄ‰   2ÃÁ‰   ò                         º  ¡   ù   ó   ﬂ¡ 	  J   J   ó   öY   ó   ¡ 	  J   ¡    ¡ 	  J   J   ·J   ‰   ¡ 	  J   J   s s L   ﬂº  Œ   ﬂó   ¡ 	  J   J   ¢• `	ë ü 	`ê õ &ˇˇˇÌPˇˇˇÎP)	`N`/QÄÄÄê   QÂÑõê   W                          ¡   J   J   õB   ó   ¡   Ä„  Å  Œ 	  ﬂ¡ 	  ·J   ‰w  ﬂ¡   J   ¡ 	  L   ﬂó   • `ô 	`
+P)	`P$	`ö@P@  IG5}@  ö                '       ¡    º  s ·J   ‰¡ $  s ö   ó    ¢ó   ¡ 	  J   J   Õ   ﬂ¡ 	  J   J   Õ  ﬂæ   ú   ó	   ﬂæ  ó	   ö   ó
+   ¢ô  ó
+   ¡ 	  J   ùV   ó   ﬂ¡    º  s ·J   ‰   s ù0   ó   ﬂ¡ 	  J   ú   ó   ﬂº  ¡ 	  J   Kó   ö   ó   ¢ó   º  ¡ 	  J   Kú*   ó   ﬂ¡   ·J   ‰¡ 	  J   Kº  s ó    öE   ó!   æ  ö-   ó"   ¡   ·J   ‰ª	   º  s ö   ó&   ¢ó&   ô   ó&   æ   ö   ó'   ¢ó'   ¢• `ˇˇˇˇP
+ˇˇˇ˜P`AF`î `î `¢ `A; `ú ˇˇˇ˛P
+P¶ 5ú `AF`ò ˇˇˇÁPì ``
+ˇˇˇÌP`Aê@	``AF`!QÄÄ(  X!oC  Ω                        ª   ·J   ‰   s J   Õ   ﬂh      i       i      i      i   Õ  ﬂæ   J	    ö   ó   ¢ó   Áò   æ  J
+   ö9   ó
+   æ  ·J   ‰s     &æ   "ö   ó   ¢ó   ôΩˇˇˇó   ¢• `ë 	P-`≤ `	`AFfì `P	`Aê@`!QÄÄÄ(         m   H   ‰  å DM‰  a                &        ª   J   Õ   ﬂ¡ 	  æ   ·J   ‰   s ˇL   ﬂ¡ 	  æ   ·J   ‰   s ˇL   ﬂ¡ 	  ¡ 	  J   ù   ó   ﬂ¡ 	  J   ó   L   ﬂ¡ 	  l	   ·J
+   ‰æ   s L   ﬂ¡ 	  l   ·J
+   ‰æ   s L   ﬂ¡ 	  ¡    s  L   ﬂ¡ 	  ¡ 	  J   ù9   ó   ﬂ¡ 	  J   ù$   ó   ﬂl   ·J
+   ‰ª   J   s ó   L   ﬂ¡    ª   J   s Œ    ﬂ¡    ª   s Œ   ﬂ¡ 	  9   L   ﬂ• `/`ï P,`ï P,`Ø `ë !ˇˇˇ˚P)`ë &ˇˇˇ˚P)`P)`ª Ä  á
+ˇˇˇ˚P.`
+
+ˇˇˇ˛P)`ˇˇˇ˛P)`ê PÄÄÄ$  egà<  9
+      	          	     º  J   öÊ   ó   ¡ 	  º  J   ·J   ‰s  L   ﬂ¡ 	  L   ﬂº  J   Õ  ﬂÕ   ﬂò	   æ   æ  J   öÇ   ó   æ  æ   KÕ  ﬂæ  J   ö   ó   æ  J   KÕ  ﬂó   æ  º  J   Kö   ó   ¡ 	  æ   L   ﬂô   ó   æ   0(Õ   ﬂôoˇˇˇó   ôÉ   ó   ¡ 	  ¡   ·J   ‰º  J   s ö   ó   º  J   ô   ó   h   º  J   i    ó   L   ﬂ¡ 	  º  J   ù   ó"   ﬂó"   L   ﬂó#   ¡ 	  J	   ö   ó%   ¡ 	  ·J
+   ‰w  ﬂ ¢ó'   ¡ 	  h    L   ﬂ   Œ   ﬂº  J   ú   ó+   ﬂº  J   J   ó-   ö-   ó.   ¡ 	  º  J   ·J   ‰s L   ﬂô   ó2   ¡ 	  ¡   L   ﬂó3   º  J   öh   ó5   ¡ 	  J   º  J   Kõ#   ó9   ¡ 	  J   º  J   9   Nﬂó=   ¡ 	  ¡ 	  J   º  J   KL   ﬂô   óA   ¡ 	  9   L   ﬂóC   ¡ 	  ¡   ·J   ‰9   ¡   J   J   º  s L   ﬂ¡ 	  ¡ 	  J   J      ö   óM   ¡ 	  J   ô   óO   ¡ 	  J   J   óQ   L   ﬂ¡ 	  J   J   öN   óU   ¡ 	  J   L   ﬂ¡ 	  J   L   ﬂ¡ 	  J   L    ﬂ¡ 	  J   L!   ﬂó]   ¡ 	  J"   õ§   ó_   ¡ 	  ¡ #   #   s ·J$   ‰%   ¡   &m&   s L"   ﬂ¡ 	  ¡ #   '   s ·J(   ‰)   ˇs ·J$   ‰%   ¡   &m*   s L'   ﬂ¡ 	  ¡ #   +   ¡ 	  J'   s L+   ﬂón   ¡ 	  ¡ #   ,   s L-   ﬂ¡ 	  J   J.   ö<   ós   ¡ 	  ¡ #   .   ¡ 	  J+   ¡ 	  J   J/   s L.   ﬂóx   ¡   J   J0   Õ  ﬂÕ   ﬂòz   æ   æ  J   öv   ó}   æ  æ   KÕ  ﬂæ  ·J1   ‰s ·J2   ‰s  æ  ·J3   ‰s &Õ  ﬂ¡ 	  4   æ  &K·J5   ‰¡ 	  w ﬂæ   0(Õ   ﬂô{ˇˇˇóã   ¡    6   w ﬂ¡ 	  J   J    öq   óè   ¡ 	  J   J7   õ-   óí   ¡ 	  J'   ·J8   ‰¡    s  w ﬂô0   óñ   ¡ %   ¡   m9   w ﬂ¡   :   &.Œ   ﬂóò   ¡ 	  J   J;   ö   óõ   ¡   <   &.Œ   ﬂóú   ¡ 	  J   ö[   óû   ¡ 	  J'   ·J=   ‰9>   ¡ 	  J   J?   <@   A   <B   ¡ 	  J   J?   <?   w ﬂôB   ó©   ¡ 	  J'   ·J=   ‰9C   ¡   ·JD   ‰s  <E   F   <G   w ﬂó±   ¡ 	  J   JH   ù6   óµ   ﬂ¡ 	  J   JH      ú   óπ   ﬂ¡ 	  J   óª   öB   óº   ¡ 	  J"   ·J=   ‰9I   ¡   ·JJ   ‰s  <J   F   <G   w ﬂóƒ   ¡ 	  J   J!   ö*   ó«   ¡   ·J$   ‰K   ¡   &mL   w ﬂó    ¡   ·J$   ‰M   ¡   &mN   w ﬂ¡ 	  J   J   õ   ó–   ¡   O   &.Œ   ﬂó—   ¡   ö$   ó“   ¡ 	  J'   ·JP   ‰¡   w ﬂó’   ¡ 	  ¡   ·JJ   ‰s  LQ   Õ  ﬂ9R   Õ  ﬂ¡ 	  J   öW   ó€   ¡ 	  ·JS   ‰æ  s ö:   óﬁ   ¡ 	  ·JT   ‰s  Õ  ﬂæ  ö   ó·   æ  æ  LU   ﬂó‚   ¡ 	  J   öZ   ó‰   ¡ 	  JV   õ   óÊ   æ  A   L@   ﬂô-   óÁ   ¡    W   s ·J=   ‰@   A   w ﬂóÍ   ¡ 	  J   JX   Õ  ﬂ¡ 	  JV   ö   óÓ   æ  Y   &.Õ  ﬂóÔ   æ  ö   ó   ¡ 	  ·JZ   ‰æ  w ﬂóÚ   ¡ 	  ·J
+   ‰w  ﬂ¡    [   w ﬂ¡    \   s ·J=   ‰æ  w ﬂ¡ 	  J"   ·J]   ‰¡ 	  J'   s ·J^   ‰ª_   J`   w ﬂ¡ 	  ª_   Ja   Lb   ﬂªc    md   w ﬂ¡ 	  L	   ﬂ¡ 	  ·Je   ‰æ  w ﬂ¡    ¡   w ﬂº  ¢• `î 	`î P)	`,`M`fî `.`ì `ï `	ï `/`J'`ü0 	`ë ˇˇˇ¯P§ $ò 	`©@`î 	`P$	`AvF`ê `+`Ø #`ï Pì `ï `í `ù `û 	`® `ï `í ˇˇˇ’P)`§ :Ø `ô 	`ë 	`ë 	`ë 	`ñ@'`î 	`ê P
+
+
+ˇˇˇÈPI+	`ê Pë P
+
+
+ˇˇˇÈPI.	`ê $
+ˇˇˇÏPN0`ê P)`ô `ê $
+ˇˇˇ›P.`î `fî `.	`P
+
+PP)	`
+ˇˇˇ˚PD3'`ï@8`P$`ô `ô `ë Vˇˇˇ˘P 	`ˇˇˇÎPD>	`ó@@`ô `ó `î `ë %	î 	*	î@A)PNF`ë %	P(	JFPIJ`º ?ö `ë %	P(	JJnPIN`ô `
+
+ˇˇˇÈPIQ`
+ˇˇˇËPDT`ô `ó ``ë ˇˇˇ˜P)`ë P-`*`î `ˇˇˇÚP-`P(``ì@\`î `î `ô `Pî P)`î `î `ï ``ˇˇˇÒP)`P$`P$`P
+ˇˇˇ¸P$`ë 
+ˇˇˇ¸P
+
+ˇˇˇˆP$`ï `5qBfPDr`,`ˇˇˇıP$`ˇˇˇˇP$`#Q$         P   ñ          Ã  ä   <   ~ÃÇ<                             ¡ 	  ·J   ‰w  ﬂ• `P$	PÄh   Ç√π»h   1                         ¡    º  J   s ö   ó   ¡ 	  ·J   ‰w  ﬂó   • `ˇˇˇˇP`P)	PÄÄL   QdL                            º ¡    º J   s L   ﬂ• `	(ˇˇˇÛP)	PÄÄ\   ™?Ù\   +                         º  J   ö   ó   ¡ 	  ·J   ‰w  ﬂó   • `ï `P)PÄÄÄ<   ≈§_ˆ<                             ¡ 	  ·J   ‰w  ﬂ• 	`P$PÄ–   Ï,Â–   }                          ¡ 	  J   ö.   ó   ¡ 	  ·J   ‰¡   w ﬂ¡    w  ﬂô$   ó   ¡ 	  J   ·J   ‰¡   w ﬂó   ¡   ·J   ‰   ¡   &m   w ﬂ• `î `ˇˇˇÒP$`î `ë ˇˇˇ˜P)	`
+ˇˇˇÁPDP§   RØ∂§   e                         º  J   ¡ 	  J   Kú/   ó   ﬂ¡   ·J   ‰¡ 	  J   Kº  J   s ó   ö   ó   ¡    w  ﬂ¢ó   • `ò ˇˇˇÍPì `*`A	VÄ4  #ø@∂4  “                          ¡ 	  J   õ   ó    ¢ó   ¡    ¡   w ﬂ¡ 	  L   ﬂ¡ 	  J   J   ú+   ó   ﬂ¡ 	  J   ú   ó
+   ﬂ¡ 	  J   ó   öB   ó   ¡ 	  ·J   ‰¡   w ﬂª    m   ¡ 	  J   J   w ﬂô   ó   ¡ 	  ·J	   ‰w  ﬂó   • `î `A
+F`ˇˇˇˇP$`,`ö Ø 	`ˇˇˇÒP$	`EOPN	`P)P<   ~ÃÇ<                             ¡ 	  ·J   ‰w  ﬂ• `P$	PÄ  SﬁÆ                  U        ¡    ¡   w ﬂ¡      &¡   &   &Õ   ﬂ¡ 	  J   ·J   ‰w  ﬂ¡ 	  J   ·J   ‰w  ﬂ¡ 	  J   ·J   ‰w  ﬂ¡ 	  J   J   ö*   ó   æ   ¡ 	  J   J      &&.Õ   ﬂó   ¡ 	  ·J	   ‰æ   w ﬂ¡ 	  J
+   öê   ó   9      <   Õ  ﬂ¡ 	  J   ö2   ó   ¡       s ·J   ‰      w ﬂô   ó   æ     L   ﬂó    ¡       s ·J   ‰æ  w ﬂó#   ¡   ·J   ‰   ¡   &   &¡   &w ﬂ¡ 	  J   ·J   ‰¡   w ﬂ¡ 	  J   ·J   ‰      s ·J   ‰   w ﬂ¡ 	  J   ·J   ‰      w ﬂ¡ 	  J   ·J   ‰      w ﬂ¡ 	  J   J   úB   ó9   ﬂ¡ 	  J   J   ù'   ó=   ﬂ¡ 	  J    ¡ 	  J!   J"   KóB   ö=   óC   ¡ 	  J    J#   ö$   óF   ¡ 	  J    J#   ·J   ‰w  ﬂóJ   ¡ 	  J$   ö(   óL   ¡    ¡ 	  J$   s ·J%   ‰w  ﬂóP   ¡ 	  L!   ﬂ¡ 	  L&   ﬂ¡ 	  L    ﬂ¡ 	  L'   ﬂ¡    ¡   w ﬂ• `ˇˇˇˇP$`ë `ë P$`ë 	P$`ë P$`ô `• `ˇˇˇÏP$`î `%O`î `Pî P.`î 	`P
+ˇˇˇ¸PI`
+ˇˇˇ⁄P$`ë ˇˇˇ¸P$`õ 	PP$`õ P$`õ P$`ö ∆ M`ô `ñ P)`î `
+ˇˇˇˇP
+P)`,`,`,`,`ˇˇˇˇP$PÄÄÄ`  Ïﬁ`  ˝                        ¡ 	  J   öo   ó   ª   J   J   ª   J   +Õ   ﬂª   J   æ   *Õ  ﬂ¡ 	  J   ·J	   ‰
+   æ  w ﬂ¡ 	  æ  L   ﬂô7   ó   ¡ 	  º  ù   ó   ﬂ¡   ·J
+   ‰s  ó   L   ﬂó   ¡ 	  J   õ.   ó   ¡ 	  J   ·J	   ‰
+   ¡ 	  J   w ﬂó   ¡       w ﬂ• `î `'ê `
+*	`ñ ˇˇˇÚP$	`ô `ü Pì `î `ñ 
+ˇˇˇÚP)`P$PÄÄ»  V√Ec»  ·         
+       G        ¡ 	  J   ¡ 	  J   KÕ   ﬂ¡ 	  J   ·J   ‰w  ﬂ¡ 	  J   ö   ó   ¡ 	  J   ·J   ‰w  ﬂó   æ   J   õ(   ó   ¡ 	  ·J   ‰¡ 	  J   s Õ   ﬂó   æ   J   Õ  ﬂ¡    	   h   ¡ 	  J
+   ö   ó   ¡ 	  J
+   J   ô   ó      ó   i    æ  i   w ﬂ¡ 	  æ   L
+   ﬂ¡ 	  J   æ  Kõ•   ó   ¡ 	  J   æ  Kö#   ó   ¡ 	  J   æ  KJ   ô   ó!   ó!   Õ  ﬂ¡       æ  w ﬂæ  ö,   ó#   ¡ 	  J   æ  ¡    æ  s Nﬂô   ó&   ¡ 	  J   æ  Nﬂó(   ¡   ú   ó)   ﬂ¡   æ   J   ó+   ö0   ó,   ¡ 	  J   ·J   ‰   ¡   &   &w ﬂó1   ¡ 	  ·   æ  ·J   ‰s ·J   ‰s  &æ  ·J   ‰s &K‰æ   ¡ 	  J   æ  Ks Õ  ﬂ¡ 	  ·J   ‰æ  æ  w ﬂæ   L   ﬂ¡    ¡ &  æ   w ﬂæ   J   Œ   ﬂ¡ 	  J   ·J   ‰¡ 	  J   w ﬂ¡       w ﬂ• `ö `ë P$`î `ë P)`ì `
+ˇˇˇ¯P-`.`º '	ˇˇˇ«P$`/`ô `¬ 	` ˇˇˇÎP$``î ˇˇˇ˛P/`ñ@`ï )ô `ë 	ˇˇˇÎP)`P
+
+PP
+ˇˇˇ˘P(`ˇˇˇÊP$`+`ˇˇˇÒP$`/`ë 
+ˇˇˇ¯P$`P$Pº  ^"!º  H                 !       ¡ 	  º  L   ﬂº  ö    ó   ¡ 	  J   J   ú5   ó   ﬂ¡ 	  J   J   ú   ó   ﬂ¡ 	  J   º Kó   öZ   ó   ¡ 	  J   ·J   ‰   s J   õ(   ó   ¡ 	  J   ·J	   ‰¡    s  w ﬂó   ô   ó   ¡ 	  º  L   ﬂó   ô   ó   ¡ 	  
+   L   ﬂó   ¡    ¡   w ﬂ¡ 	  J   ·J   ‰   º &   &w ﬂ¡ 	  J   ·J	   ‰¡ 	  J   w ﬂ• `.``” `ñ Pí `ë Vˇˇˇ˘Pì `ù `ï `ˇˇˇˇP$`ë 	
+ˇˇˇÓP$`ë 
+ˇˇˇ˘P$PÄÄÄº  ¥¶O¨           	       1      ¡ 	  J   º  KÕ   ﬂæ   J   Õ  ﬂæ   J   ö+   ó   9   ¡    æ   s <   Õ   ﬂô+   ó   9   æ   <   æ   J   <   Õ   ﬂó   æ   J   öÌ   ó   ¡ 	  J	   Õ  ﬂÕ  ﬂò   æ  æ  J
+   ö^   ó   æ   J   ·J   ‰   æ  æ  K&s ö   ó   æ  æ  KÕ  ﬂô   ó   æ  0(Õ  ﬂôìˇˇˇó   æ   æ   J   ·J   ‰   s L   ﬂæ   J   õ,   ó!   æ   æ   J   ·J   ‰   s L   ﬂó%   æ   æ  ù*   ó&   ﬂ¡ 	  J   J   ù   ó)   ﬂ   ó)   L   ﬂæ   º  L   ﬂæ   L   ﬂ¡ 	  J   º  æ   Nﬂ¡       æ   w ﬂ¡ 	  J   º  K¢• `ì `.`ì `%	ˇˇˇ˛Pó@`%	)	ò@
+`ì `/ `fî `ê 	
+ˇˇˇÓP-`.`J+`ï@	`ô P)`ì `ô PN`Ω `-`+`ì `ˇˇˇÔP$`.Qº         ®   r   »  æ"&Â»  ;                      Ω  Œ   ﬂΩ Œ   ﬂm   Õ   ﬂ¡   õ   ó   9   Œ   ﬂó      Õ  ﬂ¡   ¡   L   ﬂ¡   J   öA   ó   ¡   L   ﬂ¡   ·J   ‰æ  s ·J   ‰æ  æ   w ﬂôö   ó
+   ¡   L   ﬂ¡   J	   ö?   ó   ¡   ·J   ‰æ  s ·J   ‰æ  ¡   J	   æ   w ﬂô@   ó   ¡   ¡   L   ﬂ¡   ·J   ‰æ  s ·J   ‰æ  æ   w ﬂó   •í `J`
+`ê `*`ê `î 	`,	`ˇˇˇ¸P
+ˇˇˇˆP 	`,`î `ˇˇˇ¸P
+
+ˇˇˇ‰P `ê `ˇˇˇ¸P
+ˇˇˇˆPIPh   oØ@∆h   1                       ﬁÕ   ﬂº  æ   L   ﬂ¡	  ·J   ‰º  ¡   ¡   w ﬂ•&`-`ˇˇˇÓP$	PÄ¨  =˚¨                  5       º J    ö   ó   º J   ô   ó   ¡   J   J   J   ó   Õ   ﬂæ   ú<   ó	   ﬂº  J   ù&   ó   ﬂº  J   ù   ó   ﬂº  J   ó   ö   ó    ¢ó   º J    ö   ó   º J   ô   ó   ¡   J   J   J   ó   Õ  ﬂæ  öu   ó   ¡   ·J   ‰æ  s ö3   ó   æ  ·J	   ‰¡ 	  s õ   ó   ¢ó   ô*   ó   ¡   ·J
+   ‰s  æ  ö   ó"   ¢ó"   º  J   ö:   ó$   º  ·J   ‰w  ﬂ¡ 	  J   ö   ó(   º  ·J   ‰w  ﬂó*   º ¡    º  J   s L   ﬂº J   ö(   ó/   º º ·J   ‰º J   s L   ﬂó3   ¡ 	  ·J   ‰º w ﬂ• `º `– :`AF`º ``ˇˇˇıP-`ˇˇˇ˚P`Aê@`P
+`AF`í 	`
+P$`î `
+PI`	ˇˇˇ˛P)`í `ˇˇˇ˚P.`	ˇˇˇ˚P$P–  lè˜&–  E                        ¡ 	  J   ö5  ó   ¡   º  ö*   ó   ¡ 	  J   ·J   ‰   ¡   &w ﬂó   º ú   ó
+   ﬂº     ó   ö   ó   ¡ 	  J   J   Ã ﬂó   9   º  <	   º <
+   Õ   ﬂ¡       æ   w ﬂæ   J	   Ã  ﬂæ   J
+   Ã ﬂ¡ 	  J   ·J   ‰º w ﬂ¡ 	  J   ·J   ‰   s ·J   ‰   m   w ﬂ¡ 	  J   ·J   ‰   º  &w ﬂº  Œ   ﬂó    • `î ``ë ˇˇˇÈP)`ß `ò `%(M	`ˇˇˇÔP$	`-	`-	`ë ˇˇˇ˚P$	`ñ PˇˇˇÙPD	`ë ˇˇˇÏP$	`NPÄ<   åÇe<                            º  ·J   ‰w  ﬂ• `
+P$	PÄÄÄp   ïÉp   1                         ¡ 	  J   ·J   ‰º  w ﬂ¡ 	  J   ·J   ‰º  w ﬂ• `ë ˇˇˇ˜P$`ë ˇˇˇ˜P$PÄÄÄt   áH£ót   6                       ﬁÕ   ﬂæ   J   ·J   ‰º  w ﬂ¡ 	  J   ·J   ‰º  w ﬂ•&`ê ˇˇˇÙP$`ë ˇˇˇÙP$PÄÄò   Ûﬁ«cò   f                         ¡ 	  J   ö   ó   ¡   ·J   ‰s  ô   ó   ª   J   J   ó   º  ù   ó   ﬂ¡   ·J   ‰s  ó
+   ¢• `† P° *ö P)Q‹   A!Ot‹   Ö   	              	       Ω  Œ   ﬂº J   ö(   ó   ¡  ·J   ‰º J   º s Ã ﬂó   ¡   ¡  h   ¡   i    º i   º i   w ﬂ¡  ·J   ‰º m   w ﬂ• `í `ˇˇˇÓP,`
+
+ˇˇˇÿP$`ˇˇˇÛPDPî  *úYYî  ﬂ                2       º  ù   ó   ﬂº ó   ö   ó   ¢ó   º  ·J   ‰   s Œ   ﬂ¡   J   öY  ó	   ¡   ·J   ‰¡     &¡   K&s Õ   ﬂæ   J   ö  ó   ¡   KÕ  ﬂæ     ö<   ó   æ   Kº Kö   ó   æ   ·J   ‰º w ﬂó   ôº   ó   æ     öä   ó   æ   ·J   ‰   s ö&   ó   æ   ·J	   ‰
+   º w ﬂôB   ó!   æ   ·J   ‰   º &   &æ   ·J	   ‰   s &   &w ﬂó)   ô#   ó)   æ   ·J	   ‰¡   Kº w ﬂó,   ô6   ó,   ¡   ·J   ‰¡     &º  &s ·J   ‰º w ﬂó2   • `
+° `AF	`
+P)`ñ `ˇˇˇÍP(`ï `,`î `
+ê 
+`ˇˇˇÙPì `î `ê P`ê ˇˇˇÙP.`
+ê P
+ˇˇˇÃPì `ˇˇˇÛPì@`ˇˇˇÍP
+ ˇˇˇ˚P)PÄ  ˙“  ≥                         ¡ 	  J    öñ   ó   ª   ·J   ‰   s Õ   ﬂæ      L   ﬂæ   J      L	   ﬂª   J
+   ·J   ‰æ   w ﬂ¡ 	  æ   J   æ   J   'L   ﬂª   J
+   ·J   ‰æ   w ﬂó   ¡ 	  J   ¢• `
+,`ë 	P(	`/	`î±VN© 	`ë ˇˇˇÙP$	`,ê 	`ë ˇˇˇÙPI	`*Q‡   ´5“Ë‡   ê                       ﬁÕ   ﬂ¡ !   w  ﬂº  õ   ó   9   Ã  ﬂô&   ó   ¡   ·J   ‰9   º  s Ã  ﬂó   º  L   ﬂº  º ù   ó   ﬂó   L   ﬂæ   J   ·J   ‰º  s ¢•&`*`
+`ì `ˇˇˇÔP,`*`ù `ê ˇˇˇ˚P#QÄÄh   ÄÂ&üh   :                          ¡   J   J   ú$   ó   ﬂ¡   J   J   ·J   ‰s  ó   ¢• `∞ <P(QÄÄÄ∏   πà≠™∏   r                       ﬁÕ   ﬂº J   ö&   ó   ¡   J   J   º  º J   Nﬂó   ¡   ·J   ‰æ   J   º J   w ﬂæ   J   ·J   ‰º  w ﬂ•&`í `° `		ˇˇˇÌP$`ê ˇˇˇ˚P$PÄ  Õhﬂ  G               2       ‹Õ  ﬂﬁÕ  ﬂ¡ !   w  ﬂ¡    æ  s Õ   ﬂº  öì  ó   º     ö&  ó   ¡   ö"   ó   æ   ·J   ‰   s ô   ó	   æ   KJ   ó   Õ  ﬂª    æ  K
+s ù   ó   ﬂó   Õ  ﬂæ  J   ö"   ó   æ  J   æ  KÕ  ﬂô^   ó   æ   Õ  ﬂæ  J   ö&   ó   æ  ·J   ‰æ  J   s Õ  ﬂó   æ  ·J   ‰æ  s Õ  ﬂó   ¡ 	  ·J	   ‰9
+   æ  <   æ   æ  w ﬂôU   ó   ¡ 	  J   öA   ó    ¡ 	  º  K·J   ‰¡ 	  ª   J   J   ·J   ‰æ  s w ﬂó(   ôÅ   ó(   ¡   ·J   ‰9   º  s Ã  ﬂ¡   ö&   ó,   æ   ·J   ‰   º  w ﬂô   ó.   æ   Kº  L   ﬂó0   ¡ 	  ·J   ‰æ   º  w ﬂó2   æ   ¢•,`*`ˇˇˇˇP(	`!`ì `ü P¢ `	ˇˇˇˇPô `ì `ù 	`)`ì `	ˇˇˇ˚P-	`ˇˇˇ˝PM`%	)
+DP> `î `ê ñ ˇˇˇ˚PˇˇˇﬂPì `ˇˇˇÔP'``ê ˇˇˇÍP.`î `ˇˇˇÒPI`$QÄÄ`  ÌE∑`  Û                        º  J   ú   ó   ﬂº  J   J    ó   ö   ó   º  J   J   ¢ó   ¡ 	  J   J   J   Õ   ﬂæ   öÜ   ó   ¡   ·J   ‰æ   s ö&   ó   æ   ·J   ‰¡ 	  º  s ¢ôH   ó   º  J   ö6   ó   º  J   ·J	   ‰æ   s ù   ó   ﬂ
+   ó   ¢ó   
+   ¢• `† !ë `MF`ô `	`ˇˇˇıP`ˇˇˇˆPCK`í 	`ˇˇˇ˚Pò@F`%QÄ,  ÇpsM,  º                         ¡	  J   J   Œ   ﬂ   Õ   ﬂ¡	  J   ·J   ‰   w ﬂ¡%   ¡  æ   &m   w ﬂ¡%   ¡  æ   &m   w ﬂ¡%      æ   &¡	  J	   w ﬂ¡	  J
+   ö#   ó   ¡%      ¡	  J	   w ﬂó   • `ï `*	`ñ 
+P$	`ˇˇˇÓPD	`ˇˇˇÌPD	`
+ˇˇˇP$`î `
+ˇˇˇP)På   ∫ÚhUå   Y                  	        ¡	  J   J      ú   ó   ﬂ¡   J   ó   ö$   ó   ¡   ·J   ‰¡   J   w ﬂó	   • `π /`
+ˇˇˇ˜P)	Pê   °∑‘ê   O                          ¡   J   ö$   ó   ¡   ·J   ‰¡   J   w ﬂó   ¡  ·J   ‰   ¡  &w ﬂ• `î `
+ˇˇˇÙP)`ˇˇˇÒP$	PÄd  û@ò/d  ˆ                         ¡ 	  J   Õ   ﬂæ   ù   ó   ﬂæ   J   ó   ö   ó    ¢ó   ¡ 	  J   J   J   öù   ó
+   Õ  ﬂ¡ 	  J   öV   ó   ª    æ   J   ·J   ‰	   s 
+s ª    æ   J   ·J   ‰
+   s 
+s &Õ  ﬂó   æ   J   ·J   ‰   ¡ 	  J   æ  'w ﬂó   • `/`ê 	ô `AF`û `&`î `ï 	PˇˇˇÓP,	ï 	PˇˇˇÓP.`ï 
+	ˇˇˇÂPIPÄÄ  #†,˜  ∞                         º  J   ö¢   ó   º  L   ﬂ¡   ö   ó   ª    ¡   w ﬂó   º  L   ﬂ¡       º  w ﬂº  J   öG   ó
+   ¡ 	  J   ö$   ó   ¡ 	  J   ·J   ‰	   w ﬂó   º  L   ﬂó   • `í `*``ˇˇˇˇP)`*`ˇˇˇÔP$`í `î `ñ P)`OPÄÄp   ¿øp   9   	                     Ω  Œ   ﬂŒ   ﬂ¡   J   KŒ   ﬂm   Œ   ﬂ¡    w ﬂ•)`'`í `K	`P$PÄÄ|   %¸≠≥|   ;                         ¡  ö   ó   ª    ¡  w ﬂó   ª    m   º  s Œ  ﬂ• ``ˇˇˇˇP)`ECPIPÄÄH  ºFA»H  €                          ¡   J   ö!   ó   ¡	  ·J   ‰¡   w ﬂ ¢ó   ¡   » ö   ó   ª    ¡  w ﬂó	   ¡   0(Œ   ﬂ¡   ö   ó   ¡    
+w ﬂôQ   ó   ¡   (ö   ó   ¡    2w ﬂô)   ó   ¡   dö   ó   ¡    Ùw ﬂó   • `ñ `ˇˇˇP$`A
+F`ì `ˇˇˇˇP)`-`í `P.`í `P.`í `	P)PÄÄÄÙ  ™)®?Ù  Ë  	      	       E       Ω  Œ   ﬂŒ   ﬂm   Œ   ﬂm   Œ   ﬂ¡	  J   J   Œ   ﬂº ·J   ‰   s Õ   ﬂæ   J   ö   ó   ª   ·J	   ‰
+   s Õ  ﬂæ     L   ﬂ¡   ¡   æ  s ·J   ‰   ¡   s ·J   ‰   ¡   s L
+   ﬂæ  ¡   J   L   ﬂæ   ·J   ‰
+   s ö)   ó   ¡   ¡   J
+   ·J   ‰s  L
+   ﬂó   ¡   J
+   KJ   ö   ó   ¡   L   ﬂó   ¡	  ·J   ‰º 9   ¡   ¡   s <   ¡   J
+   <   ¡   w ﬂ¡	  ·J   ‰w  ﬂ¡   J   ö«   ó*   ¡  ö   ó+   ª    ¡  w ﬂó-   ¡   J   öZ   ó/   º ·J   ‰   w ﬂ¡	  ·J   ‰   ¡   J    ·J!   ‰"   ¡   J   s w ﬂô2   ó7   º ·J#   ‰   w ﬂ¡	  ·J   ‰$   w ﬂó;   º ¢ó;   ¡	  ·J   ‰%   w ﬂ¡   L%   ﬂ¡   J   õ>   ó@   ¡   L&   ﬂº ·J   ‰   w ﬂ¡	  ·J'   ‰¡   w ﬂóE   º ¢•)`'`K`K`ï `	P(`ì `ë 	P(`/`ˇˇˇ˛PˇˇˇÎP;ˇˇˇÍP)`î `ê P`ñ P.`ù `ë@(	`
+%ˇˇˇˆP(/E(PD,	`P$`î ``ˇˇˇˇP)`î `	P$`ë ñ 
+ˇˇˇÔPˇˇˇ›P `	P$`ë PI6`C@F8	`ë P$	`,`î `,`	P$`ˇˇˇÚPI?	`#QÄÄx  ıõ≈2x  	                         ¡   ö˛   ó   ¡   J   KJ   öô   ó   ¡   J   ·J   ‰   w ﬂ¡   ¡	  J   ö4   ó   ¡	  ·J   ‰¡   w ﬂ¡	  ·J   ‰   w ﬂó   ¡   L	   ﬂ¡   L
+   ﬂ¡      w ﬂôO   ó   ¡   0(Œ   ﬂ¡   » ö    ó   ª    ¡   dw ﬂô   ó   ¡    w  ﬂó   • `
+`õ `ñ 	P$`	ï `ˇˇˇP$`ë PI`,`,`P `-`ì `ˇˇˇˇP.`OPÄ   ÊYlƒ   ø                          ¡   ö¥   ó   ¡   J   ·J   ‰   w ﬂ¡   ¡	  J   öW   ó   ¡	  ·J   ‰¡   w ﬂ¡	  ·J   ‰   ¡   J   ·J	   ‰
+   ¡   J   s w ﬂó   ¡   L   ﬂ¡   L   ﬂ¡   L   ﬂó   • `/`ñ 	P$`	ï `ˇˇˇP$`ë ñ 
+ˇˇˇÔPˇˇˇ›PI`,`,`ë@PÄx   ¥Íôx   C                          ¡    ö0   ó   ª   ·J   ‰   s J   J    Œ   ﬂó   ¡   ¢• ``ë P*-`%Qp   kp   B                         º  ·J   ‰   s ö   ó   º  ô   ó   º  ·J   ‰   s ó   ¢• 	`P© P(Q@  ;rp@  »                         ¡	  J   J   Œ   ﬂ   Õ   ﬂ¡   J   ù   ó   ﬂ¡	  J   ó   ö   ó    ¢ó   ¡   J   Œ   ﬂm   Œ   ﬂm   Œ   ﬂ¡%   	   æ   &m
+   w ﬂ¡%   ¡  æ   &m   w ﬂ¡%   ¡  æ   &m   w ﬂ• `ï `J`ñ ö `AJF`ê `K`K	`ˇˇˇÈPD2	`ˇˇˇÊPDC	`ˇˇˇÌPDJPÄÄ`  
+Ä„f`  ˘                        º  ·J   ‰s  ·J   ‰   s ·J   ‰   s ·J   ‰   s Õ   ﬂ   ¡   J   Ë+&	   &¡   J
+   &Õ  ﬂ9      <   '<   <   <      <   Õ  ﬂ   Õ  ﬂæ     æ  &æ     æ  &æ     æ  &æ  æ  æ  NNNNﬂæ   ·J   ‰æ  w ﬂæ   ¢• `
+PPPP(`	ï ê `%*(&&O
+`*`	ñ `ˇˇˇ¸P$`$QÄÄL   ç„}L                              ¡	  J   ·J   ‰      w ﬂ• `õ P$PÄh  X%Îµh  Â                          ¡	  ·J   ‰s  ö–   ó   ª    ¡   w ﬂ¡	  J   ·J   ‰      w ﬂ¡	  ·J   ‰s  Œ   ﬂ¡   õ   ó   ¡    w  ﬂ ¢ó   ¡    ¡   s Œ   ﬂ¡   ·J   ‰¡	  ·J   ‰s  w ﬂ¡	  J	   ·J
+   ‰¡   w ﬂª    m   s Œ   ﬂó   • `P-`ˇˇˇˇP$`õ P$`P)`/`*`A	F	`ˇˇˇÒP)`Pˇˇˇ¯P$`ë ˇˇˇ˘P$`5BPN	PÄÄÄ|   G&˝5|   :                          ¡   ·J   ‰¡	  ·J   ‰s w ﬂª    m   ¡   s Œ   ﬂ• `Pˇˇˇ¯P$`E	EPI
+PÄÄÄP   ÿ¥X	P                             ¡    w  ﬂª    m   w ﬂ• `*`5BPDPÄ`   ë6§`   ,                          ¡   ·J   ‰w  ﬂŒ   Œ   ﬂ¡      w ﬂ• `P$`,`P$PÄà  #!\Ëà                            ¡	  ·J   ‰s  öÎ   ó   ª    ¡   w ﬂ¡	  J   ¡   L   ﬂ¡   õI   ó   ¡	  ·J   ‰s  Œ   ﬂ¡   õ   ó    ¢ó   ¡    ¡   s Œ   ﬂó   ¡   ·J   ‰¡	  ·J   ‰s w ﬂ¡	  J   ·J	   ‰¡   w ﬂ¡	  J
+   ·J   ‰      w ﬂª    m   w ﬂó   • `P-`ˇˇˇˇP$`ï `/`P)``A	F`ˇˇˇÒPN	`Pˇˇˇ¯P$`ë ˇˇˇ˘P$`õ P$`5BPI	PÄÄÄT   ˆà¢&T                              ¡   ·J   ‰¡	  ·J   ‰s  w ﬂ• `Pˇˇˇ¯P$PÄÄê   7¢‘õê   T                          ¡	  ·J   ‰s  ö?   ó   ¡    w  ﬂ¡   ö   ó   ¡   ·J   ‰w  ﬂó   Œ   ﬂó   • `P-`*``P)`L	PÄÄ@   ı€ˆ]@                             ¡ 	  J   J      ¢• 	`ï QÄp   Ú3Â4p   ;                          ¡ 	  J   J   ö   ó   ¡ 	  J   J   ¢ô   ó   ¢ó   • `ô `OK`!VÄÄÄÑ  ¸w¸úÑ  Ë         
+       7       º  ö#   ó   ¡ 	  J   J   Õ   ﬂôQ   ó   ¡ 	  J   J   ·J   ‰¡ 	  J   J   ù   ó	   ﬂ¡ 	  J   ó
+   s Õ   ﬂó   æ   ·J   ‰s  Õ  ﬂª    æ   ·J	   ‰
+   s 
+s Õ  ﬂª    æ   ·J	   ‰   s 
+s Õ  ﬂæ  ·J   ¡    ª   s ·J   ‰s  æ  ''.L   ﬂ9   æ   ·J   ‰s  <   ¡   ö   ó"   æ   ·J   ‰s  ô   ó$   æ   KJ   ó&   æ  'æ  '<   Õ  ﬂ¡ "   s  öG   ó+   æ  æ     æ  J   &   &æ  J   &   &L   L   ﬂô0   ó3   æ  æ  J   L   ﬂæ  æ  J   L   ﬂó7   æ  ¢• `	`û `ñ © ˇˇˇ˘P-`P(`	ê Pˇˇˇ¸P(`	ê Pˇˇˇ¸P(	`ê ˇˇˇ˛P
+
+P-`%
+P(ö Pù &O`ì `:ê • `ì `ò@	`$Q§   'iR §   ]                 	       ¡ 	  J   J   Õ   ﬂº  æ   'ö   ó   º  æ   '¢ô"   ó   º  ö   ó   æ   º  &¢ó	   º  ¢• `î `ë `EK``DF`#QÄd   }kﬂ´d   +                         º  ·J   ‰   º &s ·J   ‰   º s ¢• `ˇˇˇÓP/ˇˇˇÌP#QÄÄÿ  7-‚nÿ  +                         ¡	  J   J   Œ   ﬂ   Œ   ﬂª    ¡  J   J   s Œ   ﬂ¡	  L   ﬂ¡   ù   ó	   ﬂ¡   J   ó   ö   ó   ¢ó   ¡  	   &.Œ  ﬂ¡%   ¡  ¡   &m
+   w ﬂ¡%      ¡   &m   w ﬂ¡%   ¡  ¡   &m   w ﬂ¡%      ¡   &m   w ﬂ¡%   ¡&  ¡   &m   w ﬂ¡%   ¡  ¡   &m   w ﬂ• `ï `+`ˇˇˇˇP)	`,`ë ö `A<F	`í 	`ˇˇˇÓPD	`ˇˇˇÍPD	`ˇˇˇÊPD	`ˇˇˇÈPD/	`ˇˇˇÏPD6	`ˇˇˇÌPD<PÄÄ∞   É7ù∞   d                  	        ¡   J   ö4   ó   ¡	  J   ·J   ‰   ¡   &   m   w ﬂó   ¡  ·J   ‰   ¡   &m   w ﬂ• `î `ë 
+ˇˇˇ„PI`ˇˇˇÌPD	PÄÄÄh   ≠@Aﬁh   3                          ¡	  J   J   ö   ó   ¡	  ·J   ‰w  ﬂ¢ó   • `õ `P$`AVÄÄÄî   ˆàQ“î   Z                  
+       º  J   %ö   ó   ¡	  ·J   ‰w  ﬂô/   ó   º  J   'ö   ó   ¡	  ·J   ‰w  ﬂó
+   • `ï `P.`ï `P)PÄÄà   ∆Vî	à   P                  	       º J   öB   ó   º ¡
+   º J   ¡	  J   J   ¡	  J   J   s L   ﬂó	   • `í `	ˇˇˇœP.	PÄú   à`›ú   a                        ¡	  J   J   Õ   ﬂº æ   ö.   ó   ¡
+   ¡   J   º J   æ   s ô   ó      ó   L   ﬂ• `î `ô +
+ˇˇˇ‘Pù 	PÄÄ‘  çÊ≥‘                  0        ¡	  J   J   ú+   ó   ﬂ¡   J   ú   ó   ﬂ¡	  J   ó   ö∫  ó	   ¡   J   Õ   ﬂ¡	  ¡   æ   ·J   ‰   ¡   J   s ·J   ‰	   
+   s s ·J   ‰¡$  s L   Õ  ﬂ¡	  ¡   æ   ·J   ‰   ¡   J   s ·J   ‰	      s s ·J   ‰¡$  s L   Õ  ﬂ¡   ö   ó      ô   ó      ó   Õ  ﬂæ  ·æ  K‰m   w ﬂæ  ·æ  K‰m   w ﬂ¡	  J   öf   ó#   ¡#      æ  Kw ﬂ¡#      æ  Kw ﬂ¡#      æ  Kw ﬂ¡#      æ  Kw ﬂó+   ¡	  J   ·J   ‰æ  ·J   ‰æ  s w ﬂó0   • `± 'ö `/`ê 
+ˇˇˇÌPî PˇˇˇŸP
+Jˇˇˇ˜P-`ê 
+ˇˇˇÌPî PˇˇˇŸP
+Kˇˇˇ˜P-`≠ `ˇˇˇˇPD	`ˇˇˇˇPD`î `ˇˇˇ˙P$`ˇˇˇ˙P$`ˇˇˇ˙P$`ˇˇˇ˙PI`ë ˇˇˇ¸PˇˇˇÔPI	PÄÄÄ<   ¡Ñ^T<                             ¡	  ·J   ‰w  ﬂ• `P$PÄ<   ¡Ñ^T<                             ¡	  ·J   ‰w  ﬂ• `P$PÄà   a]p»à   I                          ¡	  J   ö   ó   ª    ¡	  J   w ﬂó   ¡	  ª    m   s L   ﬂ• `î `
+ˇˇˇˇP)`!5B!PI	PL   (ìúÁL                             ¡	  ·J   ‰w  ﬂ¡	  L   ﬂ• `P$`,PÄÄ¯   !g®¯   £                          ¡  ·J   ‰¡   w ﬂ¡	  J   ·J   ‰   ¡   &w ﬂ¡	  J   ú   ó   ﬂ¡   ó   ö3   ó	   ¡	  J   ·J   ‰¡	  J   s ·J   ‰w  ﬂó   ¡	  ¡	  L   L   ﬂ• `ˇˇˇ¸P$`ë 
+ˇˇˇÚP$`© $`ë 
+ˇˇˇ¸P
+P)`ñ 	PÄx   ˆÑ¢x   =                          ¡ 	  L   ﬂ¡ 	  ¡    ¡ 	  J   &s L   ﬂ¡ 	  ·J   ‰w  ﬂ• 	`,	`ˇˇˇÛP)	`P$PÄÄÄx   ƒi\x   =                          ¡ 	  L   ﬂ¡ 	  ¡    ¡ 	  J   's L   ﬂ¡ 	  ·J   ‰w  ﬂ• 	`,	`ˇˇˇÛP)	`P$PÄÄÄl   û/1|l   8                         ¡ 	  º  ¡ 	  J    L   ﬂ¡ 	  º  L   ﬂ¡ 	  ·J   ‰w  ﬂ• 	`ë 	`.	`P$PÄ  exß†‰  `                #       ¡ 	  J   J   J   Õ   ﬂª   ·J   ‰æ   K¡ 	  J   J   s Õ  ﬂª   ·J   ‰æ   K¡ 	  J   J   s Õ  ﬂÕ  ﬂò   æ  ¡ 	  J   ö   ó   æ  ô   ó   æ  ó   ö9   ó   ¡ 	  ·J	   ‰¡ 	  J
+   æ  &w ﬂæ  0(Õ  ﬂôñˇˇˇó   Õ  ﬂò   æ  ¡ 	  J   ö   ó   æ  ô   ó   æ  ó   ö9   ó   ¡ 	  ·J	   ‰¡ 	  J
+   æ  'w ﬂæ  0(Õ  ﬂôñˇˇˇó#   • `ô `	ˇˇˇˆP(`	ˇˇˇˆPH`f∂ 4`
+ˇˇˇÁPˇˇˇ˜`ï `f∂ 4`
+ˇˇˇÁPˇˇˇ˜`ï PÄÄÄ         q   o          Î   o   î  ÜAî                          ¡   º  s Ã  ﬂ¡	  J   º  KJ   ö   ó    ¢ó   ¡	  J   º  KŒ   ﬂ¡   J   õ"   ó	   ¡	  ·J   ‰º  s Œ   ﬂó   ¡      ¡   w ﬂ¡   J      öd   ó   ¡   ¡      s ·J	   ‰
+   m   s ·J	   ‰   m   s ·J   ‰   ¡   J   s L   ﬂó   ¡   L   ﬂ• 	`ˇˇˇÛP'`ù `AF`î `î `ˇˇˇ¯P.	`ˇˇˇÛP$`ö `ê P2ˇˇˇÎPJ"
+ˇˇˇÍPJˇˇˇÙP.	`,PÄ4   úÒ›á4                             ¡   L   ﬂ• `,	Pd   Gå!ÿd   -                          ¡   L   ﬂ¡   L   ﬂ¡      ¡   w ﬂ• `,`,`ˇˇˇÓP$	PÄÄ3ıÿ  `  `ü    `&  '  (  )  #  *  $  +    `ü .   /  0  1  2  
+   3    ` 5  6  ™   ö 7    `9  :   ;  «  <  =    `?  @  A  	  `C   E  G  6  H  I  J  &  
+  `&  '  p  ˚  ú O  L  M  N  >  O  P    `R  Q  T  U  S  W  V  X     P   Y    P[  ]    P`  ^  &  a    @b    `@     `ˇ  @     `  Ç    `ë  @     `í    `ˇ  7  J    `6  û  u  î   §    p  `d  e  f  ˝   >  h  ï 3  i  j  k  ä   l  ö ü m  b    @9    @n    @?  o   p  q  ^  r  E  G  s  t  u  –  v    p7  w  x    py  6  z  I  {  |  0  }  2  A  4   ~    Ä    pÉ  Ñ  Ö  Ü    @á  †  â  à    @ã  ä  ç  å  é    @è  ê    p…    pì  î  +   @ó  ò  ô  S  ö  ú  ù  û  ü  %     †  &  a  ¢  °  £    pí    `¶    `i   •  X  ]  û  £    p¶    `   u  ®  7  y  ©   ú  ™  p  	  @ä   ô  S  ö  Ü  †  %  ´  ê  ¨  ü w  >   ≠  Æ  ˚  Ø  ∞  s    9  ±    :  °  5  6  ≤    `[  &  µ  ∂    ∑  ∏  7  Ü  è  + p  π    `e  ˝   z  ®  6  h  ∫    ª  ±  ä   9   º  Ω  y  æ  )  ø  »   0  }  2  ¡  ¬  √  ƒ    `6   s    9  ™   ≈  >  Ä  ä   y  î  )  ø  z    `e    ∆  
+  @ï   @-  «  k  >  C  )  w  »  …      ˝   h  À    `œ  –    `  p  @“  l  e  d  ´   ”    `‘  ?  o  ’  ÷  ◊  ÿ  Ÿ  4   ⁄    €  i  ‹  œ  ï ”  ™   e  c    `‚    `I  y  æ  ﬂ  ‡   {    @ı  ﬁ  ·  %  ™   a   v    pî     `u  î  7  !  `u  æ  7  "  `S  è  &  a  ‰  $  `À  _  >  ™   -  Á  Ë  ú w  «  È  Í  >   Î  %  #  `-  n  Ü   $  p%  `Ï  &  '  (  Ó  ç ˚    Ô  a  +  Ò  ∂  Ú  &  `  @n    @d  ˝   @  c  '  `?  @  @   (  `Õ  ?  o  n  Û  |  ı  )  `c  -  ?  •  e  ”  ™   ö –    @œ  i  
+   l  ∂  2  4   n    @Ã  *  `-  ˝   ˛  ˇ  Ÿ  4   ï w  ä   ,  `±    ˛   î  -  ` æ  ´  …  +  ` ˛   k  ı  ,  p-  pπ   X  ƒ  .  `±  Ë   ˛  	 X  •  Ü     + /  `Ë       6  æ   2  `    1  `  2  p0  `Ë  1  p4  `Ë  $ ´  % ±   ›  &  ' ( £  5  `Ë  ´  % ±   ›  * 
+ «  + «   ' , 3  `4  p5  p ˛  ™   - >  &  '  Ë  . #   / 0 «  ú 1    Â    @˝  2   , î   ›  * 
+ «  + æ  & ‡    6  `&  '  p  ˚  5 7  `ú Ë  ™   9  `1 Æ  ˚  >   î  A B : C 8   @E å  F G ä  â  H N  I J K Ü  :  `6  Ü  M N >  `U V =  `£  >  p<  `Ü  T £  =  p;  `Q R 6  Ü  M â  S T 7  Ä  £  <  p@  `Ü  T ?  `Q R  •  S Ü  T 7  Ä  6  M â  £  @  pA  `Q U 8  ` 6 > 7 ]  : 9  p:  pü  ;  p?  pA  pB  `±    ˛  C  `±   Ë  D  `±  Ë   6 ; ï ô  •  Ü    ä    ã    @⁄  ∏  [ è  ^ G _ ` ] \ E  `e  >  F  `«  f g I  `e  >  w  J  `ë  | w  H  `l 7   v  - I  p{ J  pK  `ﬁ  ±  ˝   e  >  L  `e  >  r ˝   ä    N  `| O  `w  M  `e  >  m } i «  <  n ~ G î  p Ä  x v  N  pO  pS  b  a  y  Ä     Q  `Ç Å P  `Å R £  Q  pR  `´  7  v  }     É G  ` h v m  ◊ x y 7 z H  p·  K  pL  pü  M  pP  pR  pS  `y ˝   j  T  `y ˝   j  U  `˝   y j  V  ` h k p  á e  >  y â ˝   X  ` Y  ` , å W  `e  ¬  h  ∫  ä   ˛  ã  / X  p0 Y  pw  «  Ë    `        	        .          p      p  p  p  p  p  p	  p
+  p   @N     pA    pc    p@     p¶    pí    pj    p¡    p∫    pÃ    p–    p›     pû  !  p™  "  pó  #  pÂ  %  pò  ∂    @@  Û  |  &  p'  p(  pÙ    @ÿ  m  ‘  ä   ú  I  5  E  G    s  t  r  Ñ  •  q  p  é  á  ˆ  ;  ˜  =  ¯  {  o  ?  ◊ )  p*  p˛    @  @é º    ˝  ˇ  	  
+ Õ    @+  p .  p /  p 0  p 3  p! 6  p6   @  @7 9 8 : 7  p;   @8  p< B  pQ C  pS D  pT E  pF  ph   @  @j i k l m o n q p s r   @G  pt S  pw  T  p| U  pÑ V  pÇ W  pâ    `  p    ç ˇXÑ2                à  ™                                  !           	   "           
+   ,              4              8        &      >        *   
+   B        4      K        A      A        p   f   c        W      è       Y      ê       \      ë       _      ë       b      ë       h      ë       d      í       ÿ   
+   @         ÷      ì       ‚   (   ¶        
+     í             j        4     ¡        D     ∫        \  
+   Ã        Y     Œ        f     –        }     ›        {     ï       ê     û        î     ™        ò     ó        Æ     Â        û     ñ       ≥     ò        ¬     c              @         Œ     Ù        ÷     ó       Î     ¸                    ˆ     ò       ¸     ò                     
+          ,            (            $     ö       K  (   !       /     #       <     )       s     4       y     ;       «     <       }     ?       ï     L       •     ü       †     †       ù     °       ö     ¢       µ     ü       ≤     £       ƒ     ü       ‘     Q       ÿ     S       ‹     T       ˆ     a       ˘     c       H     t         	   §       ˝     •            •            §            §            §            •            •       ;     §       8     ¶       @     §       Z     w        ^     |       b     Ñ       f     Ç       w     â       q     ß       s     ß       ùH©¿      ü      ü                Äã   }  Ç   }                 D  I  ;  I     %             Ì  '  ‰  '                 ?  z  6  z                 ó  é  é  é  "               ©    †    )                         ,               ;  –  2  –  3                Ô  <
+  Ê  <
+  :               a
+  T  X
+  T  G   $             ß    û    P               0  °  '  °  ]               ß  À  û  À  Ö   F             %  g    g  à   X            √  '  ∫  '  ò   -            •  ‹  ú  ‹  ´   M              3    3  Æ   0            ∏  '  Ø  '  √                Å    x    »   5           ∑  !  Æ  !  ‘                ±   ÷   ®   ÷   ⁄                #!  Õ%  !  Õ%  ﬂ                Ë%  j'  ﬂ%  j'  ¸               â'  •+  Ä'  •+                 √+  ó-  ∫+  ó-                Ø-  Ç0  ¶-  Ç0  '            Äõ0  ◊2  í0  ◊2  A             …0  1  ¿0  1  B              Ú2  ±5  È2  ±5  U             Œ5  38  ≈5  38  d              ù7  ”7  î7  ”7  p  6            R8  •8  I8  •8  w             …8  #9  ¿8  #9  {  #            A9  ¡9  89  ¡9              Äﬁ9  ?=  ’9  ?=  Ç              ¢:  8=  ô:  8=  Ü              a=  2?  X=  2?  ñ  !            ™?  ï@  °?  ï@  ¶              ´@  ˇ@  ¢@  ˇ@  Æ              A  «A  A  «A  ±             ;D  àG  2D  àG  Õ  !            ≥G  ¿H  ™G  ¿H  Ê  *          Ä´J  ∫L  ¢J  ∫L  ˆ               5K  ùK  ,K  ùK  ˙  *              K  @L  ¡K  @L  ˝  +             ÿL  'N  œL  'N                 IN  æO  @N  æO    !          ÄﬁO  ~R  ’O  ~R               AP  [R  8P  [R    %            ∂P  GR  ≠P  GR    1           ÄôR  w[  êR  w[  ,              ÁR  ÚT  ﬁR  ÚT  .  %             U  óV  U  óV  >  "             π[  Y\  ∞[  Y\  o  6             Ù\  H]  Î\  H]  x            Äv]  !h  m]  !h  }               R^  Ω`  I^  Ω`  É  %            ‰`  )a  €`  )a  í  &            }a  ﬂd  ta  ﬂd  ñ  /            @c  ƒd  7c  ƒd  ¢  /            ™c  ´d  °c  ´d  §  1             ˆc  ñd  Ìc  ñd  ¶  %            e  Dg  
+e  Dg  Ø  2             Áf  )g  ﬁf  )g  ª  !             qg  h  hg  h  ¿  +             >h  wh  5h  wh  »               òh  ˘h  èh  ˘h  À                i  l  i  l  œ              Cl  ¸l  :l  ¸l  ‰              m  Çm  m  Çm  Í  "          Ä/o  ìy  &o  ìy  ˘              Np  “q  Ep  “q     *             ®p  #q  üp  #q    V             Vq  «q  Mq  «q    1            r  r  ˘q  r    .            ≥r  Ts  ™r  Ts    2           Ös  Ww  |s  Ww    /             u  ™u  vu  ™u    '             ‘u  ˇu  Àu  ˇu    (            Öw  qx  |w  qx  (  ,             x  bx  ˚w  bx  *  5             ûx  äy  ïx  äy  /  +             ™y  "z  °y  "z  6               9z  ≤z  0z  ≤z  ;               …z  G{  ¿z  G{  @              m{  }  d{  }  E  %           Ä!}  p  }  p  M              j~  ñ~  a~  ñ~  S  j             ∑~  2  Æ~  2  U  +           5°›¥∫£ ˙ ﬂ5∞b      gD†+gD†+Gó3gEo—   w    O^partitionKey=%28https%2Csandersofoxford.com%29,:https://www.sandersofoxford.com/static/mezzanine/js/magnific-popup.js strongly-framed 1 security-info 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 request-method GET response-head HTTP/3 200 
+server: nginx/1.27.2
+content-length: 32671
+accept-ranges: bytes
+via: 1.1 google
+date: Mon, 25 Nov 2024 06:50:57 GMT
+expires: Tue, 26 Nov 2024 06:50:57 GMT
+cache-control: max-age=86400,public
+age: 31915
+last-modified: Wed, 20 Dec 2023 14:36:10 GMT
+etag: "6582fbda-7f9f"
+content-type: application/javascript
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+X-Firefox-Http3: h3
+ original-response-headers server: nginx/1.27.2
+content-length: 32671
+accept-ranges: bytes
+via: 1.1 google
+date: Mon, 25 Nov 2024 06:50:57 GMT
+expires: Tue, 26 Nov 2024 06:50:57 GMT
+cache-control: max-age=86400,public
+age: 31915
+last-modified: Wed, 20 Dec 2023 14:36:10 GMT
+etag: "6582fbda-7f9f"
+content-type: application/javascript
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+ ctid 2 uncompressed-len 0 net-response-time-onstart 23 net-response-time-onstop 26 alt-data 1;32671,javascript/moz-script-bytecode-20241112225620-8l alt-data-from-child 1  ÷k

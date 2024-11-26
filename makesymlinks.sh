@@ -9,6 +9,8 @@ ln -sf ~/Dotfiles/bash/.bash_profile ~/
 echo "Creating symbolic links for cursor, will prompt for password..."
 sudo ln -sf ~/Dotfiles/cursor/miku-cursor-linux /usr/share/icons
 
+hyprctl setcursor /usr/share/icons/miku-cursor-linux 57
+
 # fonts
 echo "Creating symbolic links for fonts..."
 ln -sf ~/Dotfiles/fonts ~/.local/share
