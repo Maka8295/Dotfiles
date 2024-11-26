@@ -1,709 +1,0 @@
-/*
-
-Quicksand 1.2.2
-
-Reorder and filter items with a nice shuffling animation.
-
-Copyright (c) 2010 Jacek Galanciak (razorjack.net) and agilope.com
-Big thanks for Piotr Petrus (riddle.pl) for deep code review and wonderful docs & demos.
-
-Dual licensed under the MIT and GPL version 2 licenses.
-http://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt
-http://github.com/jquery/jquery/blob/master/GPL-LICENSE.txt
-
-Project site: http://razorjack.net/quicksand
-Github site: http://github.com/razorjack/quicksand
-
-*/
-
-(function ($) {
-    $.fn.quicksand = function (collection, customOptions) {     
-        var options = {
-            duration: 750,
-            easing: 'swing',
-            attribute: 'data-id', // attribute to recognize same items within source and dest
-            adjustHeight: 'auto', // 'dynamic' animates height during shuffling (slow), 'auto' adjusts it before or after the animation, false leaves height constant
-            useScaling: true, // disable it if you're not using scaling effect or want to improve performance
-            enhancement: function(c) {}, // Visual enhacement (eg. font replacement) function for cloned elements
-            selector: '> *',
-            dx: 0,
-            dy: 0
-        };
-        $.extend(options, customOptions);
-        
-        if ($.browser.msie || (typeof($.fn.scale) == 'undefined')) {
-            // Got IE and want scaling effect? Kiss my ass.
-            options.useScaling = false;
-        }
-        
-        var callbackFunction;
-        if (typeof(arguments[1]) == 'function') {
-            var callbackFunction = arguments[1];
-        } else if (typeof(arguments[2] == 'function')) {
-            var callbackFunction = arguments[2];
-        }
-    
-        
-        return this.each(function (i) {
-            var val;
-            var animationQueue = []; // used to store all the animation params before starting the animation; solves initial animation slowdowns
-            var $collection = $(collection).clone(); // destination (target) collection
-            var $sourceParent = $(this); // source, the visible container of source collection
-            var sourceHeight = $(this).css('height'); // used to keep height and document flow during the animation
-            
-            var destHeight;
-            var adjustHeightOnCallback = false;
-            
-            var offset = $($sourceParent).offset(); // offset of visible container, used in animation calculations
-            var offsets = []; // coordinates of every source collection item            
-            
-            var $source = $(this).find(options.selector); // source collection items
-            
-            // Replace the collection and quit if IE6
-            if ($.browser.msie && $.browser.version.substr(0,1)<7) {
-                $sourceParent.html('').append($collection);
-                return;
-            }
-
-            // Gets called when any animation is finished
-            var postCallbackPerformed = 0; // prevents the function from being called more than one time
-            var postCallback = function () {
-                
-                if (!postCallbackPerformed) {
-                    postCallbackPerformed = 1;
-                    
-                    // hack: 
-                    // used to be: $sourceParent.html($dest.html()); // put target HTML into visible source container
-                    // but new webkit builds cause flickering when replacing the collections
-                    $toDelete = $sourceParent.find('> *');
-                    $sourceParent.prepend($dest.find('> *'));
-                    $toDelete.remove();
-                         
-                    if (adjustHeightOnCallback) {
-                        $sourceParent.css('height', destHeight);
-                    }
-                    options.enhancement($sourceParent); // Perform custom visual enhancements on a newly replaced collection
-                    if (typeof callbackFunction == 'function') {
-                        callbackFunction.call(this);
-                    }                    
-                }
-            };
-            
-            // Position: relative situations
-            var $correctionParent = $sourceParent.offsetParent();
-            var correctionOffset = $correctionParent.offset();
-            if ($correctionParent.css('position') == 'relative') {
-                if ($correctionParent.get(0).nodeName.toLowerCase() == 'body') {
-
-                } else {
-                    correctionOffset.top += (parseFloat($correctionParent.css('border-top-width')) || 0);
-                    correctionOffset.left +=( parseFloat($correctionParent.css('border-left-width')) || 0);
-                }
-            } else {
-                correctionOffset.top -= (parseFloat($correctionParent.css('border-top-width')) || 0);
-                correctionOffset.left -= (parseFloat($correctionParent.css('border-left-width')) || 0);
-                correctionOffset.top -= (parseFloat($correctionParent.css('margin-top')) || 0);
-                correctionOffset.left -= (parseFloat($correctionParent.css('margin-left')) || 0);
-            }
-            
-            // perform custom corrections from options (use when Quicksand fails to detect proper correction)
-            if (isNaN(correctionOffset.left)) {
-                correctionOffset.left = 0;
-            }
-            if (isNaN(correctionOffset.top)) {
-                correctionOffset.top = 0;
-            }
-            
-            correctionOffset.left -= options.dx;
-            correctionOffset.top -= options.dy;
-
-            // keeps nodes after source container, holding their position
-            $sourceParent.css('height', $(this).height());
-            
-            // get positions of source collections
-            $source.each(function (i) {
-                offsets[i] = $(this).offset();
-            });
-            
-            // stops previous animations on source container
-            $(this).stop();
-            var dx = 0; var dy = 0;
-            $source.each(function (i) {
-                $(this).stop(); // stop animation of collection items
-                var rawObj = $(this).get(0);
-                if (rawObj.style.position == 'absolute') {
-                    dx = -options.dx;
-                    dy = -options.dy;
-                } else {
-                    dx = options.dx;
-                    dy = options.dy;                    
-                }
-
-                rawObj.style.position = 'absolute';
-                rawObj.style.margin = '0';
-
-                rawObj.style.top = (offsets[i].top - parseFloat(rawObj.style.marginTop) - correctionOffset.top + dy) + 'px';
-                rawObj.style.left = (offsets[i].left - parseFloat(rawObj.style.marginLeft) - correctionOffset.left + dx) + 'px';
-            });
-                    
-            // create temporary container with destination collection
-            var $dest = $($sourceParent).clone();
-            var rawDest = $dest.get(0);
-            rawDest.innerHTML = '';
-            rawDest.setAttribute('id', '');
-            rawDest.style.height = 'auto';
-            rawDest.style.width = $sourceParent.width() + 'px';
-            $dest.append($collection);      
-            // insert node into HTML
-            // Note that the node is under visible source container in the exactly same position
-            // The browser render all the items without showing them (opacity: 0.0)
-            // No offset calculations are needed, the browser just extracts position from underlayered destination items
-            // and sets animation to destination positions.
-            $dest.insertBefore($sourceParent);
-            $dest.css('opacity', 0.0);
-            rawDest.style.zIndex = -1;
-            
-            rawDest.style.margin = '0';
-            rawDest.style.position = 'absolute';
-            rawDest.style.top = offset.top - correctionOffset.top + 'px';
-            rawDest.style.left = offset.left - correctionOffset.left + 'px';
-            
-            
-    
-            
-
-            if (options.adjustHeight === 'dynamic') {
-                // If destination container has different height than source container
-                // the height can be animated, adjusting it to destination height
-                $sourceParent.animate({height: $dest.height()}, options.duration, options.easing);
-            } else if (options.adjustHeight === 'auto') {
-                destHeight = $dest.height();
-                if (parseFloat(sourceHeight) < parseFloat(destHeight)) {
-                    // Adjust the height now so that the items don't move out of the container
-                    $sourceParent.css('height', destHeight);
-                } else {
-                    //  Adjust later, on callback
-                    adjustHeightOnCallback = true;
-                }
-            }
-                
-            // Now it's time to do shuffling animation
-            // First of all, we need to identify same elements within source and destination collections    
-            $source.each(function (i) {
-                var destElement = [];
-                if (typeof(options.attribute) == 'function') {
-                    
-                    val = options.attribute($(this));
-                    $collection.each(function() {
-                        if (options.attribute(this) == val) {
-                            destElement = $(this);
-                            return false;
-                        }
-                    });
-                } else {
-                    destElement = $collection.filter('[' + options.attribute + '=' + $(this).attr(options.attribute) + ']');
-                }
-                if (destElement.length) {
-                    // The item is both in source and destination collections
-                    // It it's under different position, let's move it
-                    if (!options.useScaling) {
-                        animationQueue.push(
-                                            {
-                                                element: $(this), 
-                                                animation: 
-                                                    {top: destElement.offset().top - correctionOffset.top, 
-                                                     left: destElement.offset().left - correctionOffset.left, 
-                                                     opacity: 1.0
-                                                    }
-                                            });
-
-                    } else {
-                        animationQueue.push({
-                                            element: $(this), 
-                                            animation: {top: destElement.offset().top - correctionOffset.top, 
-                                                        left: destElement.offset().left - correctionOffset.left, 
-                                                        opacity: 1.0, 
-                                                        scale: '1.0'
-                                                       }
-                                            });
-
-                    }
-                } else {
-                    // The item from source collection is not present in destination collections
-                    // Let's remove it
-                    if (!options.useScaling) {
-                        animationQueue.push({element: $(this), 
-                                             animation: {opacity: '0.0'}});
-                    } else {
-                        animationQueue.push({element: $(this), animation: {opacity: '0.0', 
-                                         scale: '0.0'}});
-                    }
-                }
-            });
-            
-            $collection.each(function (i) {
-                // Grab all items from target collection not present in visible source collection
-                
-                var sourceElement = [];
-                var destElement = [];
-                if (typeof(options.attribute) == 'function') {
-                    val = options.attribute($(this));
-                    $source.each(function() {
-                        if (options.attribute(this) == val) {
-                            sourceElement = $(this);
-                            return false;
-                        }
-                    });                 
-
-                    $collection.each(function() {
-                        if (options.attribute(this) == val) {
-                            destElement = $(this);
-                            return false;
-                        }
-                    });
-                } else {
-                    sourceElement = $source.filter('[' + options.attribute + '=' + $(this).attr(options.attribute) + ']');
-                    destElement = $collection.filter('[' + options.attribute + '=' + $(this).attr(options.attribute) + ']');
-                }
-                
-                var animationOptions;
-                if (sourceElement.length === 0) {
-                    // No such element in source collection...
-                    if (!options.useScaling) {
-                        animationOptions = {
-                            opacity: '1.0'
-                        };
-                    } else {
-                        animationOptions = {
-                            opacity: '1.0',
-                            scale: '1.0'
-                        };
-                    }
-                    // Let's create it
-                    d = destElement.clone();
-                    var rawDestElement = d.get(0);
-                    rawDestElement.style.position = 'absolute';
-                    rawDestElement.style.margin = '0';
-                    rawDestElement.style.top = destElement.offset().top - correctionOffset.top + 'px';
-                    rawDestElement.style.left = destElement.offset().left - correctionOffset.left + 'px';
-                    d.css('opacity', 0.0); // IE
-                    if (options.useScaling) {
-                        d.css('transform', 'scale(0.0)');
-                    }
-                    d.appendTo($sourceParent);
-                    
-                    animationQueue.push({element: $(d), 
-                                         animation: animationOptions});
-                }
-            });
-            
-            $dest.remove();
-            options.enhancement($sourceParent); // Perform custom visual enhancements during the animation
-            for (i = 0; i < animationQueue.length; i++) {
-                animationQueue[i].element.animate(animationQueue[i].animation, options.duration, options.easing, postCallback);
-            }
-        });
-    };
-})(jQuery);        f  xfô   20241112225620-8l”f  =¨ªG   https://www.sandersofoxford.com/static/js/portfolio/jquery.quicksand.js      i9  /*
-
-Quicksand 1.2.2
-
-Reorder and filter items with a nice shuffling animation.
-
-Copyright (c) 2010 Jacek Galanciak (razorjack.net) and agilope.com
-Big thanks for Piotr Petrus (riddle.pl) for deep code review and wonderful docs & demos.
-
-Dual licensed under the MIT and GPL version 2 licenses.
-http://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt
-http://github.com/jquery/jquery/blob/master/GPL-LICENSE.txt
-
-Project site: http://razorjack.net/quicksand
-Github site: http://github.com/razorjack/quicksand
-
-*/
-
-(function ($) {
-    $.fn.quicksand = function (collection, customOptions) {     
-        var options = {
-            duration: 750,
-            easing: 'swing',
-            attribute: 'data-id', // attribute to recognize same items within source and dest
-            adjustHeight: 'auto', // 'dynamic' animates height during shuffling (slow), 'auto' adjusts it before or after the animation, false leaves height constant
-            useScaling: true, // disable it if you're not using scaling effect or want to improve performance
-            enhancement: function(c) {}, // Visual enhacement (eg. font replacement) function for cloned elements
-            selector: '> *',
-            dx: 0,
-            dy: 0
-        };
-        $.extend(options, customOptions);
-        
-        if ($.browser.msie || (typeof($.fn.scale) == 'undefined')) {
-            // Got IE and want scaling effect? Kiss my ass.
-            options.useScaling = false;
-        }
-        
-        var callbackFunction;
-        if (typeof(arguments[1]) == 'function') {
-            var callbackFunction = arguments[1];
-        } else if (typeof(arguments[2] == 'function')) {
-            var callbackFunction = arguments[2];
-        }
-    
-        
-        return this.each(function (i) {
-            var val;
-            var animationQueue = []; // used to store all the animation params before starting the animation; solves initial animation slowdowns
-            var $collection = $(collection).clone(); // destination (target) collection
-            var $sourceParent = $(this); // source, the visible container of source collection
-            var sourceHeight = $(this).css('height'); // used to keep height and document flow during the animation
-            
-            var destHeight;
-            var adjustHeightOnCallback = false;
-            
-            var offset = $($sourceParent).offset(); // offset of visible container, used in animation calculations
-            var offsets = []; // coordinates of every source collection item            
-            
-            var $source = $(this).find(options.selector); // source collection items
-            
-            // Replace the collection and quit if IE6
-            if ($.browser.msie && $.browser.version.substr(0,1)<7) {
-                $sourceParent.html('').append($collection);
-                return;
-            }
-
-            // Gets called when any animation is finished
-            var postCallbackPerformed = 0; // prevents the function from being called more than one time
-            var postCallback = function () {
-                
-                if (!postCallbackPerformed) {
-                    postCallbackPerformed = 1;
-                    
-                    // hack: 
-                    // used to be: $sourceParent.html($dest.html()); // put target HTML into visible source container
-                    // but new webkit builds cause flickering when replacing the collections
-                    $toDelete = $sourceParent.find('> *');
-                    $sourceParent.prepend($dest.find('> *'));
-                    $toDelete.remove();
-                         
-                    if (adjustHeightOnCallback) {
-                        $sourceParent.css('height', destHeight);
-                    }
-                    options.enhancement($sourceParent); // Perform custom visual enhancements on a newly replaced collection
-                    if (typeof callbackFunction == 'function') {
-                        callbackFunction.call(this);
-                    }                    
-                }
-            };
-            
-            // Position: relative situations
-            var $correctionParent = $sourceParent.offsetParent();
-            var correctionOffset = $correctionParent.offset();
-            if ($correctionParent.css('position') == 'relative') {
-                if ($correctionParent.get(0).nodeName.toLowerCase() == 'body') {
-
-                } else {
-                    correctionOffset.top += (parseFloat($correctionParent.css('border-top-width')) || 0);
-                    correctionOffset.left +=( parseFloat($correctionParent.css('border-left-width')) || 0);
-                }
-            } else {
-                correctionOffset.top -= (parseFloat($correctionParent.css('border-top-width')) || 0);
-                correctionOffset.left -= (parseFloat($correctionParent.css('border-left-width')) || 0);
-                correctionOffset.top -= (parseFloat($correctionParent.css('margin-top')) || 0);
-                correctionOffset.left -= (parseFloat($correctionParent.css('margin-left')) || 0);
-            }
-            
-            // perform custom corrections from options (use when Quicksand fails to detect proper correction)
-            if (isNaN(correctionOffset.left)) {
-                correctionOffset.left = 0;
-            }
-            if (isNaN(correctionOffset.top)) {
-                correctionOffset.top = 0;
-            }
-            
-            correctionOffset.left -= options.dx;
-            correctionOffset.top -= options.dy;
-
-            // keeps nodes after source container, holding their position
-            $sourceParent.css('height', $(this).height());
-            
-            // get positions of source collections
-            $source.each(function (i) {
-                offsets[i] = $(this).offset();
-            });
-            
-            // stops previous animations on source container
-            $(this).stop();
-            var dx = 0; var dy = 0;
-            $source.each(function (i) {
-                $(this).stop(); // stop animation of collection items
-                var rawObj = $(this).get(0);
-                if (rawObj.style.position == 'absolute') {
-                    dx = -options.dx;
-                    dy = -options.dy;
-                } else {
-                    dx = options.dx;
-                    dy = options.dy;                    
-                }
-
-                rawObj.style.position = 'absolute';
-                rawObj.style.margin = '0';
-
-                rawObj.style.top = (offsets[i].top - parseFloat(rawObj.style.marginTop) - correctionOffset.top + dy) + 'px';
-                rawObj.style.left = (offsets[i].left - parseFloat(rawObj.style.marginLeft) - correctionOffset.left + dx) + 'px';
-            });
-                    
-            // create temporary container with destination collection
-            var $dest = $($sourceParent).clone();
-            var rawDest = $dest.get(0);
-            rawDest.innerHTML = '';
-            rawDest.setAttribute('id', '');
-            rawDest.style.height = 'auto';
-            rawDest.style.width = $sourceParent.width() + 'px';
-            $dest.append($collection);      
-            // insert node into HTML
-            // Note that the node is under visible source container in the exactly same position
-            // The browser render all the items without showing them (opacity: 0.0)
-            // No offset calculations are needed, the browser just extracts position from underlayered destination items
-            // and sets animation to destination positions.
-            $dest.insertBefore($sourceParent);
-            $dest.css('opacity', 0.0);
-            rawDest.style.zIndex = -1;
-            
-            rawDest.style.margin = '0';
-            rawDest.style.position = 'absolute';
-            rawDest.style.top = offset.top - correctionOffset.top + 'px';
-            rawDest.style.left = offset.left - correctionOffset.left + 'px';
-            
-            
-    
-            
-
-            if (options.adjustHeight === 'dynamic') {
-                // If destination container has different height than source container
-                // the height can be animated, adjusting it to destination height
-                $sourceParent.animate({height: $dest.height()}, options.duration, options.easing);
-            } else if (options.adjustHeight === 'auto') {
-                destHeight = $dest.height();
-                if (parseFloat(sourceHeight) < parseFloat(destHeight)) {
-                    // Adjust the height now so that the items don't move out of the container
-                    $sourceParent.css('height', destHeight);
-                } else {
-                    //  Adjust later, on callback
-                    adjustHeightOnCallback = true;
-                }
-            }
-                
-            // Now it's time to do shuffling animation
-            // First of all, we need to identify same elements within source and destination collections    
-            $source.each(function (i) {
-                var destElement = [];
-                if (typeof(options.attribute) == 'function') {
-                    
-                    val = options.attribute($(this));
-                    $collection.each(function() {
-                        if (options.attribute(this) == val) {
-                            destElement = $(this);
-                            return false;
-                        }
-                    });
-                } else {
-                    destElement = $collection.filter('[' + options.attribute + '=' + $(this).attr(options.attribute) + ']');
-                }
-                if (destElement.length) {
-                    // The item is both in source and destination collections
-                    // It it's under different position, let's move it
-                    if (!options.useScaling) {
-                        animationQueue.push(
-                                            {
-                                                element: $(this), 
-                                                animation: 
-                                                    {top: destElement.offset().top - correctionOffset.top, 
-                                                     left: destElement.offset().left - correctionOffset.left, 
-                                                     opacity: 1.0
-                                                    }
-                                            });
-
-                    } else {
-                        animationQueue.push({
-                                            element: $(this), 
-                                            animation: {top: destElement.offset().top - correctionOffset.top, 
-                                                        left: destElement.offset().left - correctionOffset.left, 
-                                                        opacity: 1.0, 
-                                                        scale: '1.0'
-                                                       }
-                                            });
-
-                    }
-                } else {
-                    // The item from source collection is not present in destination collections
-                    // Let's remove it
-                    if (!options.useScaling) {
-                        animationQueue.push({element: $(this), 
-                                             animation: {opacity: '0.0'}});
-                    } else {
-                        animationQueue.push({element: $(this), animation: {opacity: '0.0', 
-                                         scale: '0.0'}});
-                    }
-                }
-            });
-            
-            $collection.each(function (i) {
-                // Grab all items from target collection not present in visible source collection
-                
-                var sourceElement = [];
-                var destElement = [];
-                if (typeof(options.attribute) == 'function') {
-                    val = options.attribute($(this));
-                    $source.each(function() {
-                        if (options.attribute(this) == val) {
-                            sourceElement = $(this);
-                            return false;
-                        }
-                    });                 
-
-                    $collection.each(function() {
-                        if (options.attribute(this) == val) {
-                            destElement = $(this);
-                            return false;
-                        }
-                    });
-                } else {
-                    sourceElement = $source.filter('[' + options.attribute + '=' + $(this).attr(options.attribute) + ']');
-                    destElement = $collection.filter('[' + options.attribute + '=' + $(this).attr(options.attribute) + ']');
-                }
-                
-                var animationOptions;
-                if (sourceElement.length === 0) {
-                    // No such element in source collection...
-                    if (!options.useScaling) {
-                        animationOptions = {
-                            opacity: '1.0'
-                        };
-                    } else {
-                        animationOptions = {
-                            opacity: '1.0',
-                            scale: '1.0'
-                        };
-                    }
-                    // Let's create it
-                    d = destElement.clone();
-                    var rawDestElement = d.get(0);
-                    rawDestElement.style.position = 'absolute';
-                    rawDestElement.style.margin = '0';
-                    rawDestElement.style.top = destElement.offset().top - correctionOffset.top + 'px';
-                    rawDestElement.style.left = destElement.offset().left - correctionOffset.left + 'px';
-                    d.css('opacity', 0.0); // IE
-                    if (options.useScaling) {
-                        d.css('transform', 'scale(0.0)');
-                    }
-                    d.appendTo($sourceParent);
-                    
-                    animationQueue.push({element: $(d), 
-                                         animation: animationOptions});
-                }
-            });
-            
-            $dest.remove();
-            options.enhancement($sourceParent); // Perform custom visual enhancements during the animation
-            for (i = 0; i < animationQueue.length; i++) {
-                animationQueue[i].element.animate(animationQueue[i].animation, options.duration, options.easing, postCallback);
-            }
-        });
-    };
-})(jQuery);”ò¿Ÿ[   Y        ],&N	      quicksand      Ìˆ±ë
-      collection     :∂NÃ      customOptions       :yã      options    ¿
-7      duration   fò„`      easing     øwå-      swing      »¨G	      attribute      Ó[Ô      data-id	    õ;      adjustHeight
-   z¡≤S      auto   «¢˚
-      useScaling     ´√`      enhancement     _l$      selector   (uÎ      > *    ªl‡Ù      extend     “ßf∞      browser    5∂™‰      msie   ç$Úù      scale      ÷&Ö      callbackFunction   &⁄õ      val    ©ÎU\      animationQueue     pd¬Ù      $collection    ±4çÆ      clone      _›«∂      $sourceParent      ÍöÊó      sourceHeight   >ü      css    ∑…≈      height     !∆·?
-      destHeight     fÒk6      adjustHeightOnCallback     –%      offsets    4ﬁf      $source     èæ_„      version!    6ôfÿ      substr"     ‘„X      html#   ‹B-      append$     ≤ÿèø      postCallbackPerformed%      rî–      postCallback&   ∂≤+	      $toDelete'      ı£$      prepend(    ˙∆      $dest)      *N∑∆      remove*     ∆õÛZ      $correctionParent+      ‘t™      offsetParent,   	Ô–û      correctionOffset-   »Åí      position.   Ï-k      relative/   U5_      nodeName0   RâDo      toLowerCase1    òh;      body2   $√Á      top3    ûØ6H      border-top-width4   ı]á      left5   RË˜«      border-left-width6      A=
-      margin-top7     Ú(:…      margin-left8    mêÅ      stop9   :π®Â      rawObj:     H<*ê      absolute;   d¸9      margin<     ∑·∏œ	      marginTop=      GÁ$W
-      marginLeft>     ¬™⁄∞      rawDest?    Q√:	      innerHTML@      ó{⁄D      setAttributeA   ÎƒJ˚      widthB      ÂL…2      insertBeforeC   ﬂue…      opacityD    f˜      zIndexE     Q‰Y¡      dynamicF    ÷q1º      animateG    ˛…∂√      destElementH    >	≈      filterI     A¢Ωê      attrJ   Ñu2      pushK   kÔÂ^	      animationL      ÌË®      1.0M    ›¢Q      0.0N    ~˚„Ä      sourceElementO      A¯∑º      animationOptionsP   Ωá#ä      rawDestElementQ     RË|	      transformR      èòµ
-      scale(0.0)S     †Á„V      appendToT   >Â/      jQueryU     “®SB      $.fn.quicksandW     P´û	      $.fn.quicksand/<Y   Eﬂ5      $.fn.quicksand/</<Z     »MÈ√      $.fn.quicksand/</</<      ≈  Ô%,â                                                                                                                                                                      	                
-      
-                 
-                 ≥Oåc                         $ `              P    P  P   Ö                c              i    P  P  P  P    P  Pô    P  P$  P%  *  ,  Pa`b`(  P>  Ö                 Ö               i  Ö               i  9  Ö               i  G  PÖ                 Ö               i  N  PG  PO  P  Ö                 Ö                 Ö   Ø¬0∞IÙ$KEÆ˙ö	   -            	        a b              
-     á   K         2  4  C     
-   á   K         2  4  C       
-      á   K         C     
-     á   K     
-    C           C     
-     C       
-    á   K  á&’™ç!´!   D     (›´∆D                             m    ª   w ﬂ•@`FÄ 2ˇˇˇˇP	PL   !‹ÓxL      	                     Ω  Œ   ﬂ¡   J   m   L   ﬂ•)`ï0Ä  PÄÄ∏  5†∏  @               !       Ω  Œ   ﬂ‹Õ   ﬂﬁÕ  ﬂ9   Ó<      <      <      <   <	   m
-   <      <   <   <   Œ   ﬂ¡  ·J   ‰¡   º w ﬂ¡  J   J   ù!   ó   ﬂ¡  J   J      ó   ö   ó   ¡   L	   ﬂó   æ   K   ö   ó   æ   KŒ   ﬂô/   ó   æ   K   ö   ó   æ   KŒ   ﬂó   æ  ·J   ‰m   s ¢•ï `%(***&**&L	`		ˇˇˇPD`ö •@`ë0 `ó $`ñ `ò $`í@	`ˇˇˇ˚PCÄ QÄ$   ≈%ˆE$                              • $
-  ÿ,
-  n               Œ      ﬁÕ  ﬂh    Œ   ﬂ¡   ¡  s ·J   ‰s  Œ   ﬂ¡   æ  s Œ   ﬂ¡   æ  s ·J   ‰   s Õ   ﬂŒ   ﬂ¡   ¡   s ·J   ‰s  Õ  ﬂh    Œ   ﬂ¡   æ  s ·J   ‰¡  J   s Œ 	  ﬂ¡  J   J   ú)   ó   ﬂ¡  J   J	   ·J
-   ‰s ó   ö0   ó   ¡   ·J   ‰   s ·J   ‰¡   w ﬂ ¢ó   Œ 
-  ﬂm   Õ  ﬂ¡   ·J   ‰s  Õ  ﬂæ  ·J   ‰s  Œ   ﬂæ  ·J   ‰   s    öÃ   ó%   æ  ·J   ‰s J   ·J   ‰s     ö   ó,   ôä   ó,   ¡   ·J   ª    æ  ·J   ‰   s s ù   ó2   ﬂó2   &.L   ﬂ¡   ·J   ª    æ  ·J   ‰   s s ù   ó:   ﬂó:   &.L   ﬂó<   ô
-  ó<   ¡   ·J   ª    æ  ·J   ‰   s s ù   óB   ﬂóB   '.L   ﬂ¡   ·J   ª    æ  ·J   ‰   s s ù   óJ   ﬂóJ   '.L   ﬂ¡   ·J   ª    æ  ·J   ‰   s s ù   óR   ﬂóR   '.L   ﬂ¡   ·J   ª    æ  ·J   ‰   s s ù   óZ   ﬂóZ   '.L   ﬂó\   ª    ¡   J   s ö   ó`   ¡   L   ﬂóa   ª    ¡   J   s ö   óe   ¡   L   ﬂóf   ¡   ·J   ¡  J   '.L   ﬂ¡   ·J   ¡  J   '.L   ﬂ¡   ·J   ‰   ¡   æ  s ·J   ‰s  w ﬂ¡ 	  ·J    ‰m!   w ﬂ¡   æ  s ·J"   ‰w  ﬂŒ   ﬂŒ   ﬂ¡ 	  ·J    ‰m#   w ﬂ¡   ¡   s ·J   ‰s  Œ   ﬂ¡   ·J   ‰s Õ  ﬂæ     L$   ﬂæ  ·J%   ‰&      w ﬂæ  J'   (   L   ﬂæ  J'   ¡   ·J)   ‰s  *   &L)   ﬂ¡   ·J   ‰¡   w ﬂ¡   ·J+   ‰¡   w ﬂ¡   ·J   ‰,   w ﬂæ  J'   ˇL-   ﬂæ  J'   .   L/   ﬂæ  J'   0   L   ﬂæ  J'   æ  J   ¡   J   '*   &L   ﬂæ  J'   æ  J   ¡   J   '*   &L   ﬂ¡  J1   2   öL   ó§   ¡   ·J3   ‰94   ¡   ·J   ‰s  <   ¡  J5   ¡  J6   w ﬂôä   ó¨   ¡  J1   (   öp   óØ   ¡   ·J   ‰s  Œ   ﬂª    æ   s ª    ¡   s ö)   ó∑   ¡   ·J   ‰   ¡   w ﬂô   óπ   Œ   ﬂóπ   ¡ 	  ·J    ‰m7   w ﬂ¡   ·J    ‰m8   w ﬂ¡   ·J9   ‰w  ﬂ¡  ·J:   ‰¡   w ﬂÃ  ﬂò¡   º  ¡   J;   öW   óƒ   ¡   º  KJ<   ·J3   ‰¡   º  KJ=   ¡  J5   ¡  J6   æ  w ﬂº  0(Ã  ﬂôöˇˇˇóŒ   • "`+`ˇˇˇˇP
-P)!`ˇˇˇˇP) `ˇˇˇˇPP8 *`G
-`ˇˇˇˇP
-P(`K`ˇˇˇˇP
-
-ˇˇˇ˚PI`≤ $Pï `ë P
-ˇˇˇ˘P$`AÄ 	F)`' `J.%`P($`P)`ê Pì `PPù03 `ë $ê Pˇˇˇ„Pú `ë %ê Pˇˇˇ„P´07 `ë $ê Pˇˇˇ„Pú `ë %ê Pˇˇˇ„Pú `ë $ê Pˇˇˇ„Pú `ë %ê Pˇˇˇ„P°@?`
-ˇˇˇˇP-`ë@B`
-ˇˇˇˇP-`ë@F`ù `ù@J`ë ˇˇˇ˛P
-PˇˇˇÍPDM`ˇˇˇ˚PDR`ˇˇˇˇP
-P$``'`ˇˇˇ˚PDg`ˇˇˇˇP
-P)`P(`/`ï P$`î `ï $P/`ˇˇˇ˘PDs`ˇˇˇÛP$`í P$`ë@w`î `î `í !ó `í #ó@Ä  Ä`ö `P
-
-ˇˇˇÃP.`ö `P)`ˇˇˇˇPˇˇˇıP `ë ˇˇˇÚP `LÄ  ë`ˇˇˇ˚PDÄ  ≈`ˇˇˇ˚PDÄ  ˝`P$`ˇˇˇÙP$`fï `ï "
-
-ˇˇˇπPDÄ  ˇ4`ì 	P$
-         ˝  k   T  ’(cT  ›                        ﬁÕ   ﬂ¡ 
-  õÃ   ó   Œ 
-  ﬂ∑   ¡   ·J   ‰   s     ﬂ¡   ·J   ‰¡   ·J   ‰   s w ﬂª   ·J   ‰w  ﬂ¡   ö$   ó   ¡   ·J   ‰   ¡   w ﬂó   ¡  ·J   ‰¡   w ﬂ¡  ö   ó   ¡  ·J	   ‰æ   w ﬂó   •F`/`G`ñ P)`ë PˇˇˇÚP$`
-PD`/`ë ˇˇˇÚPI`ˇˇˇÙP$`ë `ˇˇˇ˚PIPÄÄÄ\   ùÊà°\   (                       ﬁÕ   ﬂ¡   º  ¡   æ   s ·J   ‰s  Nﬂ•&`ˇˇˇ˛P
-P%PÄÄÙ  ±/j}Ù  k               .       ﬁÕ  ﬂ¡   æ  s ·J   ‰w  ﬂ¡   æ  s ·J   ‰s Õ   ﬂæ   J   J      ö1   ó
-   ¡  J   Œ   ﬂ¡  J   Œ   ﬂô*   ó   ¡  J   Œ   ﬂ¡  J   Œ   ﬂó   æ   J      L   ﬂæ   J      L	   ﬂæ   J   ¡   º  KJ
-   ª    æ   J   J   s '¡   J
-   '¡   &   &L
-   ﬂæ   J   ¡   º  KJ   ª    æ   J   J   s '¡   J   '¡   &   &L   ﬂ•&`ˇˇˇˇP
-P$`ˇˇˇˇPP(`û ` ë ` õ `ê `ï@`î `î@`ó %ˇˇˇıP%í `ó 'ˇˇˇıP&í P∏  ù˝X∏  ≤               U       ﬁÕ   ﬂh    Œ   ﬂ¡  J      öF   ó   ¡  ·J   ‰¡   æ   s s Œ  ﬂ¡  ·J   ‰m   w ﬂô]   ó
-   ¡  ·J   ‰   ¡  J   &   &¡   æ   s ·J   ‰¡  J   s &	   &s Œ   ﬂó   ¡   J
-   ö:  ó   ¡  J   õé   ó   ¡  ·J   ‰9   ¡   æ   s <   9   ¡   ·J   ‰s  J   ¡  J   '<   ¡   ·J   ‰s  J   ¡  J   '<   <   <   w ﬂôì   ó-   ¡  ·J   ‰9   ¡   æ   s <   9   ¡   ·J   ‰s  J   ¡  J   '<   ¡   ·J   ‰s  J   ¡  J   '<   <      <   <   w ﬂóB   ô®   óB   ¡  J   õJ   óD   ¡  ·J   ‰9   ¡   æ   s <   9      <   <   w ﬂôO   óL   ¡  ·J   ‰9   ¡   æ   s <   9      <      <   <   w ﬂóU   •&#`+`õ@`ˇˇˇ˛PˇˇˇˆP)`ˇˇˇ˚P> `!ë ˇˇˇ˛P
-
-ˇˇˇ˚P
-ˇˇˇ—PN`î@`î `,-%1ˇˇˇ˛P(1 6ë Pê 6Pê 6K(P> `%-ˇˇˇ˛P(-Pê 9Pê 9&9O(Pì0'@*`î `ˇˇˇ˛P(.O+(P>- `ˇˇˇ˛P	**O.(PI2PÄÄà   h"¶∑à   D                        ﬁÕ   ﬂ¡  ·J   ‰æ   s ¡  ö   ó   ¡   æ   s Œ   ﬂ¢ó   •&`ˇˇˇˆPê `ˇˇˇ˛P)`AVÄÄÄ  Ë∂õÌ  ˜        	       Z       ﬁÕ  ﬂh    Œ   ﬂh    Œ   ﬂ¡  J      ö[   ó   ¡  ·J   ‰¡   æ  s s Œ  ﬂ¡	  ·J   ‰m   w ﬂ¡  ·J   ‰m   w ﬂô∞   ó   ¡	  ·J   ‰   ¡  J   &   &¡   æ  s ·J	   ‰¡  J   s &
-   &s Œ   ﬂ¡  ·J   ‰   ¡  J   &   &¡   æ  s ·J	   ‰¡  J   s &
-   &s Œ   ﬂó#   ¡   J   ö≠  ó&   ¡  J   õ#   ó(   9      <   Õ   ﬂô(   ó*   9      <      <   Õ   ﬂó-   ∑   ¡   ·J   ‰s      ﬂª   ·J   ‰s Õ  ﬂæ  J      L   ﬂæ  J      L   ﬂæ  J   ¡   ·J   ‰s  J   ¡  J   '   &L   ﬂæ  J   ¡   ·J   ‰s  J   ¡  J   '   &L   ﬂª   ·J   ‰   w ﬂ¡  J   ö$   óM   ª   ·J   ‰       w ﬂóP   ª   ·J!   ‰¡  w ﬂ¡  ·J"   ‰9#   ¡   ª   s <$   æ   <%   w ﬂóZ   •F%`+#`+`õ `ˇˇˇ˛PˇˇˇˆP)`ˇˇˇ˚PD`ˇˇˇ˚P> `ë ˇˇˇ˛P
-
-ˇˇˇ˚P
-ˇˇˇ—P)`!ë ˇˇˇ˛P
-
-ˇˇˇ˚P
-ˇˇˇ—P> `ñ@`î `%ô0  `%*î@'`ë P)*`P(`î `î `ï 'Pó `ï (Pó `í P$`î `ñ PI1`ˇˇˇ˜PD3`ˇˇˇ˛P(*I3$PI6Pà   NJ¨Üà   D                        ﬁÕ   ﬂ¡  ·J   ‰æ   s ¡  ö   ó   ¡   æ   s Œ   ﬂ¢ó   •&`ˇˇˇˆPê `ˇˇˇ˛P)`AVÄÄÄà   GÈAà   D                        ﬁÕ   ﬂ¡  ·J   ‰æ   s ¡  ö   ó   ¡   æ   s Œ   ﬂ¢ó   •&`ˇˇˇˆPê `ˇˇˇ˛P)`AVÄÄÄ3ıÿ  `  `&  ™     '  )        4     `ô    `8  »   ˚  -  :  a b 0  ;  2  §  <  a 4  =  	  `    `  b  Ü   	  pH  [  =  I  ]  >    J    @á     @ô  2  4  C  K    @  @L      @  @M    @	  @  `    `  
-  `  b  Ü     p  pH  [  =  I  ]  >    
-  @L  C    @  d    »   ˚  :  -  0  ;  ô  2  a 4    Q  R  S  J    @á   K    `      ô  ™            !  "  ä   #    p+  -  .  »   /  0  1  2  §  3  4  5  6  7    a b Ü     p8    p?  @  ç ˚  
-  A  a B  C  D  0  ;  :  	  E  F    @      p
-  p)    >  á   K    `   @          
-  	      p      a b       ◊   `  b  Ü     p  `◊   p      `  pT  ˇXÑ¬                 æ                •      U                       g   >   W           
-   %              Y              Y              Y              Z        A   &   Y        =      Z        ?      Z        ùH©¿      i9      i9                Ä  _9    _9               Ç1  \9  (  \9                 7  =  /  =     "          ÇÈ  T9  ‡  T9  /   #           
-        F   )            ™  Ï  °  Ï  |   #           õ  ê  í  ê  É   #          Çi#  Õ-  `#  Õ-  ¿   #           L$  %  D$  %  ≈   .           Ç.  Ï7  ˙-  Ï7  Ù   '           h/  90  `/  90  ˚   *            {0  J1  s0  J1    .           5°›…Æ]@|Pù      +gD†+gD†+Gôl¬gEå£   y    O^partitionKey=%28https%2Csandersofoxford.com%29,:https://www.sandersofoxford.com/static/js/portfolio/jquery.quicksand.js strongly-framed 1 security-info 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 request-method GET response-head HTTP/2 200 
-server: nginx/1.27.2
-content-length: 14697
-accept-ranges: bytes
-via: 1.1 google
-date: Mon, 25 Nov 2024 08:53:55 GMT
-expires: Tue, 26 Nov 2024 08:53:55 GMT
-cache-control: max-age=86400,public
-age: 24495
-last-modified: Thu, 20 May 2021 08:46:24 GMT
-etag: "60a621e0-3969"
-content-type: application/javascript
-alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-X-Firefox-Spdy: h2
- original-response-headers server: nginx/1.27.2
-content-length: 14697
-accept-ranges: bytes
-via: 1.1 google
-date: Mon, 25 Nov 2024 08:53:55 GMT
-expires: Tue, 26 Nov 2024 08:53:55 GMT
-cache-control: max-age=86400,public
-age: 24495
-last-modified: Thu, 20 May 2021 08:46:24 GMT
-etag: "60a621e0-3969"
-content-type: application/javascript
-alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-X-Firefox-Spdy: h2
- ctid 2 uncompressed-len 0 net-response-time-onstart 107 net-response-time-onstop 136 alt-data 1;14697,javascript/moz-script-bytecode-20241112225620-8l alt-data-from-child 1   †p
