@@ -1,0 +1,123 @@
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "CloisterBlack";
+    font-size: 19px;
+    min-height: 0;
+}
+
+window#waybar {
+    background: none;
+    color: white;
+    /*border-bottom: 5px solid black;
+    border-right: 5px solid black;*/
+}
+
+#window {
+    font-weight: bold;
+    font-family: "CloisterBlack";
+}
+/*
+#workspaces {
+    padding: 0 5px;
+}
+*/
+
+#workspaces button {
+    background: none;
+    color: black;
+    border-radius: 0px 0px 0px 0px;
+}
+
+
+
+#workspaces button.active {
+  background: none;
+  font-family: "azukifontB";
+  color: black;
+  /*color: #ffffff;
+  border-radius: 13px;
+  border-color: #A020FF; */
+  border: none;
+  border-bottom: 5px solid #a63333;
+  border-radius: 0px 0px 0px 0px;/*
+  animation: gradient_f 20s ease-in infinite; */
+  transition: all 0.0s; /*cubic-bezier(0.55, -0.68, 0.48, 1.682); */
+}
+
+#workspaces button:hover {
+  background: none;
+  color: white;
+  outline: none;
+  box-shadow: none;
+  border-radius: 0px 0px 0px 0px;
+  /*animation: gradient_f 20s ease-in infinite;*/
+  transition: all 0.0s /*cubic-bezier(0.55, -0.68, 0.48, 1.682); */
+}
+
+#mode {
+    background: #64727D;
+    border-bottom: 5px solid white;
+}
+
+#clock, #battery, #cpu, #network, #pulseaudio, #custom-spotify, #tray, #mode, #temperature, #temperature#temp2, #custom-power{
+    color: black;
+    padding: 0 12px;
+    margin: 0 2px;
+}
+
+#clock {
+    /*font-weight: bold;
+    background: #f5a97f;
+    border-color: transparent;
+    border-radius: 0px 0px 10px 10px; */
+}
+
+
+/*@keyframes blink {
+    to {
+        background-color: #ffffff;
+        color: black;
+    }
+
+}
+*/
+#cpu {
+}
+
+#custom-power {
+    color: black;
+    font-size: 25px;
+    padding: 0 10px;
+    color: #ffffff;
+}
+
+#temperature {
+}
+
+#temperature#temp2{
+}
+
+
+#network {
+}
+
+#network.disconnected {
+    background: #f53c3c;
+}
+
+#pulseaudio {
+}
+
+#pulseaudio.muted {
+}
+
+#custom-spotify {
+    color: rgb(102, 220, 105);
+}
+
+#tray {
+   /* background: #c6a0f6;
+    border-radius: 0px 0px 10px 10px; */
+}
+
