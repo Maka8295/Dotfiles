@@ -1,0 +1,34 @@
+# Earthsong theme for Fish shell
+# Based on the Kitty terminal Earthsong color palette
+
+[colors]
+normal = e5c7a9
+command = 7b8748
+param = e5c7a9
+quote = af865a
+redirection = 6d715e
+end = d17b49
+error = d17b49
+comment = 535c5c
+operator = af865a
+escape = 775759
+autosuggestion = 6d715e
+valid_path = --underline
+
+selection = --background=3e3b33
+search_match = --background=3e3b33
+
+user = 7b8748
+host = 7b8748
+cwd = 7b8748
+cwd_root = d17b49
+status = d17b49
+
+pager_prefix = 7b8748
+pager_completion = e5c7a9
+pager_description = 6d715e
+pager_progress = d17b49
+pager_selected_background = --background=3e3b33
+
+cursor = e5c7a9
+
