@@ -92,10 +92,15 @@ window#waybar {
     color: #ffffff;
 }
 
-#temperature {
+#custom-audio {
+    color: black;
+    font-size: 20px;
+    padding: 0 10px;
+    color: #000000;
 }
 
-#temperature#temp2{
+#custom-cputemp {
+    color: black;
 }
 
 

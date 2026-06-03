@@ -10,11 +10,11 @@
   "modules-left": [
     "clock",
     "pulseaudio",
-
-    "temperature#temp3",
+    "custom/audio",
+    "custom/cputemp",
     "tray",
   ],
-  "modules-right": ["battery","custom/power"],
+  "modules-right": ["battery","custom/suspend","custom/power"],
   "modules-center": ["hyprland/workspaces"],
   "hyprland/workspaces": {
     "disable-scroll": true,
@@ -91,22 +91,26 @@
     //        //"format-icons": [""],
     //	"interval": 1
   },
-  "temperature#temp2": {
-    //"thermal-zone": 2,
-    "hwmon-path": "/sys/class/hwmon/hwmon6/temp1_input",
-    "critical-threshold": 80,
-    "format-critical": "{temperatureC}°C {icon}",
-    "format": "{temperatureC}°C {icon}",
-    //"format-icons": [""],
-    "interval": 1,
-  },
-  "temperature#temp3": {
-    "hwmon-path": "/sys/class/hwmon/hwmon6/temp2_input",
-    "interval": 1,
+"custom/cputemp": {
+    "exec": "~/Dotfiles/scripts/cputemp.sh",
+    "interval": 3,
+    "format": " {}",
+    "tooltip": false
   },
   "custom/power": {
     "format": "⏻",
     "tooltip": false,
     "on-double-click": "systemctl poweroff",
+  },
+  "custom/suspend": {
+    "format": "󰒲",
+    "tooltip": false,
+    "on-double-click": "systemctl suspend"
+  },
+  "custom/audio": {
+    "format": "󰒝",
+    "tooltip": false,
+    "on-click": "~/Dotfiles/scripts/toggle-audio.sh"
   }
+
 }
