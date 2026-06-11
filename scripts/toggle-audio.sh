@@ -1,8 +1,8 @@
 #!/bin/bash
-USB=65
-BT=95
 
-CURRENT=$(wpctl status | grep -A20 'Sinks:' | grep '\*' | head -1 | grep -oP '(?<=\*\s{3})\d+')
+USB=$(wpctl status | grep 'Fosi Audio SK02 Analog' | grep 'vol:' | grep -oP '\d+(?=\.)' | head -1)
+BT=$(wpctl status | grep 'SoundCore 2' | grep 'vol:' | grep -oP '\d+(?=\.)' | head -1)
+CURRENT=$(wpctl status | grep -A20 'Sinks:' | grep '\*' | head -1 | grep -oP '\d+(?=\.)' | head -1)
 
 if [ "$CURRENT" = "$USB" ]; then
     TARGET=$BT
