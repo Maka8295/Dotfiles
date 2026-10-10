@@ -1,10 +1,17 @@
-add ~/Music/metal/
-clear 
+add ~/Music/nometal/2025NewMusic/
+clear
 add ~/Music/
+add ~/Music/metal
+add ~/Music/metal/
+clear all
+add ~/Music
+add ~/Music/nometal/2025New
+cleart
+add ~/Music/nometal/
+add ~/Music/nometal
+clear 
 add /Music/
 add ~/Music/ds/
 add /Music/ds
-add ~/Music/metal
-clear
 save
 q
