@@ -88,7 +88,7 @@ section "Config links"
 link "$DOTFILES/bash/.bashrc"       "$HOME/.bashrc"
 link "$DOTFILES/bash/.bash_profile" "$HOME/.bash_profile"
 
-for dir in btop cava cmus fish fuzzel hypr kitty neofetch nvim rofi waybar yazi; do
+for dir in btop cava cmus fish fuzzel hypr kicad kitty neofetch nvim rofi waybar yazi; do
     link "$DOTFILES/$dir" "$CONFIG/$dir"
 done
 
@@ -160,15 +160,19 @@ fi
 # ---------------------------------------------------------------------------
 section "GTK theme"
 # ---------------------------------------------------------------------------
-# dungeonOS = GTK3's dark Adwaita recoloured (gtk/make-theme.py); themes Nemo, file
-# dialogs, pavucontrol and other GTK3 apps
+# dungeonOS = GTK's own dark themes recoloured (gtk/make-theme.py); themes Nemo, file
+# dialogs, pavucontrol and other GTK3/GTK4 apps
 link "$DOTFILES/gtk/dungeonOS" "$DATA/themes/dungeonOS"
-ini="$CONFIG/gtk-3.0/settings.ini"
-if grep -q '^gtk-theme-name=' "$ini"; then
-    sed -i 's|^gtk-theme-name=.*|gtk-theme-name=dungeonOS|' "$ini"
-else
-    sed -i '/^\[Settings\]/a gtk-theme-name=dungeonOS' "$ini"
-fi
+for gtk in gtk-3.0 gtk-4.0; do      # GTK3 apps (Nemo, ...) and GTK4 apps (pavucontrol, ...)
+    ini="$CONFIG/$gtk/settings.ini"
+    mkdir -p "$(dirname "$ini")"
+    [ -f "$ini" ] || printf '[Settings]\n' > "$ini"
+    if grep -q '^gtk-theme-name=' "$ini"; then
+        sed -i 's|^gtk-theme-name=.*|gtk-theme-name=dungeonOS|' "$ini"
+    else
+        sed -i '/^\[Settings\]/a gtk-theme-name=dungeonOS' "$ini"
+    fi
+done
 command -v gsettings >/dev/null && gsettings set org.gnome.desktop.interface gtk-theme dungeonOS
 echo "  gtk theme -> dungeonOS"
 
