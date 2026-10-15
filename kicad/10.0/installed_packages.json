@@ -1,0 +1,554 @@
+{
+    "packages": [
+        {
+            "current_version": "0.0",
+            "install_timestamp": 1780793783,
+            "package": {
+                "author": {
+                    "contact": {},
+                    "name": ""
+                },
+                "description": "",
+                "description_full": "",
+                "identifier": "codes.thea.witchhazel",
+                "license": "",
+                "name": "codes_thea_witchhazel",
+                "resources": {},
+                "type": "invalid",
+                "versions": [
+                    {
+                        "kicad_version": "10.0",
+                        "status": "stable",
+                        "version": "0.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "",
+            "repository_name": "<unknown>"
+        },
+        {
+            "current_version": "0.0",
+            "install_timestamp": 1784040747,
+            "package": {
+                "author": {
+                    "contact": {},
+                    "name": ""
+                },
+                "description": "",
+                "description_full": "",
+                "identifier": "com.americanembedded.via-stitcher",
+                "license": "",
+                "name": "com_americanembedded_via-stitcher",
+                "resources": {},
+                "type": "invalid",
+                "versions": [
+                    {
+                        "kicad_version": "10.0",
+                        "status": "stable",
+                        "version": "0.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "",
+            "repository_name": "<unknown>"
+        },
+        {
+            "current_version": "1.0.3",
+            "install_timestamp": 1791534849,
+            "package": {
+                "author": {
+                    "contact": {
+                        "email": "zhanghaf60@gmail.com"
+                    },
+                    "name": "Huaqiu"
+                },
+                "description": "One-click search for electronic components",
+                "description_full": "This advanced search engine empowers engineers, purchasers, and designers to efficiently locate electronic components by integrating ​multi-dimensional search capabilities and real-time supply chain insights. Designed to streamline workflows from prototyping to mass production, it supports searches via ​Manufacturer Part Number (MPN), ​vague descriptions, ​electrical parameters, and even cross-referencing equivalents.",
+                "identifier": "com.github.Huaqiu-Electronics.kicad-hqsearch-plugin",
+                "license": "MIT",
+                "maintainer": {
+                    "contact": {
+                        "email": "zhanghaf60@gmail.com"
+                    },
+                    "name": "Huaqiu"
+                },
+                "name": "Component Search",
+                "resources": {
+                    "Github": "https://github.com/Huaqiu-Electronics/kicad-hqsearch-plugin.git"
+                },
+                "type": "plugin",
+                "versions": [
+                    {
+                        "download_sha256": "1cceddfc7df0280dc7e32c2c0787eccc265c31b2f275ec6984789720354dc4ac",
+                        "download_size": 1464561,
+                        "download_url": "https://raw.githubusercontent.com/Huaqiu-Electronics/kicad-hqdfm-zip/refs/heads/master/KiCAD-HQSearch-1.0.3.zip",
+                        "install_size": 3444202,
+                        "kicad_version": "8.0",
+                        "status": "stable",
+                        "version": "1.0.3"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "46f88614eade3439",
+            "repository_name": "KiCad official repository"
+        },
+        {
+            "current_version": "0.3",
+            "install_timestamp": 1791534848,
+            "package": {
+                "author": {
+                    "contact": {
+                        "web": "https://adamws.github.io"
+                    },
+                    "name": "adamws"
+                },
+                "description": "KiCad plugin for git",
+                "description_full": "Git actions directly from KiCad's PCB editor window",
+                "identifier": "com.github.adamws.kicad-git",
+                "license": "GPL-3.0",
+                "name": "Git plugin",
+                "resources": {
+                    "Bug Tracker": "https://github.com/adamws/kicad-git/issues",
+                    "Homepage": "https://github.com/adamws/kicad-git",
+                    "Sponsor": "https://ko-fi.com/adamws"
+                },
+                "type": "plugin",
+                "versions": [
+                    {
+                        "download_sha256": "54a0a5882e5bc4c557424f352f88877303c6bc95e86d6a66cd804f2cf17cdf7d",
+                        "download_size": 8755,
+                        "download_url": "https://github.com/adamws/kicad-git/releases/download/v0.3/kicad_git-0.3.zip",
+                        "install_size": 7947,
+                        "kicad_version": "7.0",
+                        "status": "stable",
+                        "version": "0.3"
+                    },
+                    {
+                        "download_sha256": "f0ac36a2cfef71f0f5756ae74011a4bc7e849fcb7f59f75172036ff93b1bc101",
+                        "download_size": 8605,
+                        "download_url": "https://github.com/adamws/kicad-git/releases/download/v0.2/kicad_git-0.2.zip",
+                        "install_size": 7797,
+                        "kicad_version": "7.0",
+                        "status": "stable",
+                        "version": "0.2"
+                    },
+                    {
+                        "download_sha256": "a5e3135204c562e216cfce92cd13714a89287c5a63cc5a6f24835ceef6484061",
+                        "download_size": 16807,
+                        "download_url": "https://github.com/adamws/kicad-git/releases/download/v0.1/kicad_git-0.1.zip",
+                        "install_size": 15885,
+                        "kicad_version": "7.0",
+                        "status": "stable",
+                        "version": "0.1"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "46f88614eade3439",
+            "repository_name": "KiCad official repository"
+        },
+        {
+            "current_version": "0.0",
+            "install_timestamp": 1782828000,
+            "package": {
+                "author": {
+                    "contact": {},
+                    "name": ""
+                },
+                "description": "",
+                "description_full": "",
+                "identifier": "com.github.adamws.kicad-kbplacer",
+                "license": "",
+                "name": "com_github_adamws_kicad-kbplacer",
+                "resources": {},
+                "type": "invalid",
+                "versions": [
+                    {
+                        "kicad_version": "10.0",
+                        "status": "stable",
+                        "version": "0.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "",
+            "repository_name": "<unknown>"
+        },
+        {
+            "current_version": "0.2.0",
+            "install_timestamp": 1791534908,
+            "package": {
+                "author": {
+                    "contact": {
+                        "email": "build@amemb.com",
+                        "github": "https://github.com/American-Embedded"
+                    },
+                    "name": "American Embedded"
+                },
+                "description": "Reusable design blocks and verified footprints for American Embedded hardware",
+                "description_full": "A curated KiCad library maintained by American Embedded. Includes reusable design blocks and the generated amemb-MountingHole footprint family, with centered, board-edge, and board-corner exposed-substrate mounting holes across 20 mechanical sizes.",
+                "identifier": "com.github.american-embedded.library",
+                "license": "CC-BY-4.0",
+                "name": "American Embedded Library",
+                "resources": {
+                    "homepage": "https://github.com/American-Embedded/American_Embedded_KiCad_Repository"
+                },
+                "type": "library",
+                "versions": [
+                    {
+                        "download_sha256": "5f87d1ef30296ef711845931e066cf263bbad98183b9666cfe6bb9f78eac81a4",
+                        "download_size": 122938,
+                        "download_url": "https://github.com/American-Embedded/American_Embedded_KiCad_Repository/releases/download/v8/com.github.american-embedded.library-0.2.0.zip",
+                        "install_size": 484757,
+                        "kicad_version": "10.0",
+                        "status": "stable",
+                        "version": "0.2.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "63ad1834ffcadb3e",
+            "repository_name": "American Embedded KiCad Repository"
+        },
+        {
+            "current_version": "1.0.0",
+            "install_timestamp": 1791534907,
+            "package": {
+                "author": {
+                    "contact": {
+                        "email": "build@amemb.com",
+                        "github": "https://github.com/American-Embedded"
+                    },
+                    "name": "American Embedded"
+                },
+                "description": "Dark color theme for KiCad with American Embedded branding",
+                "description_full": "A professionally designed dark color theme for KiCad featuring American Embedded's brand colors. Provides comfortable viewing for extended design sessions with carefully chosen contrast ratios for all editors including schematic, PCB, footprint editor, and 3D viewer.",
+                "identifier": "com.github.american-embedded.theme-dark",
+                "license": "CC-BY-4.0",
+                "name": "American Embedded Dark Theme",
+                "resources": {
+                    "homepage": "https://github.com/American-Embedded/American_Embedded_KiCad_Repository"
+                },
+                "type": "colortheme",
+                "versions": [
+                    {
+                        "download_sha256": "92d3ace748085a5df4870e948390a370ddbf13ba81bb497a3416ddd1076fed25",
+                        "download_size": 3793,
+                        "download_url": "https://github.com/American-Embedded/American_Embedded_KiCad_Repository/releases/download/v8/com.github.american-embedded.theme-dark-1.0.0.zip",
+                        "install_size": 15767,
+                        "kicad_version": "8.0",
+                        "status": "stable",
+                        "version": "1.0.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "63ad1834ffcadb3e",
+            "repository_name": "American Embedded KiCad Repository"
+        },
+        {
+            "current_version": "0.0",
+            "install_timestamp": 1784040732,
+            "package": {
+                "author": {
+                    "contact": {},
+                    "name": ""
+                },
+                "description": "",
+                "description_full": "",
+                "identifier": "com.github.american-embedded.theme-light",
+                "license": "",
+                "name": "com_github_american-embedded_theme-light",
+                "resources": {},
+                "type": "invalid",
+                "versions": [
+                    {
+                        "kicad_version": "10.0",
+                        "status": "stable",
+                        "version": "0.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "",
+            "repository_name": "<unknown>"
+        },
+        {
+            "current_version": "0.0",
+            "install_timestamp": 1780793833,
+            "package": {
+                "author": {
+                    "contact": {},
+                    "name": ""
+                },
+                "description": "",
+                "description_full": "",
+                "identifier": "com.github.asukiaaa.gerber-to-order",
+                "license": "",
+                "name": "com_github_asukiaaa_gerber-to-order",
+                "resources": {},
+                "type": "invalid",
+                "versions": [
+                    {
+                        "kicad_version": "10.0",
+                        "status": "stable",
+                        "version": "0.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "",
+            "repository_name": "<unknown>"
+        },
+        {
+            "current_version": "5.3.0",
+            "install_timestamp": 1791534848,
+            "package": {
+                "author": {
+                    "contact": {
+                        "github": "https://github.com/bennymeg"
+                    },
+                    "name": "Benny Megidish"
+                },
+                "description": "JLC PCB fabrication toolkit\nAutomate PCB fabrication process in conjunction with JLC PCB",
+                "description_full": "Toolkit for automating PCB fabrication process with KiCad and JLC PCB. \n\n Features: \n• Generates gerber files in correct format for production. \n• Generates BOM file in correct format for production. \n• Generates Pick and Place file in correct format for assembly. \n• Automatic and manual component translations. \n• Many more unique additional features. \n♥ https://github.com/sponsors/bennymeg",
+                "identifier": "com.github.bennymeg.JLC-Plugin-for-KiCad",
+                "license": "Apache-2.0",
+                "maintainer": {
+                    "contact": {
+                        "github": "https://github.com/bennymeg"
+                    },
+                    "name": "Benny Megidish"
+                },
+                "name": "Fabrication Toolkit",
+                "resources": {
+                    "Sponsor": "https://github.com/sponsors/bennymeg",
+                    "homepage": "https://github.com/bennymeg/JLC-Plugin-for-KiCad"
+                },
+                "tags": [
+                    "jlc",
+                    "production",
+                    "fabrication",
+                    "toolkit"
+                ],
+                "type": "plugin",
+                "versions": [
+                    {
+                        "download_sha256": "70fe1ecc4858c5c44a3aedb6eafff80515e7837e48921c983c6fb2d8b19d9938",
+                        "download_size": 21723,
+                        "download_url": "https://github.com/bennymeg/Fabrication-Toolkit/releases/download/v5.3.0/Fabrication-Toolkit-5.3.0.zip",
+                        "install_size": 59132,
+                        "kicad_version": "6.00",
+                        "status": "stable",
+                        "version": "5.3.0"
+                    },
+                    {
+                        "download_sha256": "2285113715d24d6e581ee1bee4c8e2fd92ad92bc72737e1dd05f7c05210e0e67",
+                        "download_size": 17732,
+                        "download_url": "https://github.com/bennymeg/JLC-Plugin-for-KiCad/releases/download/4.5.0/JLC-Plugin-for-KiCad-4.5.0.zip",
+                        "install_size": 44106,
+                        "kicad_version": "6.00",
+                        "status": "stable",
+                        "version": "4.5.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "46f88614eade3439",
+            "repository_name": "KiCad official repository"
+        },
+        {
+            "current_version": "0.0",
+            "install_timestamp": 1780065956,
+            "package": {
+                "author": {
+                    "contact": {},
+                    "name": ""
+                },
+                "description": "",
+                "description_full": "",
+                "identifier": "com.github.mitxela.kicad-round-tracks",
+                "license": "",
+                "name": "com_github_mitxela_kicad-round-tracks",
+                "resources": {},
+                "type": "invalid",
+                "versions": [
+                    {
+                        "kicad_version": "10.0",
+                        "status": "stable",
+                        "version": "0.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "",
+            "repository_name": "<unknown>"
+        },
+        {
+            "current_version": "0.0",
+            "install_timestamp": 1780793782,
+            "package": {
+                "author": {
+                    "contact": {},
+                    "name": ""
+                },
+                "description": "",
+                "description_full": "",
+                "identifier": "com.github.pointhi.kicad-color-schemes.solarized-light",
+                "license": "",
+                "name": "com_github_pointhi_kicad-color-schemes_solarized-light",
+                "resources": {},
+                "type": "invalid",
+                "versions": [
+                    {
+                        "kicad_version": "10.0",
+                        "status": "stable",
+                        "version": "0.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "",
+            "repository_name": "<unknown>"
+        },
+        {
+            "current_version": "0.0",
+            "install_timestamp": 1782828000,
+            "package": {
+                "author": {
+                    "contact": {},
+                    "name": ""
+                },
+                "description": "",
+                "description_full": "",
+                "identifier": "com.github.pointhi.kicad-color-schemes.wdark",
+                "license": "",
+                "name": "com_github_pointhi_kicad-color-schemes_wdark",
+                "resources": {},
+                "type": "invalid",
+                "versions": [
+                    {
+                        "kicad_version": "10.0",
+                        "status": "stable",
+                        "version": "0.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "",
+            "repository_name": "<unknown>"
+        },
+        {
+            "current_version": "0.0",
+            "install_timestamp": 1782128431,
+            "package": {
+                "author": {
+                    "contact": {},
+                    "name": ""
+                },
+                "description": "",
+                "description_full": "",
+                "identifier": "com.github.sparkfun.SparkFunKiCadPanelizer",
+                "license": "",
+                "name": "com_github_sparkfun_SparkFunKiCadPanelizer",
+                "resources": {},
+                "type": "invalid",
+                "versions": [
+                    {
+                        "kicad_version": "10.0",
+                        "status": "stable",
+                        "version": "0.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "",
+            "repository_name": "<unknown>"
+        },
+        {
+            "current_version": "0.0",
+            "install_timestamp": 1780065955,
+            "package": {
+                "author": {
+                    "contact": {},
+                    "name": ""
+                },
+                "description": "",
+                "description_full": "",
+                "identifier": "com.github.yaqwsx.kikit",
+                "license": "",
+                "name": "com_github_yaqwsx_kikit",
+                "resources": {},
+                "type": "invalid",
+                "versions": [
+                    {
+                        "kicad_version": "10.0",
+                        "status": "stable",
+                        "version": "0.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "",
+            "repository_name": "<unknown>"
+        },
+        {
+            "current_version": "2.12.0",
+            "install_timestamp": 1791534847,
+            "package": {
+                "author": {
+                    "contact": {
+                        "email": "mail@qu1ck.org"
+                    },
+                    "name": "qu1ck"
+                },
+                "description": "Generate interactive html BOM to assist with manual pcb assembly",
+                "description_full": "This plugin generates a convenient Bill of Materials (BOM) listing with the ability to visually correlate and easily search for components and their placements on the PCB. It is particularly useful when hand-soldering a prototype, as it allows users to quickly find locations of components groups on the board. It is also possible to reverse lookup the component group by clicking on a footprint on the board drawing.\nThe plugin utilizes Pcbnew python API to read PCB data and render silkscreen, fab layer, footprint pads, text, and drawings. BOM table fields and grouping is fully configurable, additional columns, such as a manufacturer ID, can be added in Schematic editor and imported either through the netlist file, XML file generated by Eeschema's internal BOM tool, or from board file itself.\nThere is an option to include tracks/zones data as well as netlist information allowing dynamic highlight of nets on the board.",
+                "identifier": "org.openscopeproject.InteractiveHtmlBom",
+                "keep_on_update": [
+                    ".*/config\\.ini",
+                    ".*/web/user.*"
+                ],
+                "license": "MIT",
+                "name": "Interactive Html Bom",
+                "resources": {
+                    "Demos": "https://openscopeproject.org/InteractiveHtmlBomDemo/",
+                    "Forum": "https://forum.kicad.info/t/interactive-html-bom-plugin-for-kicad-5-0/11713",
+                    "Github": "https://github.com/openscopeproject/InteractiveHtmlBom",
+                    "Wiki": "https://github.com/openscopeproject/InteractiveHtmlBom/wiki"
+                },
+                "tags": [
+                    "bom",
+                    "pcbnew",
+                    "html",
+                    "assembly",
+                    "documentation"
+                ],
+                "type": "plugin",
+                "versions": [
+                    {
+                        "download_sha256": "de64f5f78dcdb9ffe744599e310c79330d2d9dba8b74ccb968f9169790689cb5",
+                        "download_size": 150771,
+                        "download_url": "https://github.com/openscopeproject/InteractiveHtmlBom/releases/download/v2.12.0/InteractiveHtmlBom_v2.12.0_pcm.zip",
+                        "install_size": 734659,
+                        "kicad_version": "6.0",
+                        "kicad_version_max": "10",
+                        "platforms": [
+                            "linux",
+                            "macos",
+                            "windows"
+                        ],
+                        "status": "stable",
+                        "version": "2.12.0"
+                    }
+                ]
+            },
+            "pinned": false,
+            "repository_id": "46f88614eade3439",
+            "repository_name": "KiCad official repository"
+        }
+    ]
+}

@@ -213,7 +213,13 @@ hl.animation({ leaf = "windowsOut", enabled = true, speed = 7,  bezier = "defaul
 hl.animation({ leaf = "border",     enabled = true, speed = 10, bezier = "default" })
 hl.animation({ leaf = "borderangle",enabled = true, speed = 8,  bezier = "default" })
 hl.animation({ leaf = "fade",       enabled = true, speed = 7,  bezier = "default" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 6,  bezier = "default", style = "slidevert" })  -- slide up/down, matching the vertical bar
+-- Workspaces slide the same way as the waybar layout (scripts/waybar-toggle.sh switches it):
+-- up/down with the vertical bar (default), left/right with the horizontal one
+local barLayoutFile = io.open((os.getenv("XDG_STATE_HOME") or (os.getenv("HOME") .. "/.local/state")) .. "/waybar-layout")
+local barLayout = barLayoutFile and barLayoutFile:read("l") or "vertical"
+if barLayoutFile then barLayoutFile:close() end
+hl.animation({ leaf = "workspaces", enabled = true, speed = 6,  bezier = "default",
+               style = barLayout == "horizontal" and "slide" or "slidevert" })
 
 ---------------------
 ---- KEYBINDINGS ----

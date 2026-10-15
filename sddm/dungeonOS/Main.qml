@@ -9,6 +9,10 @@ Rectangle {
     height: 1080
     color: "#1A1816"
 
+    // Whole-number UI scale from the screen height: 1x up to 1440p (the desktop), 2x on
+    // 4K (the laptop), so nothing ends up tiny on a high-resolution screen
+    readonly property int uiScale: Math.max(1, Math.floor(height / 1080))
+
     // dungeonOS palette
     readonly property color bg:       "#1A1816"
     readonly property color bgDark:   "#141210"
@@ -141,6 +145,7 @@ Rectangle {
     Panel {
         id: loginPanel
         anchors.centerIn: parent
+        scale: root.uiScale
 
         Column {
             spacing: 14
@@ -234,8 +239,10 @@ Rectangle {
     Panel {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.margins: 10
+        anchors.margins: 10 * root.uiScale
         pad: 10
+        scale: root.uiScale
+        transformOrigin: Item.BottomRight
 
         Row {
             spacing: 6
