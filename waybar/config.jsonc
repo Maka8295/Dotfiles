@@ -117,6 +117,15 @@
     "format": "\u2670",   // the ♰ cross from the fish greeting (same as the login screen)
     "tooltip": false,
     "on-double-click": "systemctl poweroff",
+    // right-click: shut down after 30/45/60 min, or cancel (waybar/power_menu.xml)
+    "menu": "on-click-right",
+    "menu-file": "~/Dotfiles/waybar/power_menu.xml",
+    "menu-actions": {
+      "off30": "~/Dotfiles/scripts/sleep.sh 30",
+      "off45": "~/Dotfiles/scripts/sleep.sh 45",
+      "off60": "~/Dotfiles/scripts/sleep.sh 60",
+      "cancel": "~/Dotfiles/scripts/sleep.sh cancel",
+    },
   },
   "custom/lock": {
     "format": "\udb80\udf3e",   // padlock (nerd font): lock the screen with hyprlock, like Super+L
