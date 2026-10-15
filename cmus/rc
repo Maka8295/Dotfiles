@@ -1,0 +1,2 @@
+# Runs every time cmus starts (after autosave), so the theme always wins
+colorscheme dungeonOS

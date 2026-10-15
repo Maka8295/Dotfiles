@@ -1,0 +1,74 @@
+/* Vertical layout: the normal style plus the differences below.
+   Switch layouts with ~/Dotfiles/scripts/waybar-toggle.sh */
+@import url("../style.css");
+
+.modules-left,
+.modules-center,
+.modules-right {
+    padding: 8px 4px;
+}
+
+/* spacing between items runs top/bottom instead of left/right */
+#clock,
+#battery,
+#cpu,
+#network,
+#pulseaudio,
+#tray,
+#mode,
+#custom-audio,
+#custom-screenshot,
+#custom-cputemp,
+#custom-gputemp,
+#custom-lock,
+#custom-suspend,
+#custom-power {
+    padding: 8px 6px;
+    margin: 1px 0;
+}
+
+#workspaces button {
+    padding: 5px 0;
+    /* keeps the active square about the same 28x25 as the horizontal bar */
+    margin: 0 10px;
+}
+
+/* these icon glyphs carry extra blank space on one side, so they sat right of centre;
+   uneven padding shifts each back by the measured amount */
+#custom-screenshot {
+    padding: 8px 10px 8px 2px;   /* 4px left */
+}
+
+#custom-suspend {
+    padding: 8px 10px 8px 3px;   /* 3.5px left */
+}
+
+#custom-audio {
+    padding: 8px 8px 8px 5px;    /* 1.5px left */
+}
+
+#custom-lock {
+    padding: 8px 8px 8px 5px;    /* centred (measured) */
+}
+
+/* icon buttons: same width as the workspace buttons (10px side margins), so their hover
+   highlight is the same size as the active workspace square */
+#custom-audio,
+#custom-screenshot,
+#custom-lock,
+#custom-suspend,
+#custom-power {
+    margin: 4px 10px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+#custom-power {
+    padding-top: 1px;      /* the cross's font has taller lines than the icon font */
+    padding-bottom: 2px;
+}
+
+/* volume: two lines of text, so its square is taller, with the same side margins */
+#pulseaudio {
+    margin: 2px 8px;
+}

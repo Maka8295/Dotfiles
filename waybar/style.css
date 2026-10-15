@@ -1,3 +1,12 @@
+/* dungeonOS — matches the nvim theme in ~/Dotfiles/nvim/lua/plugins/darkshire.lua
+ *
+ * bg         #1A1816    fg        #C8B8A0    moss   #6E7F5A
+ * bg_dark    #141210    fg_muted  #9D8E7C    sage   #879376
+ * surface    #24201C    comment   #6F675E    brass  #A88A5B
+ * selection  #463D34    border    #7E705D    clay   #7A5E47
+ * steel      #8F8B81    rust      #7B4A3E
+ */
+
 * {
     border: none;
     border-radius: 0;
@@ -6,123 +15,213 @@
     min-height: 0;
 }
 
+/* The bar itself stays transparent so the wallpaper shows between panels */
 window#waybar {
-    background: none;
-    color: white;
-    /*border-bottom: 5px solid black;
-    border-right: 5px solid black;*/
+    background: transparent;
+    color: #C8B8A0;
 }
 
-#window {
-    font-weight: bold;
-    font-family: "CloisterBlack";
+/* The 10px gap around the bar lives inside waybar's own area (the configs set the outer
+   margins to 0, and -10 on the side facing the windows), so the panels' drop shadow has
+   room to be drawn instead of being cut off at the panel edges. */
+window#waybar > box {
+    margin: 10px;
 }
-/*
-#workspaces {
-    padding: 0 5px;
+
+/* Three solid panels with a square double-rule frame, plus a drop shadow matched to the
+   Hyprland windows' (decoration.shadow: #1a1a1a, no offset). Hyprland's shadow is dark at
+   the edge and fades fast, so it's built from three layers; measured against the windows
+   it's within ~0.07 opacity at every pixel out to 10px. */
+.modules-left,
+.modules-center,
+.modules-right {
+    background: #1A1816;
+    border: 1px solid #7E705D;
+    box-shadow: inset 0 0 0 2px #141210, inset 0 0 0 3px #463D34,
+                0 0 2px 0 rgba(26, 26, 26, 0.93),
+                0 0 4px 1px rgba(26, 26, 26, 0.8),
+                0 0 8px 0 rgba(26, 26, 26, 0.5);
+    padding: 4px 8px;
 }
-*/
+
+/* ---------- workspaces ---------- */
 
 #workspaces button {
-    background: none;
-    color: black;
-    border-radius: 0px 0px 0px 0px;
+    background: transparent;
+    color: #6F675E;
+    padding: 0 10px;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    transition: none;
 }
 
-
-
 #workspaces button.active {
-  background: none;
-  font-family: "azukifontB";
-  color: black;
-  /*color: #ffffff;
-  border-radius: 13px;
-  border-color: #A020FF; */
-  border: none;
-  border-bottom: 5px solid #a63333;
-  border-radius: 0px 0px 0px 0px;/*
-  animation: gradient_f 20s ease-in infinite; */
-  transition: all 0.0s; /*cubic-bezier(0.55, -0.68, 0.48, 1.682); */
+    font-family: "azukifontB";
+    color: #1A1816;
+    background: #6E7F5A;
+    /* a ring of the panel colour shrinks the green square evenly without moving anything */
+    box-shadow: inset 0 0 0 4px #1A1816;
+}
+
+/* a different colour per workspace (buttons are always in order: I, II, III, IV);
+   workspaces 5+ keep the moss green above */
+#workspaces button.active:nth-child(2) {
+    background: #A88A5B;   /* brass */
+}
+
+#workspaces button.active:nth-child(3) {
+    background: #7B4A3E;   /* rust */
+    color: #DDD0BD;        /* dark text is hard to read on rust */
+}
+
+#workspaces button.active:nth-child(4) {
+    background: #8F8B81;   /* steel */
 }
 
 #workspaces button:hover {
-  background: none;
-  color: white;
-  outline: none;
-  box-shadow: none;
-  border-radius: 0px 0px 0px 0px;
-  /*animation: gradient_f 20s ease-in infinite;*/
-  transition: all 0.0s /*cubic-bezier(0.55, -0.68, 0.48, 1.682); */
+    background: #24201C;
+    color: #C8B8A0;
+}
+
+#workspaces button.urgent {
+    color: #C8B8A0;
+    background: #7B4A3E;
 }
 
 #mode {
-    background: #64727D;
-    border-bottom: 5px solid white;
+    background: #463D34;
+    color: #A88A5B;
+    border-bottom: 3px solid #A88A5B;
 }
 
-#clock, #battery, #cpu, #network, #pulseaudio, #custom-spotify, #tray, #mode, #temperature, #temperature#temp2, #custom-power{
-    color: black;
-    padding: 0 12px;
-    margin: 0 2px;
+/* ---------- modules ---------- */
+
+#clock,
+#battery,
+#cpu,
+#network,
+#pulseaudio,
+#tray,
+#mode,
+#custom-audio,
+#custom-screenshot,
+#custom-cputemp,
+#custom-gputemp,
+#custom-lock,
+#custom-suspend,
+#custom-power {
+    color: #C8B8A0;
+    padding: 0 10px;
+    margin: 0 1px;
 }
 
 #clock {
-    /*font-weight: bold;
-    background: #f5a97f;
-    border-color: transparent;
-    border-radius: 0px 0px 10px 10px; */
-}
-
-
-/*@keyframes blink {
-    to {
-        background-color: #ffffff;
-        color: black;
-    }
-
-}
-*/
-#cpu {
-}
-
-#custom-power {
-    color: black;
-    font-size: 25px;
-    padding: 0 10px;
-    color: #ffffff;
-}
-
-#custom-audio {
-    color: black;
-    font-size: 20px;
-    padding: 0 10px;
-    color: #000000;
-}
-
-#custom-cputemp {
-    color: black;
-}
-
-
-#network {
-}
-
-#network.disconnected {
-    background: #f53c3c;
+    color: #A88A5B;
 }
 
 #pulseaudio {
+    color: #879376;
+    padding-right: 7px;   /* evens the gap before the audio-switch button */
 }
 
 #pulseaudio.muted {
+    color: #6F675E;
 }
 
-#custom-spotify {
-    color: rgb(102, 220, 105);
+#custom-audio {
+    font-size: 20px;
+    color: #9D8E7C;
 }
 
-#tray {
-   /* background: #c6a0f6;
-    border-radius: 0px 0px 10px 10px; */
+#custom-screenshot {
+    font-size: 20px;
+    color: #9D8E7C;
+    /* square highlight 28px wide like the workspace square; more on the right keeps
+       the gap to the temperatures even */
+    padding: 0 16px 0 11px;
 }
 
+#custom-cputemp {
+    color: #6E7F5A;
+    padding-left: 13px;   /* evens the gap after the screenshot button */
+}
+
+#custom-gputemp {
+    color: #8F8B81;
+}
+
+#battery {
+    color: #879376;
+}
+
+#battery.warning:not(.charging),
+#battery.critical:not(.charging) {
+    color: #C8B8A0;
+    background: #7B4A3E;
+}
+
+#network.disconnected {
+    color: #C8B8A0;
+    background: #7B4A3E;
+}
+
+#custom-lock,
+#custom-suspend {
+    color: #9D8E7C;
+}
+
+/* power: the ♰ cross from the fish greeting, in the same font kitty draws it with and the
+   same rust as the greeting, matching the login screen's power button */
+#custom-power {
+    font-family: "DejaVu Sans Mono";
+    font-size: 25px;
+    color: #7B4A3E;
+}
+
+/* icon buttons: padding that makes their hover square 28px wide, like the workspace square
+   (horizontal bar; the vertical layout sets its own sizes) */
+#custom-audio,
+#custom-lock {
+    padding: 0 13px;
+}
+
+#custom-suspend {
+    padding: 0 16px 0 10px;   /* its icon sits right of centre */
+}
+
+/* hover highlights are inset squares like the active workspace: the highlight colour with
+   a 4px ring of the panel colour inside the button's box */
+#custom-audio:hover,
+#custom-screenshot:hover,
+#custom-lock:hover,
+#custom-suspend:hover,
+#pulseaudio:hover {
+    background: #463D34;
+    color: #C8B8A0;
+    box-shadow: inset 0 0 0 4px #1A1816;
+}
+
+#custom-power:hover {
+    background: #7B4A3E;
+    color: #C8B8A0;
+    box-shadow: inset 0 0 0 4px #1A1816;
+}
+
+/* ---------- tray & tooltips ---------- */
+
+#tray > .needs-attention {
+    background: #7B4A3E;
+}
+
+#tray menu,
+tooltip {
+    background: #141210;
+    border: 1px solid #7E705D;
+    border-radius: 0;
+}
+
+#tray menu *,
+tooltip label {
+    color: #C8B8A0;
+}

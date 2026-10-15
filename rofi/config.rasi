@@ -1,0 +1,17 @@
+/* Launcher (Super+S). Settings mirror fuzzel/fuzzel.ini so both behave the same. */
+configuration {
+    modi:                "drun,run";
+    show-icons:          true;
+    terminal:            "kitty";
+    matching:            "fuzzy";
+    drun-display-format: "{name}";
+    display-drun:        "♱";
+    display-run:         "♱";
+    font:                "CloisterBlack 18";
+    /* what rofi auto-detected on the desktop (27in 1440p), so "18" matches fuzzel there.
+       Fixed rather than auto-detected (dpi: 0) so a high-DPI laptop screen doesn't make
+       the text huge. */
+    dpi:                 112;
+}
+
+@theme "dungeonOS"

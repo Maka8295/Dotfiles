@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=dungeonOS
+Comment=Dark Adwaita in the dungeonOS palette
+
+[X-GNOME-Metatheme]
+GtkTheme=dungeonOS
