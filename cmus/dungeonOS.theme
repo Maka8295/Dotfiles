@@ -1,0 +1,60 @@
+# dungeonOS — matches nvim, waybar, btop and the Hyprland window frame
+#
+# cmus only takes terminal palette numbers, so this uses kitty's 16 colours,
+# which kitty.conf already sets to the dungeonOS palette:
+#   0 bg #1A1816   1 rust #7B4A3E   2 moss #6E7F5A    3 brass #A88A5B
+#   7 fg #C8B8A0   8 grey #55514C   10 sage #879376   11 bright brass #B79B6B
+#   9 bright rust #8A5748           15 bright fg #DDD0BD
+
+# library / playlist windows
+set color_win_bg=default
+set color_win_fg=7
+set color_win_attr=default
+set color_win_dir=2
+set color_win_cur=3
+set color_win_cur_attr=bold
+
+# cursor in the focused window: brass bar
+set color_win_sel_bg=3
+set color_win_sel_fg=0
+set color_win_sel_attr=default
+set color_win_cur_sel_bg=3
+set color_win_cur_sel_fg=0
+set color_win_cur_sel_attr=bold
+
+# cursor in the unfocused window: dim grey bar
+set color_win_inactive_sel_bg=8
+set color_win_inactive_sel_fg=7
+set color_win_inactive_sel_attr=default
+set color_win_inactive_cur_sel_bg=8
+set color_win_inactive_cur_sel_fg=11
+set color_win_inactive_cur_sel_attr=bold
+
+# window titles
+set color_win_title_bg=8
+set color_win_title_fg=11
+set color_win_title_attr=bold
+set color_separator=8
+
+set color_trackwin_album_bg=default
+set color_trackwin_album_fg=3
+set color_trackwin_album_attr=bold
+
+# top title line and bottom status line
+set color_titleline_bg=8
+set color_titleline_fg=15
+set color_titleline_attr=default
+set color_statusline_bg=0
+set color_statusline_fg=10
+set color_statusline_attr=default
+set color_statusline_progress_bg=3
+set color_statusline_progress_fg=0
+set color_statusline_progress_attr=default
+
+# command line
+set color_cmdline_bg=default
+set color_cmdline_fg=7
+set color_cmdline_attr=default
+set color_cur_sel_attr=default
+set color_error=9
+set color_info=11

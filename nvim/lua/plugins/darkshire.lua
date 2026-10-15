@@ -12,7 +12,7 @@ return {
 
       vim.cmd.colorscheme "everforest"
 
-      local function mossforge()
+      local function dungeonOS()
         local colors = {
           bg = "#1A1816",
           bg_dark = "#141210",
@@ -75,12 +75,12 @@ return {
         set(0, "StatusLine", { fg = colors.fg, bg = colors.surface })
       end
 
-      mossforge()
+      dungeonOS()
 
       vim.api.nvim_create_autocmd("ColorScheme", {
         pattern = "*",
         callback = function()
-          vim.schedule(function() mossforge() end)
+          vim.schedule(function() dungeonOS() end)
         end,
       })
     end,

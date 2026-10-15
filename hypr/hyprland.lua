@@ -5,11 +5,31 @@
 ---- MONITORS ----
 ------------------
 
+-- Desktop monitor
 hl.monitor({
     output   = "DP-3",
     mode     = "2560x1440@200",
     position = "0x0",
     scale    = 1,
+})
+
+-- Laptop (ThinkPad T14 Gen 2, 14in 4K): scale 2 = exactly 2x2 screen pixels per UI pixel,
+-- so the pixel art stays crisp (a fractional scale like 1.5 would blur it). Same layout
+-- as a 1920x1080 screen.
+hl.monitor({
+    output   = "eDP-1",
+    mode     = "3840x2160@60",
+    position = "auto",
+    scale    = 2,
+})
+
+-- Anything else (a TV, a projector, ...): its best resolution, placed and
+-- scaled automatically, so this config works on any machine out of the box
+hl.monitor({
+    output   = "",
+    mode     = "preferred",
+    position = "auto",
+    scale    = "auto",
 })
 
 ---------------------
@@ -19,7 +39,7 @@ hl.monitor({
 local terminal    = "kitty fish"
 local browser     = "firefox"
 local fileManager = "kitty yazi"
-local menu        = "fuzzel --show drun"
+local menu        = "rofi -show drun"
 local calc        = "/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=qalculate-qt io.github.Qalculate.qalculate-qt"
 local music       = "kitty --override font_size=14 -e cmus"
 local cava        = "kitty --override font_size=1 -e cava"
@@ -28,16 +48,20 @@ local cava        = "kitty --override font_size=1 -e cava"
 ---- AUTOSTART ----
 -------------------
 
+-- Scratchpad apps (Super+B): Signal on the right, cmus top-left, btop below it.
+-- special:magic uses the master layout (see WINDOWS AND WORKSPACES), so the order apps
+-- open in decides where they go; scripts/scratchpad.sh opens them one at a time. It runs
+-- as its own process because a config reload at login (the border plugin loading) wiped
+-- the waiting when it was done here in Lua, and cmus/btop never opened.
+
 hl.on("hyprland.start", function()
     hl.exec_cmd("hyprpaper")
-    hl.exec_cmd("hyprctl setcursor miku-cursor-linux 57")
-    hl.exec_cmd("waybar")
+    -- 64 = the cursor art scaled exactly 2x, so its pixels stay sharp (57 blurred them)
+    hl.exec_cmd("hyprctl setcursor dungeonOS-cursor 64")
+    hl.exec_cmd("~/Dotfiles/scripts/waybar.sh")  -- remembers horizontal/vertical (scripts/waybar-toggle.sh)
 
-    -- FIX: the old config launched "kitty fish --class cmus-term -e cmus".
-    -- Everything after "fish" is passed to fish, not kitty, so the class was
-    -- never set and the cmus-scratchpad rule below could never match.
-    hl.exec_cmd("kitty --class cmus-term -e cmus")
-    hl.exec_cmd("signal-desktop")
+    hl.exec_cmd("~/Dotfiles/scripts/scratchpad.sh")
+    hl.exec_cmd("hypridle")   -- locks before sleep, idle lock/screen-off (hypr/hypridle.conf)
 end)
 
 -- Send these to the special:magic workspace (Super+B) without switching to it
@@ -53,12 +77,23 @@ hl.window_rule({
     workspace = "special:magic silent",
 })
 
+hl.window_rule({
+    name  = "btop-scratchpad",
+    match = { class = "^(btop-term)$" },
+    workspace = "special:magic silent",
+})
+
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
 
-hl.env("XCURSOR_SIZE", "57")
-hl.env("HYPRCURSOR_SIZE", "57")
+-- Cursor theme. XCURSOR_PATH is spelled out with full paths because Hyprland didn't
+-- find cursor themes in ~/.icons or ~/.local/share/icons without it, and fell back to Miku.
+hl.env("XCURSOR_PATH", os.getenv("HOME") .. "/.local/share/icons:" .. os.getenv("HOME") .. "/.icons:/usr/share/icons:/usr/share/pixmaps")
+hl.env("XCURSOR_THEME", "dungeonOS-cursor")
+hl.env("XCURSOR_SIZE", "64")
+hl.env("HYPRCURSOR_THEME", "dungeonOS-cursor")
+hl.env("HYPRCURSOR_SIZE", "64")
 
 -----------------------
 ---- LOOK AND FEEL ----
@@ -66,13 +101,16 @@ hl.env("HYPRCURSOR_SIZE", "57")
 
 hl.config({
     general = {
-        gaps_in     = 10,
-        gaps_out    = 18,
-        border_size = 0,
+        -- every gap is 10px: screen edge <-> window, window <-> window (2 x gaps_in),
+        -- waybar <-> window, and waybar's own margins in waybar/config.jsonc
+        gaps_in     = 5,
+        gaps_out    = 10,
+        -- dungeonOS frame (matches waybar): 3px #463D34 border + 1px bronze outer rule (the sharp shadow below)
+        border_size = 3,
 
         col = {
-            active_border   = "rgb(8aadf4)",
-            inactive_border = "rgb(5b6078)",
+            active_border   = "rgb(463D34)",
+            inactive_border = "rgb(463D34)",
         },
 
         resize_on_border = false,
@@ -85,11 +123,15 @@ hl.config({
         active_opacity   = 1.0,
         inactive_opacity = 1.0,
 
+        -- sharp 1px "shadow" draws the outer rule of the frame; dims on unfocused windows
+        -- (only used when borders-plus-plus isn't built — see below)
         shadow = {
-            enabled      = true,
-            range        = 15,
-            render_power = 3,
-            color        = 0xee1a1a1a,
+            enabled        = true,
+            sharp          = true,
+            range          = 1,
+            render_power   = 1,
+            color          = 0xff7e705d,
+            color_inactive = 0xff463d34,
         },
 
         blur = {
@@ -108,20 +150,70 @@ hl.config({
         preserve_split = true,
     },
 
+    -- only used by the scratchpad (special:magic): new windows join the stack
+    -- instead of replacing the master, and master/stack split the screen in half
+    master = {
+        new_status = "slave",
+        mfact      = 0.5,
+    },
+
     misc = {
         force_default_wallpaper = -1,
         disable_hyprland_logo   = true,
     },
 })
 
-hl.curve("myBezier", { type = "bezier", points = { {0.05, 0.9}, {0.1, 1.05} } })
+-- dungeonOS frame (same as waybar) via borders-plus-plus, drawn outward from the window:
+--   3px #463D34 (Hyprland's border) | 1px #7E705D (plugin), with a soft shadow beneath
+-- Build it with ~/Dotfiles/hypr/plugins/build.sh (rerun after Hyprland updates).
+-- If it isn't built, the sharp-shadow frame configured above is used instead.
+local bordersPlusPlus = os.getenv("HOME") .. "/.local/share/hypr/plugins/borders-plus-plus.so"
+local bppFile = io.open(bordersPlusPlus, "r")
+if bppFile then
+    bppFile:close()
+    hl.plugin.load(bordersPlusPlus)
+
+    hl.config({
+        general = {
+            border_size = 3,
+            col = {
+                active_border   = "rgb(463D34)",
+                inactive_border = "rgb(463D34)",
+            },
+        },
+
+        -- back to a soft drop shadow beneath the frame
+        decoration = {
+            shadow = {
+                sharp          = false,
+                range          = 15,
+                render_power   = 3,
+                color          = 0xee1a1a1a,
+                color_inactive = 0xee1a1a1a,
+            },
+        },
+
+        plugin = {
+            borders_plus_plus = {
+                add_borders      = 1,
+                natural_rounding = true,
+                col = {
+                    border_1 = "rgb(7E705D)",
+                },
+                border_size_1 = 1,
+            },
+        },
+    })
+end
+
+hl.curve("myBezier",{ type = "bezier", points = { {0.05, 0.9}, {0.1, 1.05} } })
 
 hl.animation({ leaf = "windows",    enabled = true, speed = 7,  bezier = "myBezier" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 7,  bezier = "default", style = "popin 80%" })
 hl.animation({ leaf = "border",     enabled = true, speed = 10, bezier = "default" })
 hl.animation({ leaf = "borderangle",enabled = true, speed = 8,  bezier = "default" })
 hl.animation({ leaf = "fade",       enabled = true, speed = 7,  bezier = "default" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 6,  bezier = "default" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 6,  bezier = "default", style = "slidevert" })  -- slide up/down, matching the vertical bar
 
 ---------------------
 ---- KEYBINDINGS ----
@@ -145,6 +237,7 @@ hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("~/Dotfiles/scripts/toggle-audio
 hl.bind(mainMod .. " + F", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + R", hl.dsp.window.close())
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(fileManager))
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("nemo"))   -- graphical file manager ("Files")
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + G", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(menu))
@@ -164,6 +257,9 @@ for i = 1, 10 do
     hl.bind(mainMod .. " + " .. key,           hl.dsp.focus({ workspace = i }))
     hl.bind(mainMod .. " + SHIFT + " .. key,   hl.dsp.window.move({ workspace = i }))
 end
+
+-- Lock the screen (hyprlock, via hypridle so there is only ever one lock screen)
+hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("loginctl lock-session"))
 
 -- Special workspace (scratchpad)
 hl.bind(mainMod .. " + B",         hl.dsp.workspace.toggle_special("magic"))
@@ -192,7 +288,11 @@ hl.window_rule({
     suppress_event = "maximize",
 })
 
-hl.workspace_rule({ workspace = "1", monitor = "DP-1", persistent = true })
-hl.workspace_rule({ workspace = "2", monitor = "DP-1", persistent = true })
-hl.workspace_rule({ workspace = "3", monitor = "DP-3", persistent = true })
-hl.workspace_rule({ workspace = "4", monitor = "DP-3", persistent = true })
+-- Not pinned to a monitor name, so they work on whatever screen the machine has
+hl.workspace_rule({ workspace = "1", persistent = true, default = true })
+hl.workspace_rule({ workspace = "2", persistent = true })
+hl.workspace_rule({ workspace = "3", persistent = true })
+hl.workspace_rule({ workspace = "4", persistent = true })
+
+-- Scratchpad layout: master (Signal) on the right, stack (cmus, btop) on the left
+hl.workspace_rule({ workspace = "special:magic", layout = "master", layout_opts = { orientation = "right" } })

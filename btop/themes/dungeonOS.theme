@@ -1,0 +1,89 @@
+# dungeonOS — matches nvim (darkshire.lua), waybar and the Hyprland window frame
+#
+# bg #1A1816  surface #24201C  selection #463D34  border #7E705D
+# fg #C8B8A0  fg_muted #9D8E7C  comment #6F675E
+# moss #6E7F5A  sage #879376  brass #A88A5B  clay #7A5E47  steel #8F8B81  rust #7B4A3E
+
+# Main background, empty for terminal default
+theme[main_bg]="#1A1816"
+
+# Main text color
+theme[main_fg]="#C8B8A0"
+
+# Title color for boxes
+theme[title]="#A88A5B"
+
+# Highlight color for keyboard shortcuts
+theme[hi_fg]="#A88A5B"
+
+# Background color of selected item in processes box
+theme[selected_bg]="#463D34"
+
+# Foreground color of selected item in processes box
+theme[selected_fg]="#C8B8A0"
+
+# Color of inactive/disabled text
+theme[inactive_fg]="#6F675E"
+
+# Color of text appearing on top of graphs, i.e uptime and current network graph scaling
+theme[graph_text]="#9D8E7C"
+
+# Background color of the percentage meters
+theme[meter_bg]="#463D34"
+
+# Misc colors for processes box including mini cpu graphs, details memory graph and details status text
+theme[proc_misc]="#879376"
+
+# Box outline colors — all the same bronze as the waybar / window frame
+theme[cpu_box]="#7E705D"
+theme[mem_box]="#7E705D"
+theme[net_box]="#7E705D"
+theme[proc_box]="#7E705D"
+
+# Box divider line and small boxes line color
+theme[div_line]="#463D34"
+
+# Temperature graph colors
+theme[temp_start]="#6E7F5A"
+theme[temp_mid]="#A88A5B"
+theme[temp_end]="#7B4A3E"
+
+# CPU graph colors
+theme[cpu_start]="#6E7F5A"
+theme[cpu_mid]="#A88A5B"
+theme[cpu_end]="#7B4A3E"
+
+# Mem/Disk free meter
+theme[free_start]="#6E7F5A"
+theme[free_mid]="#6E7F5A"
+theme[free_end]="#879376"
+
+# Mem/Disk cached meter
+theme[cached_start]="#8F8B81"
+theme[cached_mid]="#8F8B81"
+theme[cached_end]="#9D8E7C"
+
+# Mem/Disk available meter
+theme[available_start]="#879376"
+theme[available_mid]="#879376"
+theme[available_end]="#C8B8A0"
+
+# Mem/Disk used meter
+theme[used_start]="#A88A5B"
+theme[used_mid]="#7A5E47"
+theme[used_end]="#7B4A3E"
+
+# Download graph colors
+theme[download_start]="#6E7F5A"
+theme[download_mid]="#879376"
+theme[download_end]="#C8B8A0"
+
+# Upload graph colors
+theme[upload_start]="#7A5E47"
+theme[upload_mid]="#A88A5B"
+theme[upload_end]="#C8B8A0"
+
+# Process box color gradient for threads, mem and cpu usage
+theme[process_start]="#879376"
+theme[process_mid]="#A88A5B"
+theme[process_end]="#7B4A3E"

@@ -1,0 +1,17 @@
+# Old English phrases for the terminal greeting (fish/functions/dungeon_greeting.fish).
+# One per line: Old English <TAB> modern English. Type them in plain letters (þ ð æ and
+# macrons like ā are fine); the greeting turns them into fraktur and w into wynn (ƿ).
+Wes hāl	Be well
+Hwæt!	Listen!
+Wyrd bið ful āræd	Fate is wholly fixed
+Gǣð ā wyrd swā hīo scel	Fate always goes as it must
+Þæs oferēode, þisses swā mæg	That passed away, so may this
+Þæt wæs gōd cyning!	That was a good king!
+Bēowulf is mīn nama	Beowulf is my name
+Ofer hronrāde	Over the whale-road
+Hāl wes þū, folde, fīra mōdor	Hail to you, earth, mother of men
+Ēalā Ēarendel, engla beorhtast	Hail Earendel, brightest of angels
+Wyrce sē þe mōte dōmes ǣr dēaþe	Let him who may win glory before death
+Hige sceal þē heardra, heorte þē cēnre	The will must be the firmer, the heart the keener
+Mōd sceal þē māre, þē ūre mægen lȳtlað	Courage must be the greater as our strength wanes
+Eall þis eorþan gesteal īdel weorþeð	All this world's foundation will lie waste

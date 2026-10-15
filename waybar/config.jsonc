@@ -1,8 +1,13 @@
 {
   "layer": "top", // Waybar at top layer
-  "output": "DP-3",
   "position": "top", // Waybar at the bottom of your screen
   "height": 3, // Waybar height
+  // the 10px gap is drawn inside the bar (style.css) so the drop shadow fits;
+  // -10 on the window side keeps the space reserved for the bar unchanged
+  "margin-top": 0,
+  "margin-left": 0,
+  "margin-right": 0,
+  "margin-bottom": -10,
 
   // "width": 1366, // Waybar width
   // Choose the order of the modules
@@ -11,13 +16,18 @@
     "clock",
     "pulseaudio",
     "custom/audio",
+    "custom/screenshot",
     "custom/cputemp",
+    "custom/gputemp",
     "tray",
   ],
-  "modules-right": ["battery","custom/suspend","custom/power"],
-  "modules-center": ["hyprland/workspaces"],
-  "hyprland/workspaces": {
-    "disable-scroll": true,
+  "modules-right": ["battery","custom/lock","custom/suspend","custom/power"],
+  "modules-center": ["ext/workspaces"],
+  // ext/workspaces instead of hyprland/workspaces: the hyprland module switches workspaces
+  // by sending old-style commands, which a Lua Hyprland config rejects, so clicking did nothing
+  "ext/workspaces": {
+    "on-click": "activate",
+    "sort-by-name": true,
     "all-outputs": true,
     "format": "{icon}",
     "format-icons": {
@@ -94,18 +104,34 @@
 "custom/cputemp": {
     "exec": "~/Dotfiles/scripts/cputemp.sh",
     "interval": 3,
-    "format": " {}",
+    "format": "{}",
+    "tooltip": false
+  },
+"custom/gputemp": {
+    "exec": "~/Dotfiles/scripts/gputemp.sh",
+    "interval": 3,
+    "format": "{}",
     "tooltip": false
   },
   "custom/power": {
-    "format": "⏻",
+    "format": "\u2670",   // the ♰ cross from the fish greeting (same as the login screen)
     "tooltip": false,
     "on-double-click": "systemctl poweroff",
+  },
+  "custom/lock": {
+    "format": "\udb80\udf3e",   // padlock (nerd font): lock the screen with hyprlock, like Super+L
+    "tooltip": false,
+    "on-click": "loginctl lock-session"
   },
   "custom/suspend": {
     "format": "󰒲",
     "tooltip": false,
     "on-double-click": "systemctl suspend"
+  },
+  "custom/screenshot": {
+    "format": "󰹑",
+    "tooltip": false,
+    "on-click": "grimblast copy area"
   },
   "custom/audio": {
     "format": "󰒝",

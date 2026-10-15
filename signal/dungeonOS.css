@@ -1,0 +1,11 @@
+/* dungeonOS extras for Signal Desktop, added after Signal's own styles by patch.py.
+   (The colours themselves come from patch.py recolouring Signal's stylesheets.) */
+
+/* conversation title in the desktop's blackletter font. Normal weight: CloisterBlack has
+   no bold, so Signal's bold title came out as an artificially thickened blackletter. */
+.module-ConversationHeader__header__info__title {
+    font-family: "Cloister Black", "CloisterBlack", serif !important;
+    font-weight: normal !important;
+    font-size: 20px !important;
+    letter-spacing: 0.5px;
+}

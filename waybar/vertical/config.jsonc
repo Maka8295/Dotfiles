@@ -1,0 +1,32 @@
+// Vertical layout: the normal config (../config.jsonc) with only the differences below.
+// Switch layouts with ~/Dotfiles/scripts/waybar-toggle.sh
+{
+  "include": "~/Dotfiles/waybar/config.jsonc",
+
+  "position": "left",
+  "height": 0,
+  // the 10px gap is drawn inside the bar (style.css) so the drop shadow fits;
+  // -10 on the window side keeps the space reserved for the bar unchanged
+  "margin-top": 0,
+  "margin-bottom": 0,
+  "margin-left": 0,
+  "margin-right": -10,
+
+  // stack the wide bits so the bar stays narrow
+  "clock": {
+    "format": "{:%H:%M\n%m/%d}",
+    "justify": "center",
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "format": {
+        "months": "<span color='#7abfff'><b>{}</b></span>",
+        "today": "<span color='#7abfff'><b>{}</b></span>",
+      },
+    },
+  },
+  "pulseaudio": {
+    "format": "{volume}%\n{icon}",
+    "format-bluetooth": "{volume}%\n{icon}\uf294",   // \uf294 = bluetooth icon
+    "justify": "center",
+  },
+}

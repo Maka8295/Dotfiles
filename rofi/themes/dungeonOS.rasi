@@ -1,0 +1,113 @@
+/* dungeonOS — same frame as waybar and the Hyprland windows:
+ *   1px bronze #7E705D outer line | 3px #463D34 band
+ * Font, padding and width match fuzzel/fuzzel.ini.
+ */
+
+* {
+    bg:        #1A1816;     /* solid, like the waybar panels */
+    band:      #463D34;
+    border:    #7E705D;
+    fg:        #C8B8A0;
+    fg-muted:  #9D8E7C;
+    comment:   #6F675E;
+    brass:     #A88A5B;
+    rust:      #7B4A3E;
+
+    font:             "CloisterBlack 18";
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+/* outer 1px bronze line */
+window {
+    location:         center;
+    anchor:           center;
+    /* fuzzel's "width = 50" (characters) measures 592px with CloisterBlack 18 */
+    width:            592px;
+    border:           1px;
+    border-color:     @border;
+    border-radius:    0;
+    background-color: @bg;
+    padding:          0;
+}
+
+/* inner 3px band, then fuzzel's padding (vertical-pad 15, horizontal-pad 20) */
+mainbox {
+    border:       3px;
+    border-color: @band;
+    padding:      16px 20px 16px 20px;  /* even space above the search bar and below the list */
+    spacing:      14px;                 /* gap between the search bar and the list */
+    children:     [ inputbar, listview ];
+}
+
+inputbar {
+    spacing:  5px;
+    children: [ prompt, entry ];
+}
+
+prompt {
+    text-color: @brass;
+}
+
+entry {
+    text-color:        @fg;
+    placeholder:       " Search";   /* leading space keeps the blinking cursor off the first letter */
+    placeholder-color: @comment;
+    cursor:            text;
+}
+
+listview {
+    lines:        15;
+    columns:      1;
+    fixed-height: true;  /* always 15 rows tall, even with few matches */
+    dynamic:      false;
+    scrollbar:    false;
+    spacing:      -1px;   /* rows 1px closer, to match fuzzel's row spacing */
+}
+
+/* each row reserves a 3px left edge that turns brass when selected */
+element {
+    padding:      0 8px;
+    spacing:      8px;
+    border:       0 0 0 3px;
+    border-color: transparent;
+    border-radius: 0;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element selected.normal {
+    background-color: @band;
+    border-color:     @brass;
+    text-color:       @fg;
+}
+
+element normal.urgent,
+element alternate.urgent,
+element selected.urgent {
+    text-color: @rust;
+}
+
+element-icon {
+    size:             1em;
+    background-color: transparent;
+}
+
+element-text {
+    background-color: transparent;
+    text-color:       inherit;
+    highlight:        #6E7F5A;   /* letters matching your search: moss green, like workspace I */
+    vertical-align:   0.5;
+}
+
+message {
+    padding: 0;
+}
+
+textbox {
+    text-color: @fg-muted;
+}

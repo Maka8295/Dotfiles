@@ -1,7 +1,9 @@
 if status is-interactive
     # Commands to run in interactive sessions can go here
 
-    echo -e "\033[0;31m♰ Ƿ𝖊𝖘 𝖍𝖆̄𝖑 ♰"
+    # a random Old English phrase and its translation (fish/functions/dungeon_greeting.fish,
+    # phrases in fish/greetings.txt)
+    dungeon_greeting
    
 
 
