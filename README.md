@@ -38,7 +38,7 @@ lock screen and the login screen all share it, along with a soft drop shadow.
 |---|---|---|
 | **Hyprland** | 10px gaps everywhere; the double-rule frame on windows via the `borders-plus-plus` plugin (built by `setup.sh`); a scratchpad (Super+B) with Signal, cmus and btop; workspaces slide up/down or left/right to match the bar | `hypr/hyprland.lua` |
 | **Waybar** | Three framed panels on the left edge (or along the top, see below): clock, volume, audio switch, screenshot, temperatures, tray, workspaces I–IV each with their own colour, lock, sleep, and a ♰ power button. Hover highlights are inset squares like the workspace squares | `waybar/` |
-| **Lock / sleep** | hyprlock styled like the login screen; hypridle locks before every sleep (button, lid, power key), locks after 10 min idle, and on the laptop suspends after 30 min | `hypr/hyprlock.conf`, `hypr/hypridle.conf` |
+| **Lock / sleep** | hyprlock styled like the login screen (2× on 4K); hypridle locks before every sleep (button, lid, power key), locks after 10 min idle, and on the laptop suspends after 30 min | `hypr/hyprlock.conf`, `hypr/hypridle.conf` |
 | **Login screen** | SDDM theme: cathedral wallpaper, framed panel, brass clock, session picker, power panel. Scales 2× on 4K screens | `sddm/` |
 | **Cursor** | Final Fantasy Tactics item sprites (sword, silver sword for links, staff for text, shuriken crosshair, potions while loading, tome, shield, gauntlets, chain, quill); every other cursor recoloured into the palette. Pixel-sharp at size 64 | `cursor/dungeonOS-cursor-src/` |
 | **Terminal** | kitty with the palette; fish greets you with a random Old English line and its translation (`♰ Hwæt! ♱ Listen! ♰`) | `kitty/`, `fish/`, `fish/greetings.txt` |
@@ -80,6 +80,7 @@ lock screen and the login screen all share it, along with a soft drop shadow.
 |---|---|
 | `scripts/waybar-toggle.sh` | Switches waybar between vertical (left, the default) and horizontal (top), and turns the workspace animation to match. Remembered across reboots |
 | `scripts/waybar.sh` | (Re)starts waybar in the remembered layout; run at login |
+| `scripts/lock.sh` | Locks the screen with hyprlock at the right size: doubles it on 4K, the same as the login screen |
 | `scripts/scratchpad.sh` | Opens Signal, cmus and btop in the scratchpad in a fixed order (safe to rerun) |
 | `scripts/cputemp.sh`, `gputemp.sh` | Temperatures for waybar (AMD, Intel or NVIDIA) |
 | `scripts/toggle-audio.sh` | Swaps between my two audio outputs |
