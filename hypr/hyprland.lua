@@ -62,6 +62,9 @@ hl.on("hyprland.start", function()
 
     hl.exec_cmd("~/Dotfiles/scripts/scratchpad.sh")
     hl.exec_cmd("hypridle")   -- locks before sleep, idle lock/screen-off (hypr/hypridle.conf)
+    -- Japanese input: Ctrl+Space switches to mozc (fcitx5/profile). Started here because
+    -- the XDG autostart entry fcitx5 ships with never runs under uwsm.
+    hl.exec_cmd("fcitx5 -d --replace")
 end)
 
 -- Send these to the special:magic workspace (Super+B) without switching to it
@@ -94,6 +97,12 @@ hl.env("XCURSOR_THEME", "dungeonOS-cursor")
 hl.env("XCURSOR_SIZE", "64")
 hl.env("HYPRCURSOR_THEME", "dungeonOS-cursor")
 hl.env("HYPRCURSOR_SIZE", "64")
+
+-- fcitx5 (Japanese input). GTK_IM_MODULE is left unset on purpose: on Wayland GTK apps
+-- talk to fcitx5 through Hyprland's text-input protocol, and setting it breaks that.
+hl.env("XMODIFIERS", "@im=fcitx")     -- X11 (XWayland) apps
+hl.env("QT_IM_MODULE", "fcitx")       -- Qt apps
+hl.env("SDL_IM_MODULE", "fcitx")      -- games / SDL apps
 
 -----------------------
 ---- LOOK AND FEEL ----

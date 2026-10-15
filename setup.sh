@@ -57,7 +57,7 @@ PACMAN_PKGS=(
     # apps
     kitty fish neovim btop cava cmus yazi firefox signal-desktop
     # japanese input
-    fcitx5 fcitx5-mozc fcitx5-gtk fcitx5-qt
+    fcitx5 fcitx5-mozc fcitx5-gtk fcitx5-qt fcitx5-configtool
     # fonts not kept in this repo (CJK, emoji, waybar/nvim icons)
     fontconfig noto-fonts-cjk noto-fonts-emoji ttf-nerd-fonts-symbols
     # neovim (AstroNvim) tooling
@@ -88,7 +88,8 @@ section "Config links"
 link "$DOTFILES/bash/.bashrc"       "$HOME/.bashrc"
 link "$DOTFILES/bash/.bash_profile" "$HOME/.bash_profile"
 
-for dir in btop cava cmus fish fuzzel hypr kicad kitty neofetch nvim rofi waybar yazi; do
+# fcitx5: started by hyprland.lua; profile = English keyboard + Japanese (mozc), Ctrl+Space toggles
+for dir in btop cava cmus fcitx5 fish fuzzel hypr kicad kitty neofetch nvim rofi waybar yazi; do
     link "$DOTFILES/$dir" "$CONFIG/$dir"
 done
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- right-click menu on the power button: shut down after a delay (see ~/Dotfiles/scripts/sleep.sh) -->
+<interface>
+  <object class="GtkMenu" id="menu">
+    <child>
+      <object class="GtkMenuItem" id="off30">
+        <property name="label">Off in 30 min</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="off45">
+        <property name="label">Off in 45 min</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="off60">
+        <property name="label">Off in 60 min</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="sep"/>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="cancel">
+        <property name="label">Cancel timer</property>
+      </object>
+    </child>
+  </object>
+</interface>
