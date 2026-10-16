@@ -23,6 +23,17 @@ hl.monitor({
     scale    = 2,
 })
 
+-- Work monitor (LG UltraGear 45in, 5120x2160 native). Matched by its description so
+-- it works on any port. Needs DisplayPort/USB-C: amdgpu on Linux can't drive 5K2K over
+-- HDMI, and anything below native gets upscaled by the monitor and looks blurry.
+-- Scale 1 keeps the pixel art crisp (~125 PPI is comfortable at 1x on a 45in panel).
+hl.monitor({
+    output   = "desc:LG Electronics LG ULTRAGEAR+ 505NTMXEE507",
+    mode     = "highres",  -- 5120x2160@100 over DP; follows the monitor if Dual-Mode switches it to 2560x1080
+    position = "auto",
+    scale    = 1,
+})
+
 -- Anything else (a TV, a projector, ...): its best resolution, placed and
 -- scaled automatically, so this config works on any machine out of the box
 hl.monitor({
