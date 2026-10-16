@@ -636,6 +636,25 @@
         "wxStaticBox_2wxTextCtrl_8": 0,
         "wxStaticBox_2wxTextCtrl_9": 0
       },
+      "Tuning Pattern Properties": {
+        "__geometry": {
+          "h": 326,
+          "w": 1006,
+          "x": 0,
+          "y": 0
+        },
+        "wxCheckBox_0": false,
+        "wxCheckBox_1": false,
+        "wxChoice_0": 1,
+        "wxRadioButton_0": true,
+        "wxRadioButton_1": false,
+        "wxTextCtrl_0": 15577800,
+        "wxTextCtrl_1": 0,
+        "wxTextCtrl_2": 200000,
+        "wxTextCtrl_3": 1000000,
+        "wxTextCtrl_4": 600000,
+        "wxTextCtrl_5": "80"
+      },
       "Update PCB from Schematic": {
         "__geometry": {
           "h": 686,
