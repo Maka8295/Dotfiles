@@ -1,6 +1,6 @@
 [Groups/0]
 # Group Name
-Name="Group 1"
+Name="Group 2"
 # Layout
 Default Layout=us
 # Default Input Method
@@ -19,5 +19,5 @@ Name=mozc
 # Layout=
 
 [GroupOrder]
-0="Group 1"
+0="Group 2"
 
