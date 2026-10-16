@@ -19,5 +19,6 @@ else
     style=slide         # workspaces slide left/right, like the bar's row of numerals
 fi
 
-# hyprland.lua picks the same style when it loads; this applies it right away
-hyprctl eval "hl.animation({ leaf = \"workspaces\", enabled = true, speed = 6, bezier = \"default\", style = \"$style\" })" >/dev/null 2>&1
+# hyprland.lua picks the same style when it loads; this applies it right away. The
+# scratchpad's close animation is set too, since lock.sh gives it its own setting.
+hyprctl eval "hl.animation({ leaf = \"workspaces\", enabled = true, speed = 6, bezier = \"default\", style = \"$style\" }); hl.animation({ leaf = \"specialWorkspaceOut\", enabled = true, speed = 6, bezier = \"default\", style = \"$style\" })" >/dev/null 2>&1
