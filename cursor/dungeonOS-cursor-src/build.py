@@ -85,12 +85,12 @@ def centre(size):
     return (size[0] // 2, size[1] // 2)
 
 
-def left_of_foot(grid, size):
-    """The clear pixel just left of a sprite's bottom tip, as a hotspot that stays touching
-    the tip at every size (the bottom-right screen pixel of that art pixel)."""
-    y = size[1] - 1
+def left_of_middle(grid, size):
+    """The clear pixel just left of a sprite at its middle row, as a hotspot that stays
+    touching the sprite at every size (the right-hand screen pixel of that art pixel)."""
+    y = size[1] // 2
     x = next(x for x in range(size[0]) if grid.getpixel((x, y))[3]) - 1
-    return lambda scale: ((x + 1) * scale - 1, (y + 1) * scale - 1)
+    return lambda scale: ((x + 1) * scale - 1, y * scale + scale // 2)
 
 
 def sprite(path):
@@ -121,9 +121,9 @@ CURSORS = {
     "pointer": (SILVER_SWORD, (0, 0), 0,
                 ["hand", "hand1", "hand2", "pointing_hand",
                  "e29285e634086352946a0e7090d73106", "9d800788f1b08800ae810202380a0822"]),
-    # text: click point is the pixel just left of the staff's foot, so the text caret lands
-    # where the staff points
-    "xterm": (STAFF, left_of_foot(STAFF[0], STAFF_SIZE), 0, ["text", "ibeam"]),
+    # text: click point is the pixel just left of the staff, halfway up, so the text caret
+    # lands at the staff's left edge
+    "xterm": (STAFF, left_of_middle(STAFF[0], STAFF_SIZE), 0, ["text", "ibeam"]),
     "crosshair": (SHURIKEN, centre(SHURIKEN_SIZE), 0,
                   ["cross", "tcross", "cell", "cross_reverse", "diamond_cross",
                    "zoom-in", "zoom-out", "zoom_in", "zoom_out"]),
