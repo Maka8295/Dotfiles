@@ -85,6 +85,14 @@ def centre(size):
     return (size[0] // 2, size[1] // 2)
 
 
+def left_of_foot(grid, size):
+    """The clear pixel just left of a sprite's bottom tip, as a hotspot that stays touching
+    the tip at every size (the bottom-right screen pixel of that art pixel)."""
+    y = size[1] - 1
+    x = next(x for x in range(size[0]) if grid.getpixel((x, y))[3]) - 1
+    return lambda scale: ((x + 1) * scale - 1, (y + 1) * scale - 1)
+
+
 def sprite(path):
     """One sprite with its hotspot in the middle."""
     grids, size = sprites(path)
@@ -113,8 +121,9 @@ CURSORS = {
     "pointer": (SILVER_SWORD, (0, 0), 0,
                 ["hand", "hand1", "hand2", "pointing_hand",
                  "e29285e634086352946a0e7090d73106", "9d800788f1b08800ae810202380a0822"]),
-    # text: click point in the middle of the staff, like a normal I-beam
-    "xterm": (STAFF, centre(STAFF_SIZE), 0, ["text", "ibeam"]),
+    # text: click point is the pixel just left of the staff's foot, so the text caret lands
+    # where the staff points
+    "xterm": (STAFF, left_of_foot(STAFF[0], STAFF_SIZE), 0, ["text", "ibeam"]),
     "crosshair": (SHURIKEN, centre(SHURIKEN_SIZE), 0,
                   ["cross", "tcross", "cell", "cross_reverse", "diamond_cross",
                    "zoom-in", "zoom-out", "zoom_in", "zoom_out"]),
@@ -178,12 +187,13 @@ def from_grids(frames, hotspot, delay=0):
     images = []
     for size in SIZES:
         scale = size // GRID
+        hs = hotspot(scale) if callable(hotspot) else (hotspot[0] * scale, hotspot[1] * scale)
         for grid in frames:
             big = grid.resize((size, size), Image.NEAREST)
             flat = big.get_flattened_data() if hasattr(big, "get_flattened_data") else big.getdata()
             # Xcursor wants premultiplied ARGB; the art only has fully solid or clear pixels
             px = [((a << 24) | (r << 16) | (g << 8) | b) if a else 0 for r, g, b, a in flat]
-            images.append((size, size, size, hotspot[0] * scale, hotspot[1] * scale, delay, px))
+            images.append((size, size, size, hs[0], hs[1], delay, px))
     return images
 
 
@@ -246,7 +256,8 @@ def main():
             f.write(encode(from_grids(frames, hotspot, delay)))
         for alias in aliases:
             os.symlink(name, os.path.join(cursors_dir, alias))
-        print(f"{name}: {len(frames)} frame(s), {len(aliases)} aliases, hotspot {hotspot}")
+        print(f"{name}: {len(frames)} frame(s), {len(aliases)} aliases, hotspot "
+              f"{hotspot(1) if callable(hotspot) else hotspot}")
 
     # Everything else: recolour the Miku theme's cursor, or repeat its alias.
     ours = set(CURSORS) | {a for _, _, _, aliases in CURSORS.values() for a in aliases}
