@@ -84,12 +84,12 @@
   },
   "footprint_chooser": {
     "filter_on_pin_count": false,
-    "height": 944,
-    "sash_h": 660,
-    "sash_v": 462,
+    "height": 919,
+    "sash_h": 634,
+    "sash_v": 447,
     "sort_mode": 0,
     "use_fp_filters": false,
-    "width": 1232
+    "width": 1210
   },
   "footprint_viewer": {
     "aui_state": null,
@@ -454,42 +454,10 @@
       "Description"
     ],
     "open_libs": [
-      "Connector_PinHeader_2.54mm",
-      "Connector_PinSocket_2.54mm",
-      "TerminalBlock",
-      "TerminalBlock_Phoenix",
-      "Connector_IDC",
-      "Connector_Wuerth",
-      "Inductor_THT",
-      "Resistor_THT",
-      "TerminalBlock_TE-Connectivity",
-      "Connector_Dsub",
-      "Connector_Harwin",
-      "Panelization",
-      "TerminalBlock_WAGO",
-      "TestPoint",
-      "Button_Switch_SMD",
-      "Button_Switch_THT",
-      "Connector",
-      "Connector_Harting",
-      "Connector_Molex",
-      "Connector_Samtec_HLE_SMD",
-      "Connector_Samtec_HLE_THT",
-      "Fuse",
-      "OptoDevice",
-      "Oscillator",
-      "Package_DFN_QFN",
-      "Package_DIP",
-      "Package_SIP",
+      "Connector_PCBEdge",
       "Package_TO_SOT_THT",
-      "Sensor",
-      "Socket",
-      "Symbol",
-      "Converter_DCDC",
-      "Relay_THT",
-      "Heatsink",
-      "Module",
-      "Transformer_SMD"
+      "Diode_SMD",
+      "Diode_THT"
     ]
   },
   "meta": {
@@ -543,9 +511,11 @@
   },
   "system": {
     "file_history": [
+      "/home/maka/PCBs/Lazy-Kiwi/home.kicad_pcb",
+      "/home/maka/PCBs/Hugo project/Hugo project.kicad_pcb",
       "/home/maka/PCBs/shuriken2/shuriken2.kicad_pcb",
-      "/home/maka/PCBs/dumptruck/Flumper0.3/flash.kicad_pcb",
-      "/home/maka/PCBs/Badge2026/badge.kicad_pcb"
+      "/home/maka/PCBs/Badge2026/badge.kicad_pcb",
+      "/home/maka/PCBs/dumptruck/Flumper0.3/flash.kicad_pcb"
     ],
     "first_run_shown": false,
     "last_footprint3d_dir": "/usr/share/kicad/3dmodels/",
