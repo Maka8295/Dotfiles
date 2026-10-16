@@ -6,28 +6,20 @@
 
 CONF="$HOME/.config/hypr/hyprlock.conf"
 
+# Close an open scratchpad (special workspace) first: left open across a lock, it
+# stops taking clicks after unlocking.
+special=$(hyprctl monitors -j | python3 -c 'import json,sys
+m = next((m for m in json.load(sys.stdin) if m["focused"]), None)
+print(m["specialWorkspace"]["name"].removeprefix("special:") if m else "")')
+[ -n "$special" ] && hyprctl dispatch "hl.dsp.workspace.toggle_special(\"$special\")" >/dev/null
+
 factor=$(hyprctl monitors -j | python3 -c 'import json,sys
 ms = json.load(sys.stdin)
 m = next((m for m in ms if m["focused"]), ms[0] if ms else None)
 print(max(1, m["height"] // 1080) if m else 1)')
 
-# After unlocking, a scratchpad (special workspace) left open doesn't take clicks until
-# it is closed and reopened, so do that for whichever one is open.
-refresh_special() {
-    local ws
-    ws=$(hyprctl monitors -j | python3 -c 'import json,sys
-m = next((m for m in json.load(sys.stdin) if m["focused"]), None)
-n = m["specialWorkspace"]["name"] if m else ""
-print(n.removeprefix("special:"))')
-    [ -n "$ws" ] || return
-    hyprctl dispatch "hl.dsp.workspace.toggle_special(\"$ws\")" >/dev/null
-    hyprctl dispatch "hl.dsp.workspace.toggle_special(\"$ws\")" >/dev/null
-}
-
 if [ "${factor:-1}" -le 1 ]; then
-    hyprlock
-    refresh_special
-    exit
+    exec hyprlock
 fi
 
 # scaled copy: multiply every pixel size (sizes, font sizes, positions, borders);
@@ -44,5 +36,4 @@ text = open(src).read()
 text = re.sub(r"^(\s*(?:%s)\s*=\s*)([-\d,\s]+?)(?=\s*(?:#|$))" % "|".join(keys), scale, text, flags=re.M)
 open(out, "w").write(text)
 PY
-hyprlock --config "$scaled"
-refresh_special
+exec hyprlock --config "$scaled"
