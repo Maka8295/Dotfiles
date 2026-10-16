@@ -59,6 +59,9 @@ BOARD = {
 }
 BOARD.update({f"copper.in{i}": INNER[(i - 1) % len(INNER)] for i in range(1, 31)})
 BOARD.update({f"user_{i}": INNER[(i + 2) % len(INNER)] for i in range(1, 46)})
+# PCB editor only: see-through copper so the other layers show, and no shading over the board area
+PCB = {**BOARD, **{k: (v, 0.75) for k, v in BOARD.items() if k.startswith("copper.")},
+       "outline_area": (STEEL, 0.0)}
 VIEWER_3D = {
     "background_top": "#2A2520", "background_bottom": BG_DARK, "board": (CLAY, 0.9),
     "copper": "#B99A6B", "silkscreen_top": CREAM, "silkscreen_bottom": CREAM,
@@ -114,7 +117,7 @@ def main():
     template = json.load(open(template_path))
 
     # use the template with the most sections (some themes skip e.g. the footprint editor)
-    sections = {"3d_viewer": VIEWER_3D, "board": BOARD, "fpedit": BOARD, "schematic": SCHEMATIC}
+    sections = {"3d_viewer": VIEWER_3D, "board": PCB, "fpedit": BOARD, "schematic": SCHEMATIC}
     theme = {name: build(name, template[name], chosen) for name, chosen in sections.items() if name in template}
     if "gerbview" in template:
         g = template["gerbview"]
