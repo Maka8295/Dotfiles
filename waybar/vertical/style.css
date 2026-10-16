@@ -72,3 +72,9 @@
 #pulseaudio {
     margin: 2px 8px;
 }
+
+/* 100% and up ("100" is 7px wider than "99"): narrower side margins instead of a wider bar
+   (config.jsonc gives the module an "under-100" class below that) */
+#pulseaudio:not(.under-100) {
+    margin: 2px 4px;
+}

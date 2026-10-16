@@ -93,6 +93,17 @@ for dir in btop cava cmus fcitx5 fish fuzzel hypr kicad kitty neofetch nvim rofi
     link "$DOTFILES/$dir" "$CONFIG/$dir"
 done
 
+# KiCad launchers that run it through XWayland: KiCad 10.0.7 asks wxWidgets whether a hotkey
+# letter is still held down, which wxWidgets can only answer on X11 - on Wayland every hotkey
+# (X, Ctrl+S, ...) pops up an "Unsupported key" assert. Made from the installed launchers,
+# so they follow KiCad updates; delete ~/.local/share/applications/org.kicad.* to undo.
+mkdir -p "$DATA/applications"
+for desktop in /usr/share/applications/org.kicad.*.desktop; do
+    [ -e "$desktop" ] || continue
+    sed 's/^Exec=/Exec=env GDK_BACKEND=x11 /' "$desktop" > "$DATA/applications/$(basename "$desktop")"
+    echo "  kicad launcher $(basename "$desktop") (XWayland)"
+done
+
 # Links left behind by older versions of this script whose folders no longer exist
 for stale in alacritty BetterDiscord; do
     if [ -L "$CONFIG/$stale" ] && [ ! -e "$CONFIG/$stale" ] && [[ "$(readlink "$CONFIG/$stale")" == "$DOTFILES/"* ]]; then
