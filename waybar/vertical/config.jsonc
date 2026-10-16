@@ -24,9 +24,14 @@
       },
     },
   },
+  // The bar is as wide as its widest module, so a wider volume number made the whole bar
+  // grow. The digits stay full size (like the temperatures) and only the % sign is small
+  // (9pt = 12px; sizes are in 1024ths of a point), so up to "99%" fits the space the bar
+  // already has. 100%+ has no state class and style.css narrows its side margins instead.
   "pulseaudio": {
-    "format": "{volume}%\n{icon}",
-    "format-bluetooth": "{volume}%\n{icon}\uf294",   // \uf294 = bluetooth icon
+    "states": { "under-100": 99 },   // class on the module while the volume is <= 99
+    "format": "{volume}<span font_size='9216'>%</span>\n{icon}",
+    "format-bluetooth": "{volume}<span font_size='9216'>%</span>\n{icon}\uf294",   // \uf294 = bluetooth icon
     "justify": "center",
   },
 }
