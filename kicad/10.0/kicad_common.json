@@ -22,6 +22,21 @@
   },
   "dialog": {
     "controls": {
+      "*Footprint Libraries": {
+        "__geometry": {
+          "h": 649,
+          "w": 1010,
+          "x": 813,
+          "y": 395
+        },
+        "wxPanel_0wxAuiNotebook_0": "Global Libraries *",
+        "wxPanel_0wxAuiNotebook_0wxPanel_0wxGrid_0": "0 1 3 4 5 6 7",
+        "wxPanel_0wxAuiNotebook_0wxPanel_0wxGrid_0wxWindow_3wxComboCtrl_0": "/home/maka/PCBs/parts/parts.pretty",
+        "wxPanel_0wxAuiNotebook_0wxPanel_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "/home/maka/PCBs/parts/parts.pretty",
+        "wxPanel_0wxAuiNotebook_0wxPanel_0wxGrid_0wxWindow_3wxTextCtrl_0": "parts",
+        "wxPanel_0wxAuiNotebook_0wxPanel_1wxGrid_0": "0 1 3 4 5 6 7",
+        "wxPanel_0wxGrid_0": "0 1"
+      },
       "*Pad Properties": {
         "__geometry": {
           "h": 716,
@@ -106,6 +121,21 @@
         "wxNotebook_0wxPanel_3wxStaticBox_1wxChoice_0": 0,
         "wxNotebook_0wxPanel_3wxStaticBox_1wxTextCtrl_0": 0,
         "wxNotebook_0wxPanel_3wxStaticBox_1wxTextCtrl_1": 0
+      },
+      "*Symbol Libraries": {
+        "__geometry": {
+          "h": 649,
+          "w": 1010,
+          "x": 813,
+          "y": 395
+        },
+        "wxPanel_0wxAuiNotebook_0": "Global Libraries *",
+        "wxPanel_0wxAuiNotebook_0wxPanel_0wxGrid_0": "0 1 2 3 4 5 6 7",
+        "wxPanel_0wxAuiNotebook_0wxPanel_0wxGrid_0wxWindow_3wxComboCtrl_0": "/home/maka/PCBs/parts",
+        "wxPanel_0wxAuiNotebook_0wxPanel_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "/home/maka/PCBs/parts",
+        "wxPanel_0wxAuiNotebook_0wxPanel_0wxGrid_0wxWindow_3wxTextCtrl_0": "Parts",
+        "wxPanel_0wxAuiNotebook_0wxPanel_1wxGrid_0": "0 1 2 3 4 5 6 7",
+        "wxPanel_0wxGrid_0": "0 1"
       },
       "*Symbol Properties": {
         "__geometry": {
@@ -356,6 +386,14 @@
         "wxTextCtrl_4": -40000,
         "wxTextCtrl_5": 150000
       },
+      "Grid Settings": {
+        "__geometry": {
+          "h": 209,
+          "w": 278,
+          "x": 1105,
+          "y": 622
+        }
+      },
       "Manage Repositories": {
         "__geometry": {
           "h": 137,
@@ -423,8 +461,8 @@
         "__geometry": {
           "h": 692,
           "w": 1165,
-          "x": 0,
-          "y": 0
+          "x": 644,
+          "y": 381
         },
         "wxPanel_0wxTreebook_0wxPanel_0wxSearchCtrl_0": "",
         "wxPanel_0wxTreebook_0wxPanel_15wxPanel_0wxCheckBox_0": false,
@@ -540,12 +578,14 @@
         "__geometry": {
           "h": 556,
           "w": 1013,
-          "x": 0,
-          "y": 0
+          "x": 118,
+          "y": 442
         },
         "wxNotebook_0": "General",
         "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0": "0 1 2 3 4 5 6 7",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "U7",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0": "parts:LED_SK6812MINI-E_3.2x2.8mm_P1.5mm_ReverseMount",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "parts:LED_SK6812MINI-E_3.2x2.8mm_P1.5mm_ReverseMount",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "D67",
         "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_0": true,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_1": true,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_0": -1,
@@ -560,7 +600,7 @@
         "wxNotebook_0wxPanel_1wxGrid_0": "0 1 2 3 4",
         "wxNotebook_0wxPanel_2wxCheckBox_0": false,
         "wxNotebook_0wxPanel_2wxGrid_0": "0 1",
-        "wxTextCtrl_0": "Interface_USB:USB2514B_Bi"
+        "wxTextCtrl_0": "LED:SK6812MINI-E"
       },
       "Text Properties": {
         "__geometry": {
@@ -659,15 +699,15 @@
         "__geometry": {
           "h": 686,
           "w": 769,
-          "x": 0,
-          "y": 0
+          "x": 1327,
+          "y": 377
         },
         "wxPanel_0wxStaticBox_0wxCheckBox_0": true,
         "wxPanel_0wxStaticBox_0wxCheckBox_1": true,
         "wxPanel_0wxStaticBox_0wxCheckBox_2": true,
         "wxPanel_0wxStaticBox_0wxCheckBox_3": true,
         "wxPanel_0wxStaticBox_0wxCheckBox_4": true,
-        "wxPanel_0wxStaticBox_0wxHtmlWindow_0": 310,
+        "wxPanel_0wxStaticBox_0wxHtmlWindow_0": 680,
         "wxStaticBox_0wxCheckBox_0": false,
         "wxStaticBox_0wxCheckBox_1": false,
         "wxStaticBox_0wxCheckBox_2": false,
@@ -760,6 +800,6 @@
     "pdf_viewer_name": "",
     "text_editor": "",
     "use_system_pdf_viewer": true,
-    "working_dir": "/home/maka/PCBs/Lucca58_Marika"
+    "working_dir": "/home/maka/PCBs/Lucca58 (copy)"
   }
 }
