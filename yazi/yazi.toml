@@ -1,0 +1,21 @@
+# What Enter (open) does. Only the rules below are changed; yazi keeps its defaults for everything else.
+
+[opener]
+edit = [
+	{ run = 'nvim "$@"', block = true, desc = "nvim", for = "unix" },
+]
+appimage = [
+	{ run = 'chmod +x "$1" && "$1"', block = true, desc = "Run AppImage", for = "unix" },
+]
+
+[open]
+prepend_rules = [
+	{ url = "*.{AppImage,appimage}", use = "appimage" },
+
+	# editable files go to nvim
+	{ mime = "text/*", use = "edit" },
+	{ mime = "inode/empty", use = "edit" },
+	{ mime = "application/{json,ndjson,toml,yaml,xml,x-shellscript,javascript,x-subrip}", use = "edit" },
+	{ url = "*.{txt,md,py,lua,sh,fish,js,ts,jsx,tsx,json,toml,yaml,yml,ini,conf,cfg,c,h,cpp,hpp,rs,go,java,html,css,scss,sql,csv,log,vim,nix,zig,rb,php,env}", use = "edit" },
+	{ url = ".*", use = "edit" }, # dotfiles like .bashrc, .gitignore
+]
