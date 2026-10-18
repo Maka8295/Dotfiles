@@ -122,6 +122,24 @@
         "wxNotebook_0wxPanel_3wxStaticBox_1wxTextCtrl_0": 0,
         "wxNotebook_0wxPanel_3wxStaticBox_1wxTextCtrl_1": 0
       },
+      "*Sheet Properties": {
+        "__geometry": {
+          "h": 436,
+          "w": 894,
+          "x": 868,
+          "y": 502
+        },
+        "wxStaticBox_0wxGrid_0": "0 1 2 3 4 5 6 7",
+        "wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0": "peripherals.kicad_sch",
+        "wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "peripherals.kicad_sch",
+        "wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "Peripherals",
+        "wxStaticBox_1wxCheckBox_0": false,
+        "wxStaticBox_1wxCheckBox_1": false,
+        "wxStaticBox_1wxCheckBox_2": false,
+        "wxStaticBox_1wxCheckBox_3": false,
+        "wxStaticBox_1wxTextCtrl_0": "5",
+        "wxStaticBox_2wxTextCtrl_0": 1524
+      },
       "*Symbol Libraries": {
         "__geometry": {
           "h": 649,
@@ -234,6 +252,20 @@
         "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxScrolledWindow_0wxTextCtrl_8": "In2.Cu",
         "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxScrolledWindow_0wxTextCtrl_9": "B.Cu"
       },
+      "Choose Symbol": {
+        "__geometry": {
+          "h": 770,
+          "w": 990,
+          "x": 205,
+          "y": 335
+        },
+        "wxCheckBox_0": false,
+        "wxCheckBox_1": true,
+        "wxPanel_0wxSplitterWindow_0": 495,
+        "wxPanel_0wxSplitterWindow_0wxPanel_0wxPanel_0wxHtmlWindow_0": 0,
+        "wxPanel_0wxSplitterWindow_0wxPanel_0wxPanel_0wxSearchCtrl_0": "",
+        "wxPanel_0wxSplitterWindow_0wxPanel_1wxPanel_1wxOwnerDrawnComboBox_0": 0
+      },
       "Copper Zone Properties": {
         "__geometry": {
           "h": 528,
@@ -281,6 +313,26 @@
         "wxCheckBox_4": true,
         "wxCheckBox_5": false
       },
+      "Edit Sheetname Field": {
+        "__geometry": {
+          "h": 299,
+          "w": 747,
+          "x": 945,
+          "y": 570
+        },
+        "wxCheckBox_0": true,
+        "wxCheckBox_1": false,
+        "wxCheckBox_2": true,
+        "wxCheckBox_3": false,
+        "wxCheckBox_4": false,
+        "wxChoice_0": -1,
+        "wxOwnerDrawnComboBox_0": 0,
+        "wxOwnerDrawnComboBox_0wxTextCtrl_0": "Default Font",
+        "wxTextCtrl_0": "Peripherals",
+        "wxTextCtrl_1": 12700,
+        "wxTextCtrl_2": 1231900,
+        "wxTextCtrl_3": 526284
+      },
       "Edit Value Field": {
         "__geometry": {
           "h": 308,
@@ -305,18 +357,19 @@
         "__geometry": {
           "h": 728,
           "w": 846,
-          "x": 0,
-          "y": 0
+          "x": 1094,
+          "y": 356
         },
         "wxNotebook_0": "General",
         "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0": "0 1 2 3 4 5 7",
         "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0": "http://www.mouser.com/ds/2/268/22090a-52174.pdf",
         "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "http://www.mouser.com/ds/2/268/22090a-52174.pdf",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "SK6812MINI-E",
         "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_0": false,
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_0": 1,
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxComboBox_0": "180",
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxTextCtrl_0": 66391515,
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxTextCtrl_1": 170265539,
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_0": 0,
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxComboBox_0": "0",
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxTextCtrl_0": 103535000,
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxTextCtrl_1": 100815000,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_0": false,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_1": false,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_2": false,
@@ -340,7 +393,7 @@
         "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_2wxTextCtrl_0": "0.000000 mm",
         "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_2wxTextCtrl_1": "0.000000 mm",
         "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_2wxTextCtrl_2": "0.000000 mm",
-        "wxTextCtrl_0": "Package_DFN_QFN:QFN-20-1EP_4x4mm_P0.5mm_EP2.5x2.5mm"
+        "wxTextCtrl_0": "parts:LED_SK6812MINI-E_3.2x2.8mm_P1.5mm_ReverseMount"
       },
       "Footprint Reference Properties": {
         "__geometry": {
@@ -402,6 +455,34 @@
           "y": 0
         },
         "wxGrid_0": "0 1"
+      },
+      "Plot Schematic": {
+        "__geometry": {
+          "h": 511,
+          "w": 999,
+          "x": 201,
+          "y": 464
+        },
+        "wxChoice_0": 0,
+        "wxPanel_1wxStaticBox_0wxCheckBox_0": true,
+        "wxPanel_1wxStaticBox_0wxCheckBox_1": true,
+        "wxPanel_1wxStaticBox_0wxCheckBox_2": true,
+        "wxPanel_1wxStaticBox_0wxCheckBox_3": true,
+        "wxPanel_1wxStaticBox_0wxCheckBox_4": true,
+        "wxPanel_1wxStaticBox_0wxHtmlWindow_0": 0,
+        "wxRadioBox_0": 1,
+        "wxStaticBox_0wxCheckBox_0": true,
+        "wxStaticBox_0wxCheckBox_1": false,
+        "wxStaticBox_0wxChoice_0": 0,
+        "wxStaticBox_0wxChoice_1": 0,
+        "wxStaticBox_0wxChoice_2": -1,
+        "wxStaticBox_0wxTextCtrl_0": 0,
+        "wxStaticBox_1wxCheckBox_0": true,
+        "wxStaticBox_1wxCheckBox_1": true,
+        "wxStaticBox_1wxCheckBox_2": true,
+        "wxStaticBox_2wxChoice_0": 0,
+        "wxStaticBox_3wxCheckBox_0": false,
+        "wxTextCtrl_0": ""
       },
       "Plugin And Content Manager": {
         "__geometry": {
@@ -574,6 +655,51 @@
         "wxPanel_0wxTreebook_0wxPanel_55wxFilePickerCtrl_0wxTextCtrl_0": "/usr/bin/python3",
         "wxPanel_0wxTreebook_0wxPanel_56wxSpinCtrl_0": 30
       },
+      "Schematic Setup": {
+        "__geometry": {
+          "h": 606,
+          "w": 969,
+          "x": 240,
+          "y": 490
+        },
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_0wxTextCtrl_0": 12700,
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_0wxTextCtrl_1": "123",
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_0wxTextCtrl_2": "15",
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_0wxTextCtrl_3": "37.5",
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_1wxTextCtrl_0": 1524,
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_1wxTextCtrl_1": 6350,
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_2wxChoice_0": 3,
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_2wxChoice_1": 0,
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_2wxTextCtrl_0": 12700,
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_3wxCheckBox_0": false,
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_3wxCheckBox_1": false,
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_3wxRadioButton_0": true,
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_3wxRadioButton_1": false,
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_3wxTextCtrl_0": "",
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_3wxTextCtrl_1": "",
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_4wxTextCtrl_0": "12",
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_4wxTextCtrl_1": "3",
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_5wxChoice_0": 0,
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_5wxChoice_1": 0,
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_5wxSpinCtrl_0": 3,
+        "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxStaticBox_5wxSpinCtrl_1": 3
+      },
+      "Sheet Properties": {
+        "__geometry": {
+          "h": 436,
+          "w": 894,
+          "x": 868,
+          "y": 502
+        },
+        "wxStaticBox_0wxGrid_0": "0 1 2 3 4 5 6 7",
+        "wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "Power",
+        "wxStaticBox_1wxCheckBox_0": false,
+        "wxStaticBox_1wxCheckBox_1": false,
+        "wxStaticBox_1wxCheckBox_2": false,
+        "wxStaticBox_1wxCheckBox_3": false,
+        "wxStaticBox_1wxTextCtrl_0": "2",
+        "wxStaticBox_2wxTextCtrl_0": 1524
+      },
       "Symbol Properties": {
         "__geometry": {
           "h": 556,
@@ -734,7 +860,9 @@
     "sim_model": false
   },
   "environment": {
-    "vars": {}
+    "vars": {
+      "MAKA_PARTS": "/home/maka/PCBs/parts"
+    }
   },
   "git": {
     "authorEmail": "",

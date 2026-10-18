@@ -16,13 +16,8 @@
   "clock": {
     "format": "{:%H:%M\n%m/%d}",
     "justify": "center",
-    "tooltip-format": "<tt><small>{calendar}</small></tt>",
-    "calendar": {
-      "format": {
-        "months": "<span color='#7abfff'><b>{}</b></span>",
-        "today": "<span color='#7abfff'><b>{}</b></span>",
-      },
-    },
+    "tooltip": false,
+    "on-click-right": "python3 ~/Dotfiles/scripts/calendar-panel.py",
   },
   // The bar is as wide as its widest module, so a wider volume number made the whole bar
   // grow. The digits stay full size (like the temperatures) and only the % sign is small

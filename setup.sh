@@ -56,10 +56,12 @@ PACMAN_PKGS=(
     pipewire pipewire-pulse wireplumber pavucontrol
     # apps
     kitty fish neovim btop cava cmus yazi firefox signal-desktop
+    # waybar music panel (scripts/music-panel.py: GTK 3 + layer shell from Python)
+    python-gobject gtk3 gtk-layer-shell
     # japanese input
     fcitx5 fcitx5-mozc fcitx5-gtk fcitx5-qt fcitx5-configtool
     # fonts not kept in this repo (CJK, emoji, waybar/nvim icons)
-    fontconfig noto-fonts-cjk noto-fonts-emoji ttf-nerd-fonts-symbols
+    fontconfig noto-fonts-cjk noto-fonts-emoji ttf-nerd-fonts-symbols ttf-fantasque-nerd
     # neovim (AstroNvim) tooling
     git ripgrep fd nodejs npm python go
     # building the Hyprland border plugin

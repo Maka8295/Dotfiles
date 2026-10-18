@@ -1,28 +1,53 @@
 # Terminal greeting: a random Old English phrase from ~/Dotfiles/fish/greetings.txt and its
-# translation on one line, in red fraktur: ♰ phrase ♱ translation ♰. Never the same twice in a row.
+# translation on one line, in red fraktur: ♰ phrase ♱ translation ♰. Only phrases that fit
+# the window's width are picked (in a very narrow window, just the phrase without its
+# translation), and never the same one twice in a row.
 function dungeon_greeting
     set -l file ~/Dotfiles/fish/greetings.txt
     test -r $file; or return
     set -l lines (string match -rv '^\s*(#|$)' < $file)
     test (count $lines) -gt 0; or return
+    set -l cols $COLUMNS
+    test -n "$cols"; or set cols 80
+
+    # what fits: the whole greeting if possible, otherwise the phrase on its own. The fraktur
+    # letters take one column each like the plain ones, so the plain text measures the same.
+    set -l fits
+    set -l short 0
+    for line in $lines
+        set -l parts (string split -m1 \t -- $line)
+        test (string length -V -- "♰ $parts[1] ♱ $parts[2] ♰") -le $cols; and set -a fits $line
+    end
+    if test (count $fits) -eq 0
+        set short 1
+        for line in $lines
+            set -l parts (string split -m1 \t -- $line)
+            test (string length -V -- "♰ $parts[1] ♰") -le $cols; and set -a fits $line
+        end
+    end
+    test (count $fits) -gt 0; or return
 
     # pick one, avoiding the phrase shown last time
     set -l last_file ~/.cache/dungeon_greeting_last
     set -l last (cat $last_file 2>/dev/null)
-    set -l pick (random 1 (count $lines))
-    if test (count $lines) -gt 1; and test "$pick" = "$last"
-        set pick (math "$pick % "(count $lines)" + 1")
+    if test (count $fits) -gt 1; and set -l i (contains -i -- "$last" $fits)
+        set -e fits[$i]
     end
-    mkdir -p ~/.cache; echo $pick > $last_file
+    set -l pick $fits[(random 1 (count $fits))]
+    mkdir -p ~/.cache; printf '%s\n' $pick > $last_file
 
-    set -l parts (string split -m1 \t -- $lines[$pick])
+    set -l parts (string split -m1 \t -- $pick)
     set -l phrase (__dungeon_fraktur --wynn $parts[1])
-    set -l translation (__dungeon_fraktur $parts[2])
 
     # ♰ Old English ♱ translation ♰  (the middle cross is the prompt's ♱)
     set_color red
-    echo "♰ $phrase ♱ $translation ♰"
+    if test $short = 1
+        echo "♰ $phrase ♰"
+    else
+        echo "♰ $phrase ♱ "(__dungeon_fraktur $parts[2])" ♰"
+    end
     set_color normal
+    echo   # a blank line before the first prompt, the same gap as between commands
 end
 
 # plain letters -> bold fraktur (long vowels keep their macron); --wynn also turns w into ƿ

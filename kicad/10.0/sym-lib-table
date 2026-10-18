@@ -1,5 +1,5 @@
 (sym_lib_table
 	(version 7)
 	(lib (name "KiCad") (type "Table") (uri "/usr/share/kicad/template/sym-lib-table") (options "") (descr "KiCad Default Libraries"))
-	(lib (name "Parts") (type "KiCad") (uri "/home/maka/PCBs/parts") (options "") (descr ""))
+	(lib (name "Parts") (type "KiCad") (uri "${MAKA_PARTS}/symbols") (options "") (descr ""))
 )

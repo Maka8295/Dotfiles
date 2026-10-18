@@ -14,8 +14,8 @@
   // "modules-right": ["hyprland/window"],
   "modules-left": [
     "clock",
+    "custom/cava",
     "pulseaudio",
-    "custom/audio",
     "custom/screenshot",
     "custom/cputemp",
     "custom/gputemp",
@@ -50,20 +50,11 @@
     // "icon-size": 21,
     "spacing": 10,
   },
+  // right click: calendar (scripts/calendar-panel.py) instead of a tooltip on hover
   "clock": {
     "format": "{:%H:%M %m/%d}",
-    "tooltip-format": "<tt><small>{calendar}</small></tt>",
-    "calendar": {
-      "format": {
-        "months": "<span color='#7abfff'><b>{}</b></span>",
-        "today": "<span color='#7abfff'><b>{}</b></span>",
-        //"tooltip-format": "{tz_list}",
-        //"timezones": [
-        //	"Asia/Tokyo",
-        //	"Europe/London"
-        //]
-      },
-    },
+    "tooltip": false,
+    "on-click-right": "python3 ~/Dotfiles/scripts/calendar-panel.py",
   },
   "cpu": {
     "format": "CPU",
@@ -89,7 +80,17 @@
       "default": ["", ""],
     },
     "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-    "on-click-right": "pavucontrol",
+    // right click: menu with the mixer, bluetooth (bluetui) and the switch scripts
+    // (waybar/audio_menu.xml)
+    "menu": "on-click-right",
+    "menu-file": "~/Dotfiles/waybar/audio_menu.xml",
+    "menu-actions": {
+      "mixer": "pavucontrol",
+      "bluetooth": "kitty --class bluetui -e bluetui",
+      "output": "~/Dotfiles/scripts/toggle-audio.sh",
+      // setsid: waybar.sh restarts waybar, so it mustn't be one of waybar's own processes
+      "layout": "setsid -f ~/Dotfiles/scripts/waybar-toggle.sh",
+    },
 
     //    },
     //    "temperature": {
@@ -142,10 +143,15 @@
     "tooltip": false,
     "on-click": "grimblast copy area"
   },
-  "custom/audio": {
-    "format": "󰒝",
+  // small cava visualiser (scripts/cava-waybar.sh, cava/waybar/config): left click plays /
+  // pauses cmus, right click opens the music panel (volume slider + cmus controls)
+  "custom/cava": {
+    "exec": "~/Dotfiles/scripts/cava-waybar.sh",
+    "format": "{}",
     "tooltip": false,
-    "on-click": "~/Dotfiles/scripts/toggle-audio.sh"
-  }
+    "escape": false,
+    "on-click": "cmus-remote -Q | grep -q '^status stopped' && cmus-remote -p || cmus-remote -u",
+    "on-click-right": "python3 ~/Dotfiles/scripts/music-panel.py",
+  },
 
 }
