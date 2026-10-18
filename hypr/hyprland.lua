@@ -260,7 +260,8 @@ hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_S
 hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("~/Dotfiles/scripts/toggle-audio.sh"))
 
 -- Apps / window management
-hl.bind(mainMod .. " + F", hl.dsp.exec_cmd(terminal))
+-- terminal; opens in yazi's folder when yazi is the focused window (scripts/terminal-here.sh)
+hl.bind(mainMod .. " + F", hl.dsp.exec_cmd("~/Dotfiles/scripts/terminal-here.sh"))
 hl.bind(mainMod .. " + R", hl.dsp.window.close())
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("nemo"))   -- graphical file manager ("Files")

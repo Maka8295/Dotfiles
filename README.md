@@ -24,8 +24,8 @@ everything from the login screen to the cursor.
 | `#6E7F5A` moss | `#879376` sage | `#A88A5B` brass | `#7A5E47` clay |
 | `#8F8B81` steel | `#7B4A3E` rust | | |
 
-**Fonts:** CloisterBlack (blackletter) for UI text, azukifontB for the active workspace, mononoki in
-the terminal.
+**Fonts:** CloisterBlack (blackletter) for UI text, azukifontB for the active workspace, Fantasque Sans
+Mono (Nerd Font) in the terminal.
 
 **The frame:** a 1px bronze line around a 3px `#463D34` band. Windows, waybar panels, rofi, the
 lock screen and the login screen all share it, along with a soft drop shadow.
@@ -127,7 +127,8 @@ files and can be rebuilt with:
 - Item sprites from *Final Fantasy Tactics* © Square Enix, via The Spriters Resource
 - Original cursor base: the Hatsune Miku pixel cursor theme
 - Wallpaper: King's College Chapel, Cambridge
-- Fonts: CloisterBlack, azuki, mononoki (see `fonts/`)
+- Fonts: CloisterBlack, azuki, mononoki (see `fonts/`), Fantasque Sans Mono (`ttf-fantasque-nerd`)
 - `borders-plus-plus` from [hyprwm/hyprland-plugins](https://github.com/hyprwm/hyprland-plugins)
-- Old English lines from *Beowulf*, *The Wanderer*, *Deor*, *The Battle of Maldon*, *Christ I* and
-  the *Æcerbot* charm
+- Old English lines from *Beowulf*, *The Wanderer*, *The Seafarer*, *Deor*, *The Battle of Maldon*,
+  *The Dream of the Rood*, *The Ruin*, *Maxims II*, *Wulf and Eadwacer*, *Cædmon's Hymn*, the
+  *Rune Poem*, the Exeter Book riddles, *Christ I* and the *Æcerbot* charm

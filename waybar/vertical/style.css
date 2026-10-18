@@ -16,7 +16,7 @@
 #pulseaudio,
 #tray,
 #mode,
-#custom-audio,
+#custom-cava,
 #custom-screenshot,
 #custom-cputemp,
 #custom-gputemp,
@@ -43,17 +43,12 @@
     padding: 8px 10px 8px 3px;   /* 3.5px left */
 }
 
-#custom-audio {
-    padding: 8px 8px 8px 5px;    /* 1.5px left */
-}
-
 #custom-lock {
     padding: 8px 8px 8px 5px;    /* centred (measured) */
 }
 
 /* icon buttons: same width as the workspace buttons (10px side margins), so their hover
    highlight is the same size as the active workspace square */
-#custom-audio,
 #custom-screenshot,
 #custom-lock,
 #custom-suspend,
@@ -77,4 +72,11 @@
    (config.jsonc gives the module an "under-100" class below that) */
 #pulseaudio:not(.under-100) {
     margin: 2px 4px;
+}
+
+/* cava: thin side margins and wider padding, so the hover square's 4px ring sits around
+   the bars instead of over them while the bar keeps its existing width */
+#custom-cava {
+    margin: 2px 1px;
+    padding: 8px 6px;
 }

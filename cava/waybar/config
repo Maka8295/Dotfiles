@@ -1,0 +1,22 @@
+# cava config for the small visualiser on waybar (~/Dotfiles/scripts/cava-waybar.sh).
+# Raw ascii output: one line of bar heights (0-7) per frame, read by the script.
+[general]
+bars = 6
+framerate = 30
+sleep_timer = 3
+
+[input]
+method = pulse
+source = auto
+
+[output]
+method = raw
+raw_target = /dev/stdout
+data_format = ascii
+ascii_max_range = 7
+bar_delimiter = 59
+frame_delimiter = 10
+channels = mono
+
+[smoothing]
+noise_reduction = 70

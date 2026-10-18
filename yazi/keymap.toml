@@ -1,0 +1,7 @@
+# Additions to yazi's default keys (the defaults stay as they are).
+
+[[mgr.prepend_keymap]]
+# a new kitty window in the folder yazi is showing; --orphan keeps it open after yazi quits
+on   = "!"
+run  = 'shell --orphan "kitty fish"'
+desc = "Open a terminal here"

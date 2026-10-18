@@ -82,6 +82,8 @@ window#waybar > box {
 #workspaces button:hover {
     background: #24201C;
     color: #C8B8A0;
+    /* same panel-colour ring as the active square, so the hover square is the same size */
+    box-shadow: inset 0 0 0 4px #1A1816;
 }
 
 #workspaces button.urgent {
@@ -104,7 +106,7 @@ window#waybar > box {
 #pulseaudio,
 #tray,
 #mode,
-#custom-audio,
+#custom-cava,
 #custom-screenshot,
 #custom-cputemp,
 #custom-gputemp,
@@ -122,16 +124,24 @@ window#waybar > box {
 
 #pulseaudio {
     color: #879376;
-    padding-right: 7px;   /* evens the gap before the audio-switch button */
 }
 
 #pulseaudio.muted {
     color: #6F675E;
 }
 
-#custom-audio {
-    font-size: 20px;
-    color: #9D8E7C;
+/* cava: block characters from the monospace nerd font, small so the row of bars fits
+   inside the vertical bar's width (the colours come from scripts/cava-waybar.sh) */
+#custom-cava {
+    font-family: "MesloLGM Nerd Font Mono";
+    font-size: 11px;
+    letter-spacing: 0;
+    padding: 6px 12px;   /* room for the hover square's 4px ring around the bars */
+}
+
+#custom-cava:hover {
+    background: #463D34;
+    box-shadow: inset 0 0 0 4px #1A1816;
 }
 
 #custom-screenshot {
@@ -181,7 +191,6 @@ window#waybar > box {
 
 /* icon buttons: padding that makes their hover square 28px wide, like the workspace square
    (horizontal bar; the vertical layout sets its own sizes) */
-#custom-audio,
 #custom-lock {
     padding: 0 13px;
 }
@@ -192,7 +201,6 @@ window#waybar > box {
 
 /* hover highlights are inset squares like the active workspace: the highlight colour with
    a 4px ring of the panel colour inside the button's box */
-#custom-audio:hover,
 #custom-screenshot:hover,
 #custom-lock:hover,
 #custom-suspend:hover,
@@ -214,14 +222,80 @@ window#waybar > box {
     background: #7B4A3E;
 }
 
-#tray menu,
 tooltip {
     background: #141210;
     border: 1px solid #7E705D;
     border-radius: 0;
 }
 
-#tray menu *,
 tooltip label {
     color: #C8B8A0;
+}
+
+/* ---------- right-click menus (power, volume, tray apps) ----------
+   The same panel as the bar and the music / calendar popups: square, with the double-rule
+   frame, and the bar's hover colour on the item under the cursor. */
+
+menu,
+.csd menu {
+    background: #1A1816;
+    border: 1px solid #7E705D;
+    border-radius: 0;
+    box-shadow: inset 0 0 0 2px #141210, inset 0 0 0 3px #463D34;
+    margin: 0;
+    padding: 8px 7px;   /* keeps the hover square clear of the frame, like the bar's buttons */
+}
+
+menu menuitem {
+    font-size: 17px;
+    color: #C8B8A0;
+    background: transparent;
+    padding: 6px 16px;
+    min-height: 0;
+    text-shadow: none;
+}
+
+menu menuitem:hover {
+    background: #463D34;
+    color: #C8B8A0;
+}
+
+menu menuitem:disabled,
+menu menuitem:disabled label {
+    color: #6F675E;
+}
+
+/* GTK dims menus that lost focus; keep them readable */
+menu:backdrop,
+menu menuitem:backdrop {
+    background: transparent;
+    color: #C8B8A0;
+}
+
+menu:backdrop {
+    background: #1A1816;
+}
+
+menu menuitem:backdrop:hover {
+    background: #463D34;
+}
+
+menu separator {
+    background: #463D34;
+    min-height: 1px;
+    margin: 4px 10px;
+}
+
+menu check,
+menu radio {
+    color: #A88A5B;
+    background: #24201C;
+    border: 1px solid #463D34;
+    border-radius: 0;
+}
+
+/* the window GTK draws around a menu: no rounded corners or extra shadow */
+.csd.popup decoration {
+    border-radius: 0;
+    box-shadow: none;
 }

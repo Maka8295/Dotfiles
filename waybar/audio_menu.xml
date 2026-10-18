@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- right-click menu on the volume module (pulseaudio in config.jsonc)
+     (add a GtkMenuItem here and an entry with the same id under "menu-actions") -->
+<interface>
+  <object class="GtkMenu" id="menu">
+    <child>
+      <object class="GtkMenuItem" id="mixer">
+        <property name="label">Mixer settings</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="bluetooth">
+        <property name="label">Bluetooth settings</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="sep"/>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="output">
+        <property name="label">Switch audio output</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="layout">
+        <property name="label">Switch bar layout</property>
+      </object>
+    </child>
+  </object>
+</interface>
