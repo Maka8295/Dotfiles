@@ -47,7 +47,7 @@ lock screen and the login screen all share it, along with a soft drop shadow.
 | **btop, cmus, Yazi** | Themes in the palette (Yazi's 725 file icons recoloured too) | `btop/themes/`, `cmus/`, `yazi/` |
 | **GTK** | A dungeonOS GTK3 and GTK4 theme (GTK's own dark themes, recoloured) for Nemo, pavucontrol and file dialogs | `gtk/` |
 | **Signal** | Signal Desktop recoloured, re-applied automatically after every Signal update | `signal/` |
-| **KiCad** | A colour theme for the schematic, PCB, footprint, 3D and Gerber views; KiCad's settings live here too | `kicad/` |
+| **KiCad** | A colour theme for the schematic, PCB, footprint, 3D and Gerber views; KiCad's settings live here too. Plus the LCSC Part Finder plugin: a schematic toolbar button that finds the cheapest in-stock LCSC part for a symbol | `kicad/`, `kicad/plugins/` |
 
 ---
 

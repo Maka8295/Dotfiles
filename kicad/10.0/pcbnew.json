@@ -95,7 +95,7 @@
     "aui_state": null,
     "autozoom": true,
     "cursor": {
-      "always_show_cursor": true,
+      "always_show_cursor": false,
       "cross_hair_mode": 0
     },
     "display": 0,
@@ -238,12 +238,12 @@
     },
     "lib_list_width": 200,
     "maximized": false,
-    "mru_path": "",
-    "perspective": "",
-    "pos_x": 0,
-    "pos_y": 0,
-    "size_x": 0,
-    "size_y": 0,
+    "mru_path": "/home/maka/.local/share/kicad/10.0/projects",
+    "perspective": "layout2|",
+    "pos_x": 778,
+    "pos_y": 252,
+    "size_x": 1210,
+    "size_y": 919,
     "zoom": 1.0,
     "zoom_factors": [
       0.13,
@@ -454,10 +454,18 @@
       "Description"
     ],
     "open_libs": [
-      "Connector_PCBEdge",
-      "Package_TO_SOT_THT",
+      "Capacitor_SMD",
+      "Connector_FFC-FPC",
+      "Connector_Hirose",
+      "Connector_Molex",
       "Diode_SMD",
-      "Diode_THT"
+      "Fuse",
+      "Inductor_SMD",
+      "LED_SMD",
+      "Mounting_Wuerth",
+      "Panelization",
+      "Resistor_SMD",
+      "Transistor_Power"
     ]
   },
   "meta": {
@@ -511,6 +519,7 @@
   },
   "system": {
     "file_history": [
+      "/home/maka/PCBs/MetalMachine/MetalMachine.kicad_pcb",
       "/home/maka/PCBs/Lucca58 (copy)/Lucca58.kicad_pcb",
       "/home/maka/PCBs/Lucca58/Lucca58.kicad_pcb",
       "/home/maka/PCBs/simple_and_affordable_lps/Ultimate_LPS/Ultimate_LPS.kicad_pcb",
@@ -518,13 +527,12 @@
       "/home/maka/PCBs/Lazy-Kiwi/home.kicad_pcb",
       "/home/maka/PCBs/Hugo project/Hugo project.kicad_pcb",
       "/home/maka/PCBs/shuriken2/shuriken2.kicad_pcb",
-      "/home/maka/PCBs/Badge2026/badge.kicad_pcb",
-      "/home/maka/PCBs/dumptruck/Flumper0.3/flash.kicad_pcb"
+      "/home/maka/PCBs/Badge2026/badge.kicad_pcb"
     ],
     "first_run_shown": false,
     "last_footprint3d_dir": "/usr/share/kicad/3dmodels/",
     "last_footprint_lib_dir": "/home/maka/PCBs/parts/parts.pretty",
-    "last_imperial_units": 5,
+    "last_imperial_units": 0,
     "last_metric_units": 1,
     "max_undo_items": 0,
     "show_import_issues": true,
@@ -711,9 +719,9 @@
     "maximized": false,
     "mru_path": "",
     "perspective": "layout2|name=InfoBar;caption=;state=131454;dir=1;layer=1;row=0;pos=0;prop=100000;bestw=20;besth=30;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=LoadNoticeInfoBar;caption=;state=131454;dir=1;layer=1;row=1;pos=0;prop=100000;bestw=20;besth=30;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TopMainToolbar;caption=;state=139632;dir=1;layer=6;row=0;pos=0;prop=100000;bestw=1164;besth=38;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=TopAuxToolbar;caption=;state=139632;dir=1;layer=5;row=0;pos=0;prop=100000;bestw=1251;besth=38;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=MsgPanel;caption=;state=131452;dir=3;layer=6;row=0;pos=0;prop=100000;bestw=400;besth=38;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=LeftToolbar;caption=;state=139596;dir=4;layer=3;row=0;pos=0;prop=100000;bestw=34;besth=622;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=RightToolbar;caption=;state=139596;dir=2;layer=3;row=0;pos=0;prop=100000;bestw=34;besth=819;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=LayersManager;caption=Appearance;state=1532;dir=2;layer=4;row=0;pos=0;prop=100000;bestw=220;besth=-1;minw=200;minh=60;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=220;floath=480|name=SelectionFilter;caption=Selection Filter;state=1532;dir=2;layer=4;row=0;pos=1;prop=0;bestw=254;besth=-1;minw=254;minh=171;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=254;floath=171|name=DesignBlocks;caption=Design Blocks;state=2099150;dir=2;layer=5;row=0;pos=0;prop=100000;bestw=300;besth=200;minw=240;minh=60;maxw=-1;maxh=-1;floatx=50;floaty=200;floatw=800;floath=600|name=PropertiesManager;caption=Properties;state=2098686;dir=4;layer=5;row=0;pos=0;prop=100000;bestw=300;besth=200;minw=240;minh=60;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=300;floath=200|name=DrawFrame;caption=;state=1020;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=400;besth=188;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=NetInspector;caption=Net Inspector;state=2098686;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=300;besth=200;minw=240;minh=60;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=300;floath=200|name=Search;caption=Search;state=2098686;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=180;besth=100;minw=180;minh=60;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=480;floath=200|dock_size(1,6,0)=38|dock_size(1,5,0)=38|dock_size(3,6,0)=38|dock_size(4,3,0)=34|dock_size(2,3,0)=34|dock_size(2,4,0)=254|dock_size(5,0,0)=384|",
-    "pos_x": 91,
+    "pos_x": 984,
     "pos_y": 14,
-    "size_x": 802,
+    "size_x": 770,
     "size_y": 1412,
     "zoom_factors": [
       0.13,

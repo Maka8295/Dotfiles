@@ -230,6 +230,46 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+section "KiCad plugins"
+# ---------------------------------------------------------------------------
+# kicad/plugins (the LCSC Part Finder) is linked as a whole folder so that a backup of an old
+# one lands outside it: KiCad searches every subfolder for plugin.json and drops a plugin it
+# finds twice.
+link "$DOTFILES/kicad/plugins" "$DATA/kicad/10.0/plugins"
+
+# KiCad gives each Python plugin its own virtualenv on first start, but that can stop half-way
+# without an error, and then the plugin's toolbar button never appears. Build them here the
+# same way; KiCad finds and reuses them.
+if [ "$INSTALL_PACKAGES" = 0 ]; then
+    echo "  plugin environments skipped (--no-packages)"
+elif ! command -v kicad >/dev/null; then
+    echo "  KiCad not installed; plugin environments skipped"
+else
+    KICAD_PY="$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["api"]["interpreter_path"])' \
+                "$DOTFILES/kicad/10.0/kicad_common.json" 2>/dev/null)"
+    KICAD_PY="${KICAD_PY:-/usr/bin/python3}"
+    for manifest in "$DOTFILES"/kicad/plugins/*/plugin.json; do
+        plugin="$(dirname "$manifest")"
+        [ -f "$plugin/requirements.txt" ] || continue
+        id="$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["identifier"])' "$manifest" 2>/dev/null)"
+        [ -n "$id" ] || continue
+        venv="${XDG_CACHE_HOME:-$HOME/.cache}/kicad/10.0/python-environments/$id"
+        # a Python update leaves an old environment unable to start
+        if [ -d "$venv" ] && ! "$venv/bin/python" -c '' 2>/dev/null; then
+            rm -rf "$venv"
+        fi
+        [ -f "$venv/pyvenv.cfg" ] || "$KICAD_PY" -m venv --system-site-packages "$venv"
+        # the options KiCad itself installs with, so it sees the requirements as already met
+        if "$venv/bin/python" -m pip install -q --no-input --isolated --only-binary :all: \
+               --require-virtualenv --exists-action i -r "$plugin/requirements.txt"; then
+            echo "  ok    $(basename "$plugin") environment"
+        else
+            echo "  $(basename "$plugin"): installing its requirements failed; KiCad retries when it starts"
+        fi
+    done
+fi
+
+# ---------------------------------------------------------------------------
 section "Shell"
 # ---------------------------------------------------------------------------
 FISH="$(command -v fish || true)"
