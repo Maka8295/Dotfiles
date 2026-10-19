@@ -1,0 +1,30 @@
+{
+  "$schema": "https://go.kicad.org/api/schemas/v1",
+  "identifier": "engineering.kage.lcsc-part-finder",
+  "name": "LCSC Part Finder",
+  "description": "Find the cheapest in-stock LCSC part that meets a symbol's criteria and write its LCSC number and datasheet into the schematic.",
+  "runtime": {
+    "type": "python",
+    "min_version": "3.9"
+  },
+  "actions": [
+    {
+      "identifier": "find-lcsc-part",
+      "name": "Find cheapest LCSC part",
+      "description": "Find the cheapest in-stock LCSC part for the selected (copied) symbol",
+      "show-button": true,
+      "scopes": ["schematic"],
+      "entrypoint": "lcsc_finder.py",
+      "icons-light": [
+        "icons/lcsc-finder-light-24.png",
+        "icons/lcsc-finder-light-32.png",
+        "icons/lcsc-finder-light-48.png"
+      ],
+      "icons-dark": [
+        "icons/lcsc-finder-dark-24.png",
+        "icons/lcsc-finder-dark-32.png",
+        "icons/lcsc-finder-dark-48.png"
+      ]
+    }
+  ]
+}

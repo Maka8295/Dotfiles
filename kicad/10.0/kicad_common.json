@@ -159,19 +159,19 @@
         "__geometry": {
           "h": 556,
           "w": 1013,
-          "x": 0,
-          "y": 0
+          "x": 1547,
+          "y": 618
         },
         "wxNotebook_0": "General",
         "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0": "0 1 2 3 4 5 6 7",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "D68",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0": "Capacitor_SMD:C_0402_1005Metric",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "Capacitor_SMD:C_0402_1005Metric",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "C8",
         "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_0": false,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_1": false,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_0": -1,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_1": -1,
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_2": 1,
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_2": 0,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_3": 0,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_0": false,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_1": false,
@@ -181,7 +181,7 @@
         "wxNotebook_0wxPanel_1wxGrid_0": "0 1 2 3 4",
         "wxNotebook_0wxPanel_2wxCheckBox_0": false,
         "wxNotebook_0wxPanel_2wxGrid_0": "0 1",
-        "wxTextCtrl_0": "LED:IR26-21C_L110_TR8"
+        "wxTextCtrl_0": "Device:C_Small"
       },
       "Board Setup": {
         "__geometry": {
@@ -252,18 +252,67 @@
         "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxScrolledWindow_0wxTextCtrl_8": "In2.Cu",
         "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxScrolledWindow_0wxTextCtrl_9": "B.Cu"
       },
-      "Choose Symbol": {
+      "Change Symbols": {
         "__geometry": {
-          "h": 770,
-          "w": 990,
-          "x": 205,
-          "y": 335
+          "h": 736,
+          "w": 1007,
+          "x": 1338,
+          "y": 338
+        },
+        "wxPanel_2wxStaticBox_0wxCheckBox_0": true,
+        "wxPanel_2wxStaticBox_0wxCheckBox_1": true,
+        "wxPanel_2wxStaticBox_0wxCheckBox_2": true,
+        "wxPanel_2wxStaticBox_0wxCheckBox_3": true,
+        "wxPanel_2wxStaticBox_0wxCheckBox_4": true,
+        "wxPanel_2wxStaticBox_0wxHtmlWindow_0": 0,
+        "wxRadioButton_0": false,
+        "wxRadioButton_1": true,
+        "wxRadioButton_2": false,
+        "wxRadioButton_3": false,
+        "wxRadioButton_4": false,
+        "wxStaticBox_1wxCheckBox_0": false,
+        "wxStaticBox_1wxCheckBox_1": false,
+        "wxStaticBox_1wxCheckBox_10": true,
+        "wxStaticBox_1wxCheckBox_11": false,
+        "wxStaticBox_1wxCheckBox_2": true,
+        "wxStaticBox_1wxCheckBox_3": true,
+        "wxStaticBox_1wxCheckBox_4": true,
+        "wxStaticBox_1wxCheckBox_5": true,
+        "wxStaticBox_1wxCheckBox_6": true,
+        "wxStaticBox_1wxCheckBox_7": true,
+        "wxStaticBox_1wxCheckBox_8": true,
+        "wxStaticBox_1wxCheckBox_9": true,
+        "wxTextCtrl_0": "U3",
+        "wxTextCtrl_1": "CS43131-CNZ",
+        "wxTextCtrl_2": "Parts:CS43131-CNZ",
+        "wxTextCtrl_3": ""
+      },
+      "Choose Power Symbol": {
+        "__geometry": {
+          "h": 799,
+          "w": 1062,
+          "x": 1431,
+          "y": 320
         },
         "wxCheckBox_0": false,
         "wxCheckBox_1": true,
-        "wxPanel_0wxSplitterWindow_0": 495,
+        "wxPanel_0wxSplitterWindow_0": 518,
+        "wxPanel_0wxSplitterWindow_0wxPanel_0wxHtmlWindow_0": 0,
+        "wxPanel_0wxSplitterWindow_0wxSplitterWindow_0": 542,
+        "wxPanel_0wxSplitterWindow_0wxSplitterWindow_0wxPanel_0wxPanel_0wxSearchCtrl_0": "3V"
+      },
+      "Choose Symbol": {
+        "__geometry": {
+          "h": 799,
+          "w": 1062,
+          "x": 1063,
+          "y": 308
+        },
+        "wxCheckBox_0": false,
+        "wxCheckBox_1": true,
+        "wxPanel_0wxSplitterWindow_0": 542,
         "wxPanel_0wxSplitterWindow_0wxPanel_0wxPanel_0wxHtmlWindow_0": 0,
-        "wxPanel_0wxSplitterWindow_0wxPanel_0wxPanel_0wxSearchCtrl_0": "",
+        "wxPanel_0wxSplitterWindow_0wxPanel_0wxPanel_0wxSearchCtrl_0": "LT3042",
         "wxPanel_0wxSplitterWindow_0wxPanel_1wxPanel_1wxOwnerDrawnComboBox_0": 0
       },
       "Copper Zone Properties": {
@@ -337,8 +386,8 @@
         "__geometry": {
           "h": 308,
           "w": 747,
-          "x": 0,
-          "y": 0
+          "x": 1589,
+          "y": 566
         },
         "wxCheckBox_0": true,
         "wxCheckBox_1": false,
@@ -350,8 +399,8 @@
         "wxOwnerDrawnComboBox_0wxTextCtrl_0": "Default Font",
         "wxTextCtrl_0": "",
         "wxTextCtrl_1": 12700,
-        "wxTextCtrl_2": 1496060,
-        "wxTextCtrl_3": 2098040
+        "wxTextCtrl_2": 647700,
+        "wxTextCtrl_3": 812799
       },
       "Footprint Properties": {
         "__geometry": {
@@ -455,6 +504,28 @@
           "y": 0
         },
         "wxGrid_0": "0 1"
+      },
+      "Pin Properties": {
+        "__geometry": {
+          "h": 486,
+          "w": 706,
+          "x": 1490,
+          "y": 596
+        },
+        "wxBitmapComboBox_0": "Input",
+        "wxBitmapComboBox_1": "Line",
+        "wxBitmapComboBox_2": "Left",
+        "wxCheckBox_0": false,
+        "wxCheckBox_1": false,
+        "wxCheckBox_2": true,
+        "wxCollapsiblePane_0wxPanel_0wxGrid_0": "0 1 2",
+        "wxTextCtrl_0": "HP_DETECT",
+        "wxTextCtrl_1": "22",
+        "wxTextCtrl_2": 203200,
+        "wxTextCtrl_3": 609600,
+        "wxTextCtrl_4": 25400,
+        "wxTextCtrl_5": 12700,
+        "wxTextCtrl_6": 12700
       },
       "Plot Schematic": {
         "__geometry": {
@@ -704,19 +775,20 @@
         "__geometry": {
           "h": 556,
           "w": 1013,
-          "x": 118,
-          "y": 442
+          "x": 1547,
+          "y": 618
         },
         "wxNotebook_0": "General",
         "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0": "0 1 2 3 4 5 6 7",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0": "parts:LED_SK6812MINI-E_3.2x2.8mm_P1.5mm_ReverseMount",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "parts:LED_SK6812MINI-E_3.2x2.8mm_P1.5mm_ReverseMount",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "D67",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0": "Capacitor_SMD:C_0603_1608Metric",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "Capacitor_SMD:C_0603_1608Metric",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "J1",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_1": "200mA, Adjustable, Ultralow Noise, Ultrahigh PSRR RF Linear Regulator, MSOP-10",
         "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_0": true,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_1": true,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_0": -1,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_1": -1,
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_2": 0,
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_2": 3,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_3": 0,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_0": false,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_1": false,
@@ -726,7 +798,7 @@
         "wxNotebook_0wxPanel_1wxGrid_0": "0 1 2 3 4",
         "wxNotebook_0wxPanel_2wxCheckBox_0": false,
         "wxNotebook_0wxPanel_2wxGrid_0": "0 1",
-        "wxTextCtrl_0": "LED:SK6812MINI-E"
+        "wxTextCtrl_0": "Connector_Audio:AudioPlug3"
       },
       "Text Properties": {
         "__geometry": {
@@ -749,6 +821,28 @@
         "wxTextCtrl_3": 59970000,
         "wxTextCtrl_4": 30150000,
         "wxTextCtrl_5": 150000
+      },
+      "Text PropertiesSchematicFrame": {
+        "__geometry": {
+          "h": 394,
+          "w": 734,
+          "x": 1476,
+          "y": 523
+        },
+        "wxBitmapComboBox_0": "",
+        "wxCheckBox_0": false,
+        "wxCheckBox_1": false,
+        "wxCheckBox_2": false,
+        "wxCheckBox_3": false,
+        "wxCheckBox_4": false,
+        "wxCheckBox_5": false,
+        "wxCheckBox_6": false,
+        "wxOwnerDrawnComboBox_0": 0,
+        "wxOwnerDrawnComboBox_0wxTextCtrl_0": "Default Font",
+        "wxOwnerDrawnComboBox_1": -1,
+        "wxOwnerDrawnComboBox_1wxTextCtrl_0": "",
+        "wxTextCtrl_0": 12700,
+        "wxTextCtrl_1": 0
       },
       "Track & Via Properties": {
         "__geometry": {
@@ -833,7 +927,7 @@
         "wxPanel_0wxStaticBox_0wxCheckBox_2": true,
         "wxPanel_0wxStaticBox_0wxCheckBox_3": true,
         "wxPanel_0wxStaticBox_0wxCheckBox_4": true,
-        "wxPanel_0wxStaticBox_0wxHtmlWindow_0": 680,
+        "wxPanel_0wxStaticBox_0wxHtmlWindow_0": 1234,
         "wxStaticBox_0wxCheckBox_0": false,
         "wxStaticBox_0wxCheckBox_1": false,
         "wxStaticBox_0wxCheckBox_2": false,
@@ -928,6 +1022,6 @@
     "pdf_viewer_name": "",
     "text_editor": "",
     "use_system_pdf_viewer": true,
-    "working_dir": "/home/maka/PCBs/Lucca58 (copy)"
+    "working_dir": "/home/maka"
   }
 }
