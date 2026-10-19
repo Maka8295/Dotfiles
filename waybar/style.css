@@ -53,7 +53,17 @@ window#waybar > box {
     border: none;
     border-radius: 0;
     box-shadow: none;
+    text-shadow: none;   /* the GTK theme gives hovered buttons one; the other modules have none */
     transition: none;
+}
+
+/* the same hover square as the other modules (see the hover highlights further down), with
+   the same panel-colour ring as the active square so both are the same size; it comes
+   before .active so the active square keeps its colour under the pointer */
+#workspaces button:hover {
+    background: #463D34;
+    color: #C8B8A0;
+    box-shadow: inset 0 0 0 4px #1A1816;
 }
 
 #workspaces button.active {
@@ -77,13 +87,6 @@ window#waybar > box {
 
 #workspaces button.active:nth-child(4) {
     background: #8F8B81;   /* steel */
-}
-
-#workspaces button:hover {
-    background: #24201C;
-    color: #C8B8A0;
-    /* same panel-colour ring as the active square, so the hover square is the same size */
-    box-shadow: inset 0 0 0 4px #1A1816;
 }
 
 #workspaces button.urgent {
@@ -153,12 +156,34 @@ window#waybar > box {
 }
 
 #custom-cputemp {
-    color: #6E7F5A;
     padding-left: 13px;   /* evens the gap after the screenshot button */
 }
 
-#custom-gputemp {
-    color: #8F8B81;
+/* temperatures: both graded the same, by the class scripts/temp-json.sh gives them
+   (cool <50°C, warm 50+, hot 75+, critical 85+), along the cava bars' ramp. Clay and rust
+   are too dark for text, so the hot levels become inset squares like the hover ones. */
+#custom-cputemp.cool,
+#custom-gputemp.cool {
+    color: #6E7F5A;   /* moss */
+}
+
+#custom-cputemp.warm,
+#custom-gputemp.warm {
+    color: #A88A5B;   /* brass */
+}
+
+#custom-cputemp.hot,
+#custom-gputemp.hot,
+#custom-cputemp.critical,
+#custom-gputemp.critical {
+    color: #C8B8A0;
+    background: #7A5E47;   /* clay */
+    box-shadow: inset 0 0 0 4px #1A1816;
+}
+
+#custom-cputemp.critical,
+#custom-gputemp.critical {
+    background: #7B4A3E;   /* rust */
 }
 
 #battery {
@@ -214,6 +239,21 @@ window#waybar > box {
     background: #7B4A3E;
     color: #C8B8A0;
     box-shadow: inset 0 0 0 4px #1A1816;
+}
+
+/* hover fade, the same as the music / calendar popups' buttons (there it comes from the
+   GTK theme's flat buttons): the highlight eases in over half a second, and goes off at
+   once when the pointer leaves, since the normal states have no transition. Not on the
+   active workspace, so clicking one switches as instantly as the keyboard does. */
+#workspaces button:not(.active):hover,
+#custom-cava:hover,
+#custom-screenshot:hover,
+#custom-lock:hover,
+#custom-suspend:hover,
+#custom-power:hover,
+#pulseaudio:hover,
+menu menuitem:hover {
+    transition: all 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* ---------- tray & tooltips ---------- */

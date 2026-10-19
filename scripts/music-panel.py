@@ -18,8 +18,16 @@ CSS = """
 #artist { color: #9D8E7C; }
 #time, #vol-value { color: #6F675E; font-size: 12px; }
 
-button { font-size: 18px; }
-#play { color: #879376; font-size: 22px; }
+/* Propo: the plain Nerd Font gives icons a one-cell width and lets them spill out to
+   the right, so the hover box sat left of the icon. Fixed size keeps every box square. */
+button {
+    font-family: "FantasqueSansM Nerd Font Propo";
+    font-size: 26px;
+    padding: 4px;
+    min-width: 30px;
+    min-height: 30px;
+}
+#play { color: #879376; font-size: 30px; }
 button.on { color: #A88A5B; }
 #mute.on { color: #7B4A3E; }
 
@@ -132,8 +140,8 @@ class Panel(Popup):
 
         # transport: shuffle | previous, play/pause, next, stop | repeat
         controls = Gtk.Box(spacing=2)
-        self.shuffle = icon_button("\U000f049d", "shuffle", lambda: cmus("-S"))   # nf-md-shuffle_variant
-        self.play = icon_button("", "play", self.toggle_play)
+        self.shuffle = icon_button("\U000f049d", "shuffle", lambda: cmus("-S"))   # nf-md-shuffle
+        self.play = icon_button("\U000f040a", "play", self.toggle_play)          # nf-md-play
         self.repeat = icon_button("\U000f0456", "repeat", lambda: cmus("-R"))     # nf-md-repeat
         controls.pack_start(self.shuffle, False, False, 0)
         controls.set_center_widget(self.centre_controls())
@@ -163,10 +171,10 @@ class Panel(Popup):
 
     def centre_controls(self):
         box = Gtk.Box(spacing=2)
-        box.pack_start(icon_button("", "prev", lambda: cmus("-r")), False, False, 0)
+        box.pack_start(icon_button("\U000f04ae", "prev", lambda: cmus("-r")), False, False, 0)   # nf-md-skip_previous
         box.pack_start(self.play, False, False, 0)
-        box.pack_start(icon_button("", "next", lambda: cmus("-n")), False, False, 0)
-        box.pack_start(icon_button("", "stop", lambda: cmus("-s")), False, False, 0)
+        box.pack_start(icon_button("\U000f04ad", "next", lambda: cmus("-n")), False, False, 0)   # nf-md-skip_next
+        box.pack_start(icon_button("\U000f04db", "stop", lambda: cmus("-s")), False, False, 0)   # nf-md-stop
         return box
 
     def hold(self, scale, on_release):
@@ -228,7 +236,7 @@ class Panel(Popup):
                 self.seek.set_value(position)
             self.elapsed.set_text(fmt_time(self.seek.get_value()))
             self.total.set_text(fmt_time(duration) if info.get("duration") else "")
-            self.play.set_label("" if info.get("status") == "playing" else "")
+            self.play.set_label("\U000f03e4" if info.get("status") == "playing" else "\U000f040a")   # pause / play
             for button, key in ((self.shuffle, "shuffle"), (self.repeat, "repeat")):
                 ctx = button.get_style_context()
                 (ctx.add_class if info["set"].get(key) == "true" else ctx.remove_class)("on")
