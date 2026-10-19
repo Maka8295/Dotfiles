@@ -1,6 +1,6 @@
 {
   "api": {
-    "enable_server": false,
+    "enable_server": true,
     "interpreter_path": "/usr/bin/python3"
   },
   "appearance": {
@@ -488,12 +488,12 @@
         "__geometry": {
           "h": 540,
           "w": 1059,
-          "x": 0,
-          "y": 0
+          "x": 211,
+          "y": 262
         },
-        "wxNotebook_0": "Repository (3)",
-        "wxNotebook_0wxPanel_0wxChoice_0": 1,
-        "wxNotebook_0wxPanel_0wxNotebook_0": "Libraries (1)",
+        "wxNotebook_0": "Repository (130)",
+        "wxNotebook_0wxPanel_0wxChoice_0": 0,
+        "wxNotebook_0wxPanel_0wxNotebook_0": "Plugins (84)",
         "wxNotebook_0wxPanel_0wxNotebook_0wxPanel_0wxSplitterWindow_0": 380,
         "wxNotebook_0wxPanel_0wxNotebook_0wxPanel_0wxSplitterWindow_0wxPanel_0wxScrolledWindow_0": 0,
         "wxNotebook_0wxPanel_0wxNotebook_0wxPanel_0wxSplitterWindow_0wxPanel_0wxSearchCtrl_0": "",
@@ -542,8 +542,8 @@
         "__geometry": {
           "h": 692,
           "w": 1165,
-          "x": 644,
-          "y": 381
+          "x": 86,
+          "y": 334
         },
         "wxPanel_0wxTreebook_0wxPanel_0wxSearchCtrl_0": "",
         "wxPanel_0wxTreebook_0wxPanel_15wxPanel_0wxCheckBox_0": false,
@@ -651,7 +651,7 @@
         "wxPanel_0wxTreebook_0wxPanel_35wxPanel_0wxCheckBox_0": false,
         "wxPanel_0wxTreebook_0wxPanel_35wxPanel_0wxChoice_0": 0,
         "wxPanel_0wxTreebook_0wxPanel_35wxPanel_0wxPanel_0wxScrolledWindow_0": 0,
-        "wxPanel_0wxTreebook_0wxPanel_55wxCheckBox_0": false,
+        "wxPanel_0wxTreebook_0wxPanel_55wxCheckBox_0": true,
         "wxPanel_0wxTreebook_0wxPanel_55wxFilePickerCtrl_0wxTextCtrl_0": "/usr/bin/python3",
         "wxPanel_0wxTreebook_0wxPanel_56wxSpinCtrl_0": 30
       },
@@ -754,21 +754,21 @@
         "__geometry": {
           "h": 354,
           "w": 1033,
-          "x": 0,
-          "y": 0
+          "x": 188,
+          "y": 306
         },
         "wxStaticBox_0wxCheckBox_0": true,
         "wxStaticBox_0wxCheckBox_1": false,
-        "wxStaticBox_0wxComboCtrl_0": "RPD-",
+        "wxStaticBox_0wxComboCtrl_0": "COL2",
         "wxStaticBox_0wxComboCtrl_0wxPopupTransientWindow_0wxPanel_0wxTextCtrl_0": "",
-        "wxStaticBox_1wxBitmapComboBox_0": "F.Cu",
+        "wxStaticBox_1wxBitmapComboBox_0": "B.Cu",
         "wxStaticBox_1wxCheckBox_0": false,
-        "wxStaticBox_1wxChoice_0": 2,
-        "wxStaticBox_1wxTextCtrl_0": 83905448,
-        "wxStaticBox_1wxTextCtrl_1": 103789049,
-        "wxStaticBox_1wxTextCtrl_2": 81931072,
-        "wxStaticBox_1wxTextCtrl_3": 105763425,
-        "wxStaticBox_1wxTextCtrl_4": 270000,
+        "wxStaticBox_1wxChoice_0": 1,
+        "wxStaticBox_1wxTextCtrl_0": 112785000,
+        "wxStaticBox_1wxTextCtrl_1": 129585013,
+        "wxStaticBox_1wxTextCtrl_2": 112785000,
+        "wxStaticBox_1wxTextCtrl_3": 132035000,
+        "wxStaticBox_1wxTextCtrl_4": 300000,
         "wxStaticBox_1wxTextCtrl_5": 0,
         "wxStaticBox_2wxBitmapComboBox_0": "F.Cu",
         "wxStaticBox_2wxBitmapComboBox_1": "B.Cu",
