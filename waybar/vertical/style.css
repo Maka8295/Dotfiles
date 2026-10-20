@@ -63,6 +63,16 @@
     padding-bottom: 2px;
 }
 
+/* The bar is as wide as its widest module, and the clock's width changed with the digits
+   (date 39-51px, time 33-45px in CloisterBlack), so the bar shifted with the date and the
+   minute. A fixed 57px is the volume module's width (the widest of the rest), so the
+   widest date still fits and the bar never changes or grows past what it needs. */
+#clock {
+    padding-left: 0;
+    padding-right: 0;
+    min-width: 57px;
+}
+
 /* volume: two lines of text, so its square is taller, with the same side margins */
 #pulseaudio {
     margin: 2px 8px;
