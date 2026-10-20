@@ -2,4 +2,5 @@
 	(version 7)
 	(lib (name "KiCad") (type "Table") (uri "/usr/share/kicad/template/fp-lib-table") (options "") (descr "KiCad Default Libraries"))
 	(lib (name "PCM_amemb-MountingHole") (type "KiCad") (uri "${KICAD10_3RD_PARTY}/footprints/com_github_american-embedded_library/amemb-MountingHole.pretty") (options "") (descr "Added by Plugin and Content Manager"))
+	(lib (name "parts") (type "KiCad") (uri "${MAKA_PARTS}/parts.pretty") (options "") (descr ""))
 )

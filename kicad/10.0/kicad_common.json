@@ -252,6 +252,37 @@
         "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxScrolledWindow_0wxTextCtrl_8": "In2.Cu",
         "wxPanel_0wxTreebook_0wxPanel_1wxPanel_0wxScrolledWindow_0wxTextCtrl_9": "B.Cu"
       },
+      "Change Footprints": {
+        "__geometry": {
+          "h": 700,
+          "w": 771,
+          "x": 957,
+          "y": 730
+        },
+        "wxPanel_2wxStaticBox_0wxCheckBox_0": true,
+        "wxPanel_2wxStaticBox_0wxCheckBox_1": true,
+        "wxPanel_2wxStaticBox_0wxCheckBox_2": true,
+        "wxPanel_2wxStaticBox_0wxCheckBox_3": true,
+        "wxPanel_2wxStaticBox_0wxCheckBox_4": true,
+        "wxPanel_2wxStaticBox_0wxHtmlWindow_0": 0,
+        "wxRadioButton_0": false,
+        "wxRadioButton_1": false,
+        "wxRadioButton_2": false,
+        "wxRadioButton_3": false,
+        "wxRadioButton_4": true,
+        "wxStaticBox_0wxCheckBox_0": false,
+        "wxStaticBox_0wxCheckBox_1": true,
+        "wxStaticBox_0wxCheckBox_2": true,
+        "wxStaticBox_0wxCheckBox_3": true,
+        "wxStaticBox_0wxCheckBox_4": true,
+        "wxStaticBox_0wxCheckBox_5": true,
+        "wxStaticBox_0wxCheckBox_6": true,
+        "wxStaticBox_0wxCheckBox_7": true,
+        "wxTextCtrl_0": "U9",
+        "wxTextCtrl_1": "MIC2077-1YM",
+        "wxTextCtrl_2": "Package_SO:SOIC-16_4.55x10.3mm_P1.27mm",
+        "wxTextCtrl_3": ""
+      },
       "Change Symbols": {
         "__geometry": {
           "h": 736,
@@ -416,9 +447,9 @@
         "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "SK6812MINI-E",
         "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_0": false,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_0": 0,
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxComboBox_0": "0",
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxTextCtrl_0": 103535000,
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxTextCtrl_1": 100815000,
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxComboBox_0": "45",
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxTextCtrl_0": 133822788,
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxTextCtrl_1": 125021529,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_0": false,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_1": false,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_2": false,
@@ -442,7 +473,7 @@
         "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_2wxTextCtrl_0": "0.000000 mm",
         "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_2wxTextCtrl_1": "0.000000 mm",
         "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_2wxTextCtrl_2": "0.000000 mm",
-        "wxTextCtrl_0": "parts:LED_SK6812MINI-E_3.2x2.8mm_P1.5mm_ReverseMount"
+        "wxTextCtrl_0": "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm"
       },
       "Footprint Reference Properties": {
         "__geometry": {
@@ -915,6 +946,37 @@
         "wxTextCtrl_4": 600000,
         "wxTextCtrl_5": "80"
       },
+      "Update Footprints from Library": {
+        "__geometry": {
+          "h": 673,
+          "w": 761,
+          "x": 962,
+          "y": 743
+        },
+        "wxPanel_2wxStaticBox_0wxCheckBox_0": true,
+        "wxPanel_2wxStaticBox_0wxCheckBox_1": true,
+        "wxPanel_2wxStaticBox_0wxCheckBox_2": true,
+        "wxPanel_2wxStaticBox_0wxCheckBox_3": true,
+        "wxPanel_2wxStaticBox_0wxCheckBox_4": true,
+        "wxPanel_2wxStaticBox_0wxHtmlWindow_0": 0,
+        "wxRadioButton_0": false,
+        "wxRadioButton_1": false,
+        "wxRadioButton_2": false,
+        "wxRadioButton_3": false,
+        "wxRadioButton_4": true,
+        "wxStaticBox_0wxCheckBox_0": false,
+        "wxStaticBox_0wxCheckBox_1": false,
+        "wxStaticBox_0wxCheckBox_2": false,
+        "wxStaticBox_0wxCheckBox_3": false,
+        "wxStaticBox_0wxCheckBox_4": false,
+        "wxStaticBox_0wxCheckBox_5": false,
+        "wxStaticBox_0wxCheckBox_6": true,
+        "wxStaticBox_0wxCheckBox_7": true,
+        "wxTextCtrl_0": "U9",
+        "wxTextCtrl_1": "MIC2077-1YM",
+        "wxTextCtrl_2": "Package_SO:SOIC-16_4.55x10.3mm_P1.27mm",
+        "wxTextCtrl_3": "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm"
+      },
       "Update PCB from Schematic": {
         "__geometry": {
           "h": 686,
@@ -1022,6 +1084,6 @@
     "pdf_viewer_name": "",
     "text_editor": "",
     "use_system_pdf_viewer": true,
-    "working_dir": "/home/maka"
+    "working_dir": "/home/maka/PCBs/shuriken2"
   }
 }
