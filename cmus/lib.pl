@@ -63,6 +63,11 @@
 /home/maka/Music/ds/Fief - VII/Fief - VII - 09 Peasants' Vigil.flac
 /home/maka/Music/ds/Fief - VII/Fief - VII - 10 The Lovelorn Knight.flac
 /home/maka/Music/ds/Fief - VII/Fief - VII - 11 Maiden in Her Trellised Bower.flac
+/home/maka/Music/ds/Tales Under The Oak - The Toad King/Tales Under The Oak - The Toad King - 01 Birth of the Toad King.flac
+/home/maka/Music/ds/Tales Under The Oak - The Toad King/Tales Under The Oak - The Toad King - 02 Ancient Wisdom of the Swamps.flac
+/home/maka/Music/ds/Tales Under The Oak - The Toad King/Tales Under The Oak - The Toad King - 03 Wide Hall's Welcoming Light.flac
+/home/maka/Music/ds/Tales Under The Oak - The Toad King/Tales Under The Oak - The Toad King - 04 Ruler's Crown.flac
+/home/maka/Music/ds/Tales Under The Oak - The Toad King/Tales Under The Oak - The Toad King - 05 Eternal Sleep.flac
 /home/maka/Music/ds/Tales Under The Oak - The Toad King/Tales Under The Oak - The Toad King - 06 Leaving the Frozen Swamp Kingdom.flac
 /home/maka/Music/ds/Tales Under The Oak - Swamp Kingdom/Tales Under The Oak - Swamp Kingdom - 01 Entering the Croaked Forest.flac
 /home/maka/Music/ds/Tales Under The Oak - Swamp Kingdom/Tales Under The Oak - Swamp Kingdom - 02 Secret of the Mushroom Wizard.flac
