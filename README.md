@@ -83,6 +83,7 @@ lock screen and the login screen all share it, along with a soft drop shadow.
 | `scripts/lock.sh` | Locks the screen with hyprlock at the right size: doubles it on 4K, the same as the login screen |
 | `scripts/scratchpad.sh` | Opens Signal, cmus and btop in the scratchpad in a fixed order (safe to rerun) |
 | `scripts/cputemp.sh`, `gputemp.sh` | Temperatures for waybar (AMD, Intel or NVIDIA) |
+| `scripts/temp-panel.py` | Right-click on a temperature: every CPU / GPU sensor and a fan speed slider (with Auto). The fans go through CoolerControl, which needs an access token with Write Access saved in `~/.config/coolercontrol-token` (never in this repo) |
 | `scripts/toggle-audio.sh` | Swaps between my two audio outputs |
 
 ---
@@ -102,7 +103,8 @@ deleted. It:
 3. installs the fonts, the cursor and the GTK theme,
 4. builds the Hyprland border plugin,
 5. installs the login screen and the Signal theme (these two ask for your password),
-6. sets fish as your shell.
+6. turns on CoolerControl's daemon for waybar's fan slider, and says how to make the token it needs,
+7. sets fish as your shell.
 
 At the end it tells you whether to reboot (only when the kernel was updated) or just log out and back
 in to the Hyprland session.

@@ -56,7 +56,8 @@ PACMAN_PKGS=(
     pipewire pipewire-pulse wireplumber pavucontrol
     # apps
     kitty fish neovim btop cava cmus yazi firefox signal-desktop
-    # waybar music panel (scripts/music-panel.py: GTK 3 + layer shell from Python)
+    # waybar popups (scripts/music-panel.py, calendar-panel.py, temp-panel.py: GTK 3 + layer
+    # shell from Python)
     python-gobject gtk3 gtk-layer-shell
     # japanese input
     fcitx5 fcitx5-mozc fcitx5-gtk fcitx5-qt fcitx5-configtool
@@ -67,7 +68,9 @@ PACMAN_PKGS=(
     # building the Hyprland border plugin
     base-devel pkgconf
 )
-AUR_PKGS=(neofetch grimblast-git)   # grimblast-git is in the CachyOS repo, AUR on plain Arch
+# grimblast-git and coolercontrol (the waybar fan slider, with its daemon coolercontrold)
+# are in the CachyOS repo, AUR on plain Arch
+AUR_PKGS=(neofetch grimblast-git coolercontrol)
 
 if [ "$INSTALL_PACKAGES" = 1 ]; then
     # -Syu: refresh the package lists and update the system first (a fresh install
@@ -198,6 +201,31 @@ chmod +x "$DOTFILES"/scripts/*.sh "$DOTFILES"/hypr/plugins/build.sh
 echo "  marked executable"
 if [ "$DOTFILES" != "$HOME/Dotfiles" ]; then
     echo "  WARNING: configs expect this repo at ~/Dotfiles (it is at $DOTFILES)"
+fi
+
+# ---------------------------------------------------------------------------
+section "Fan control"
+# ---------------------------------------------------------------------------
+# The waybar temperature panel (scripts/temp-panel.py) sets fan speeds through CoolerControl's
+# daemon. Its API needs a token that only the CoolerControl app can make, so that step is manual.
+# Not the desktop's motherboard fans: its ITE IT8689E only loads with it87's
+# ignore_resource_conflict=1, and then manual speeds don't work (the CPU fan stops at every
+# setting; frankcrawford/it87 issue #96). Leave it87 unloaded and set those in the BIOS.
+if ! command -v coolercontrold >/dev/null; then
+    echo "  CoolerControl not installed; skipped"
+else
+    if systemctl is-enabled --quiet coolercontrold; then
+        echo "  ok    coolercontrold enabled"
+    else
+        sudo systemctl enable --now coolercontrold && echo "  coolercontrold enabled and started"
+    fi
+    if [ -s "$CONFIG/coolercontrol-token" ]; then
+        echo "  ok    $CONFIG/coolercontrol-token"
+    else
+        echo "  For the fan slider: open CoolerControl (it asks for a new password first), then"
+        echo "  Access Protection > Create Token with Write Access. Copy the token, then run:"
+        echo "    install -m 600 /dev/null $CONFIG/coolercontrol-token && wl-paste -n > $CONFIG/coolercontrol-token"
+    fi
 fi
 
 # ---------------------------------------------------------------------------

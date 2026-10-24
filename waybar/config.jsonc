@@ -102,19 +102,23 @@
     //        //"format-icons": [""],
     //	"interval": 1
   },
+  // right click on either temperature: the temperature panel (scripts/temp-panel.py) with
+  // every CPU / GPU sensor and the fan speed slider
 "custom/cputemp": {
     "exec": "~/Dotfiles/scripts/cputemp.sh",
     "return-type": "json",   // text plus a heat class for style.css (scripts/temp-json.sh)
     "interval": 3,
     "format": "{}",
-    "tooltip": false
+    "tooltip": false,
+    "on-click-right": "python3 ~/Dotfiles/scripts/temp-panel.py",
   },
 "custom/gputemp": {
     "exec": "~/Dotfiles/scripts/gputemp.sh",
     "return-type": "json",   // text plus a heat class for style.css (scripts/temp-json.sh)
     "interval": 3,
     "format": "{}",
-    "tooltip": false
+    "tooltip": false,
+    "on-click-right": "python3 ~/Dotfiles/scripts/temp-panel.py",
   },
   "custom/power": {
     "format": "\u2670",   // the ♰ cross from the fish greeting (same as the login screen)
