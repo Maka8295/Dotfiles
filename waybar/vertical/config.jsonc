@@ -29,4 +29,13 @@
     "format-bluetooth": "{volume}<span font_size='9216'>%</span>\n{icon}\uf294",   // \uf294 = bluetooth icon
     "justify": "center",
   },
+  // the bolt next to the percentage made the bar wider while charging, so it sits on its
+  // own line above it instead
+  "battery": {
+    "format-discharging": "{}%",
+    "format-plugged": "󱐌\n{}%",
+    "format-charging": "󱐌\n{}%",
+    "justify": "center",
+    "interval": 2,
+  },
 }
