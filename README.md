@@ -46,6 +46,7 @@ lock screen and the login screen all share it, along with a soft drop shadow.
 | **rofi** | The launcher (Super+S), framed like everything else; matched letters in moss | `rofi/` |
 | **btop, cmus, Yazi** | Themes in the palette (Yazi's 725 file icons recoloured too) | `btop/themes/`, `cmus/`, `yazi/` |
 | **GTK** | A dungeonOS GTK3 and GTK4 theme (GTK's own dark themes, recoloured) for Nemo, pavucontrol and file dialogs | `gtk/` |
+| **Firefox** | Tabs, toolbar, address bar, menus and panels in the palette, square, with CloisterBlack labels. The selected tab, the focused address bar and every popup get the double-rule frame; the hovered menu row or result gets rofi's band and brass edge. Firefox's own pages (new tab, Settings, Add-ons) are recoloured too, and websites are left alone. Works over any Firefox theme | `firefox/` |
 | **Signal** | Signal Desktop recoloured, re-applied automatically after every Signal update | `signal/` |
 | **KiCad** | A colour theme for the schematic, PCB, footprint, 3D and Gerber views; KiCad's settings live here too. Plus the LCSC Part Finder plugin: a schematic toolbar button that finds the cheapest in-stock LCSC part for a symbol | `kicad/`, `kicad/plugins/` |
 
@@ -102,7 +103,8 @@ deleted. It:
 2. links every config folder into `~/.config`,
 3. installs the fonts, the cursor and the GTK theme,
 4. builds the Hyprland border plugin,
-5. installs the login screen and the Signal theme (these two ask for your password),
+5. installs the login screen and the Signal theme (these two ask for your password), and links the
+   Firefox theme into your Firefox profile (start Firefox once first so the profile exists),
 6. turns on CoolerControl's daemon for waybar's fan slider, and says how to make the token it needs,
 7. sets fish as your shell.
 
@@ -121,6 +123,9 @@ files and can be rebuilt with:
 - `yazi/make-icons.py` (if Yazi adds file types),
 - `kicad/make-theme.py` (to tweak the KiCad colours),
 - `cursor/dungeonOS-cursor-src/build.py` (after editing the cursors).
+
+The Firefox theme is written against Firefox 159. When a Firefox update rearranges its UI, the parts
+it moved go back to Firefox's own look until `firefox/chrome/userChrome.css` is updated to match.
 
 ---
 

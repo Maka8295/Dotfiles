@@ -1,0 +1,520 @@
+/* dungeonOS for Firefox: the browser's own UI (tabs, toolbar, address bar, menus, panels).
+ *
+ * Same palette, type and frame as waybar, rofi and the Hyprland windows:
+ *   bg         #1A1816    fg        #C8B8A0    moss   #6E7F5A
+ *   bg_dark    #141210    fg_muted  #9D8E7C    sage   #879376
+ *   surface    #24201C    comment   #6F675E    brass  #A88A5B
+ *   band       #463D34    border    #7E705D    clay   #7A5E47
+ *   steel      #8F8B81    rust      #7B4A3E    bright #DDD0BD
+ *
+ * The frame is a 1px bronze line around a 3px band. Here it goes on the selected tab, the
+ * focused address bar and every popup, so they read as small waybar panels.
+ * Labels are CloisterBlack; what you type (the address bar) stays in Fantasque Sans Mono.
+ *
+ * Firefox only reads this with toolkit.legacyUserProfileCustomizations.stylesheets = true
+ * (../user.js) and only at startup. Written against Firefox 159 with the "Nova" design.
+ */
+
+:root {
+    --d-bg-dark:  #141210;
+    --d-bg:       #1A1816;
+    --d-surface:  #24201C;
+    --d-band:     #463D34;
+    --d-bronze:   #7E705D;
+    --d-fg:       #C8B8A0;
+    --d-bright:   #DDD0BD;
+    --d-muted:    #9D8E7C;
+    --d-comment:  #6F675E;
+    --d-moss:     #6E7F5A;
+    --d-sage:     #879376;
+    --d-brass:    #A88A5B;
+    --d-brass-hi: #B79B6B;
+    --d-clay:     #7A5E47;
+    --d-steel:    #8F8B81;
+    --d-rust:     #7B4A3E;
+
+    --d-blackletter: "Cloister Black", "CloisterBlack", serif;
+    --d-mono:        "FantasqueSansM Nerd Font", "Fantasque Sans Mono", monospace;
+
+    /* the frame: 1px bronze (a border) + 3px band (an inset shadow inside it) */
+    --d-frame-band: inset 0 0 0 3px var(--d-band);
+    /* the same frame as a border image, for popups: their contents have backgrounds of
+       their own that would cover an inset shadow. Use it with a 4px border. */
+    --d-frame-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9'%3E%3Crect width='9' height='9' fill='%237E705D'/%3E%3Crect x='1' y='1' width='7' height='7' fill='%23463D34'/%3E%3C/svg%3E");
+    --d-drop-shadow: 0 0 2px 0 rgba(26, 26, 26, 0.93), 0 0 4px 1px rgba(26, 26, 26, 0.8),
+                     0 0 8px 0 rgba(26, 26, 26, 0.5);
+}
+
+/* ---------------------------------------------------------------------------------------
+ * Firefox's colour tokens. !important so they also win over an installed AMO theme (those
+ * set their colours inline on the root element) and over the dark/light/system themes.
+ * ------------------------------------------------------------------------------------ */
+:root,
+:root[lwtheme],
+:root[theme-in-app] {
+    color-scheme: dark !important;
+
+    --lwt-header-image: none !important;
+    --lwt-additional-images: none !important;
+    --toolbox-background-image: none !important;
+
+    /* the tab strip, and the toolbars below it */
+    --toolbox-background-color:          var(--d-bg-dark) !important;
+    --toolbox-background-color-inactive: var(--d-bg-dark) !important;
+    --toolbox-text-color:                var(--d-muted) !important;
+    --toolbox-text-color-inactive:       var(--d-comment) !important;
+    --toolbar-background-color:          var(--d-bg) !important;
+    --toolbar-text-color:                var(--d-fg) !important;
+    --toolbar-border:                    var(--d-band) !important;
+    --tabs-navbar-separator-color:       var(--d-band) !important;
+    --tabs-navbar-separator-style:       solid !important;
+    --chrome-content-separator-color:    var(--d-band) !important;
+    --content-area-shadow:               none !important;
+
+    /* toolbar buttons */
+    --toolbarbutton-icon-fill:              var(--d-muted) !important;
+    --toolbarbutton-icon-fill-attention:    var(--d-brass) !important;
+    --toolbarbutton-icon-fill-attention-text: var(--d-bg) !important;
+    --toolbarbutton-background-color-hover: var(--d-band) !important;
+    --toolbarbutton-background-color-active: var(--d-band) !important;
+    --toolbarbutton-border-radius:          0 !important;
+    --toolbarbutton-outline-color:          transparent !important;
+    --toolbarbutton-outline-color-hover:    transparent !important;
+    --toolbarbutton-outline-color-active:   transparent !important;
+
+    /* address bar / search field */
+    --toolbar-field-background-color:       var(--d-bg-dark) !important;
+    --toolbar-field-background-color-focus: var(--d-bg-dark) !important;
+    --toolbar-field-text-color:             var(--d-fg) !important;
+    --toolbar-field-text-color-focus:       var(--d-fg) !important;
+    --toolbar-field-border-color:           var(--d-band) !important;
+    --toolbar-field-border-color-focus:     var(--d-bronze) !important;
+    --urlbar-border-radius:                 0 !important;
+    --urlbar-inner-border-radius:           0 !important;
+    --urlbarview-border-radius:             0 !important;
+    --urlbar-box-background-color:          transparent !important;
+    --urlbar-box-background-color-hover:    var(--d-band) !important;
+    --urlbar-box-background-color-active:   var(--d-band) !important;
+    --urlbar-box-background-color-focus:    transparent !important;
+    --urlbar-box-text-color:                var(--d-muted) !important;
+    --urlbar-box-text-color-hover:          var(--d-fg) !important;
+    --urlbar-box-text-color-active:         var(--d-fg) !important;
+    --urlbar-box-text-color-focus:          var(--d-fg) !important;
+    --urlbarview-background-color-hover:    var(--d-surface) !important;
+    --urlbarview-background-color-selected: var(--d-band) !important;
+    --urlbarview-text-color-selected:       var(--d-fg) !important;
+    --urlbarview-text-color-secondary:      var(--d-muted) !important;
+    --urlbarview-separator-color:           var(--d-band) !important;
+    --urlbarview-text-color-action:         var(--d-sage) !important;
+
+    /* tabs */
+    --tab-border-radius:              0 !important;
+    --tab-background-color:           transparent !important;
+    --tab-background-color-hover:     var(--d-surface) !important;
+    --tab-background-color-selected:  var(--d-bg) !important;
+    --tab-border-color:               transparent !important;
+    --tab-border-color-hover:         transparent !important;
+    --tab-border-color-selected:      var(--d-bronze) !important;
+    --tab-border-color-accent:        var(--d-bronze) !important;
+    --tab-box-shadow-selected:        none !important;
+    --tab-text-color:                 var(--d-muted) !important;
+    --tab-text-color-hover:           var(--d-fg) !important;
+    --tab-text-color-selected:        var(--d-fg) !important;
+    --tab-icon-fill-loading:          var(--d-brass) !important;
+    --tab-attention-dot-color:        var(--d-brass) !important;
+    --tab-selected-color-scheme:      dark !important;
+
+    /* tab group colours, pulled into the palette */
+    --tab-group-gray:   var(--d-steel) !important;
+    --tab-group-blue:   #6F7F8C !important;
+    --tab-group-purple: #7D6A80 !important;
+    --tab-group-cyan:   #6E8580 !important;
+    --tab-group-green:  var(--d-moss) !important;
+    --tab-group-yellow: var(--d-brass) !important;
+    --tab-group-orange: var(--d-clay) !important;
+    --tab-group-red:    var(--d-rust) !important;
+    --tab-group-pink:   #8A6466 !important;
+
+    /* popups: menus, the main menu, extensions, downloads ... */
+    --panel-background-color:           var(--d-bg) !important;
+    --panel-text-color:                 var(--d-fg) !important;
+    --panel-border-color:               var(--d-bronze) !important;
+    --panel-border-radius:              0 !important;
+    --panel-separator-color:            var(--d-band) !important;
+    --panel-menuitem-border-radius:     0 !important;
+    --panel-icon-fill:                  var(--d-muted) !important;
+    --panel-shadow:                     var(--d-drop-shadow) !important;
+    --menuitem-icon-fill:               var(--d-muted) !important;
+
+    /* the design system everything else (buttons, sidebar, dialogs) is drawn from */
+    --background-color-canvas:          var(--d-bg) !important;
+    --background-color-box:             var(--d-bg) !important;
+    --background-color-list-item-hover: var(--d-band) !important;
+    --text-color:                       var(--d-fg) !important;
+    --text-color-deemphasized:          var(--d-muted) !important;
+    --text-color-list-item-hover:       var(--d-fg) !important;
+    --border-color:                     var(--d-band) !important;
+    --border-color-deemphasized:        var(--d-band) !important;
+    --border-color-interactive:         var(--d-bronze) !important;
+    --border-color-selected:            var(--d-brass) !important;
+    --color-accent-primary:             var(--d-brass) !important;
+    --color-accent-primary-hover:       var(--d-brass-hi) !important;
+    --color-accent-primary-active:      var(--d-clay) !important;
+    --color-accent-primary-selected:    var(--d-brass) !important;
+    --text-color-accent-primary-selected: var(--d-bg) !important;
+    --color-accent-attention:           var(--d-brass) !important;
+    --focus-outline-color:              var(--d-brass) !important;
+    --link-color:                       var(--d-brass) !important;
+    --link-color-hover:                 var(--d-brass-hi) !important;
+    --link-color-active:                var(--d-clay) !important;
+    --button-background-color:          var(--d-surface) !important;
+    --button-background-color-hover:    var(--d-band) !important;
+    --button-background-color-active:   var(--d-band) !important;
+    --button-text-color:                var(--d-fg) !important;
+    --button-text-color-hover:          var(--d-fg) !important;
+    --button-text-color-active:         var(--d-fg) !important;
+    --button-background-color-primary:        var(--d-brass) !important;
+    --button-background-color-primary-hover:  var(--d-brass-hi) !important;
+    --button-background-color-primary-active: var(--d-clay) !important;
+    --button-text-color-primary:              var(--d-bg) !important;
+    --button-text-color-primary-hover:        var(--d-bg) !important;
+    --button-text-color-primary-active:       var(--d-bg) !important;
+    --button-border-color:              transparent !important;
+    --button-border-radius:             0 !important;
+    --sidebar-background-color:         var(--d-bg) !important;
+    --sidebar-text-color:               var(--d-fg) !important;
+    --sidebar-border-color:             var(--d-band) !important;
+    --input-background-color:           var(--d-bg-dark) !important;
+    --input-border-color:               var(--d-band) !important;
+    --input-text-color:                 var(--d-fg) !important;
+    --input-border-radius:              0 !important;
+    --input-search-border-radius:       0 !important;
+
+    /* square corners everywhere (but leave real circles alone) */
+    --border-radius-xsmall: 0 !important;
+    --border-radius-small:  0 !important;
+    --border-radius-medium: 0 !important;
+    --border-radius-large:  0 !important;
+    --border-radius-xlarge: 0 !important;
+}
+
+/* ---------------------------------------------------------------------------------------
+ * Toolbox
+ * ------------------------------------------------------------------------------------ */
+#navigator-toolbox {
+    background: var(--d-bg-dark) !important;
+    border-bottom: 1px solid var(--d-band) !important;
+}
+
+#nav-bar,
+#PersonalToolbar {
+    background: var(--d-bg) !important;
+    color: var(--d-fg) !important;
+}
+
+#nav-bar {
+    border-top: 1px solid var(--d-band) !important;
+}
+
+/* ---------------------------------------------------------------------------------------
+ * Tabs
+ * ------------------------------------------------------------------------------------ */
+.tab-label {
+    font-family: var(--d-blackletter) !important;
+    font-size: 17px !important;
+    font-weight: normal !important;   /* CloisterBlack has no bold */
+}
+
+.tab-background {
+    border-radius: 0 !important;
+    border: 1px solid transparent !important;
+    background-image: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* hover: a plain dark square, like the waybar hover */
+.tabbrowser-tab:hover > .tab-stack > .tab-background:not([selected], [multiselected]) {
+    background-color: var(--d-surface) !important;
+}
+
+/* selected: the dungeonOS frame */
+.tab-background:is([selected], [multiselected]) {
+    background-color: var(--d-bg) !important;
+    border-color: var(--d-bronze) !important;
+    box-shadow: var(--d-frame-band) !important;
+}
+
+/* the other tabs selected alongside it (Ctrl+click): a brass rule instead of the band */
+.tab-background[multiselected]:not([selected]) {
+    box-shadow: inset 0 0 0 1px var(--d-band), inset 0 -3px 0 var(--d-brass) !important;
+}
+
+.tabbrowser-tab[selected] .tab-label {
+    color: var(--d-fg) !important;
+}
+
+/* close button: a small square */
+.tab-close-button {
+    border-radius: 0 !important;
+    fill: var(--d-comment) !important;
+}
+.tab-close-button:hover {
+    background-color: var(--d-band) !important;
+    fill: var(--d-fg) !important;
+}
+
+/* playing / muted */
+.tab-audio-button {
+    --button-border-radius: 0;
+}
+
+/* ---------------------------------------------------------------------------------------
+ * Toolbar buttons
+ * ------------------------------------------------------------------------------------ */
+.toolbarbutton-1 > :is(.toolbarbutton-icon, .toolbarbutton-badge-stack, .toolbarbutton-text) {
+    border-radius: 0 !important;
+}
+
+.toolbarbutton-1:not([disabled]):hover {
+    --toolbarbutton-icon-fill: var(--d-fg);
+}
+
+.toolbarbutton-1[open],
+.toolbarbutton-1[checked] {
+    --toolbarbutton-icon-fill: var(--d-brass) !important;
+}
+
+/* ---------------------------------------------------------------------------------------
+ * Address bar
+ * ------------------------------------------------------------------------------------ */
+#urlbar .urlbar-background {
+    border-radius: 0 !important;
+    background-color: var(--d-bg-dark) !important;
+    border: 1px solid var(--d-band) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* focused or showing results: becomes a framed panel */
+#urlbar:is([focused], [open]) .urlbar-background {
+    background-color: var(--d-bg) !important;
+    border-color: var(--d-bronze) !important;
+    box-shadow: var(--d-frame-band), var(--d-drop-shadow) !important;
+}
+
+/* With results showing, Firefox draws the list on its own layer (.urlbarView-background),
+   on top of the lower half of the address bar's. Its sides and bottom carry on the
+   address bar's frame (same x, same widths), so the two read as one framed panel. */
+.urlbarView-background {
+    border-radius: 0 !important;
+    background-color: var(--d-bg) !important;
+    border: 1px solid var(--d-bronze) !important;
+    border-top-color: transparent !important;
+    box-shadow: inset 3px 0 0 var(--d-band), inset -3px 0 0 var(--d-band),
+                inset 0 -3px 0 var(--d-band),
+                0 6px 8px -4px rgba(26, 26, 26, 0.8) !important;
+}
+
+#urlbar-input,
+#urlbar-scheme {
+    font-family: var(--d-mono) !important;
+    font-size: 15px !important;
+    color: var(--d-fg) !important;
+}
+
+#urlbar-input::placeholder {
+    font-family: var(--d-blackletter) !important;
+    font-size: 17px !important;
+    color: var(--d-comment) !important;
+    opacity: 1 !important;
+}
+
+#urlbar-input::selection {
+    background-color: var(--d-band) !important;
+    color: var(--d-bright) !important;
+}
+
+/* the results list */
+.urlbarView {
+    font-family: var(--d-blackletter) !important;
+    font-size: 17px !important;
+}
+
+.urlbarView-url,
+.urlbarView-action {
+    font-family: var(--d-mono) !important;
+    font-size: 13px !important;
+}
+
+.urlbarView-url {
+    color: var(--d-sage) !important;
+}
+
+/* "Switch to Tab" and the like */
+.urlbarView-action {
+    border-radius: 0 !important;
+    border-color: var(--d-band) !important;
+    color: var(--d-sage) !important;
+}
+
+.urlbarView-row,
+.urlbarView-row-inner {
+    border-radius: 0 !important;
+}
+
+/* the selected row: band behind it and a brass edge, the same as rofi (the row paints its
+   band inside its padding, which is where .urlbarView-row-inner sits) */
+.urlbarView-row[selected] > .urlbarView-row-inner {
+    box-shadow: inset 3px 0 0 var(--d-brass) !important;
+}
+
+/* the letters you typed: moss green, as in rofi */
+.urlbarView-title strong,
+.urlbarView-title > strong {
+    color: var(--d-moss) !important;
+    font-weight: normal !important;
+}
+.urlbarView-row[selected] .urlbarView-title strong {
+    color: var(--d-sage) !important;
+}
+
+/* ---------------------------------------------------------------------------------------
+ * Bookmarks toolbar
+ * ------------------------------------------------------------------------------------ */
+#PersonalToolbar {
+    font-family: var(--d-blackletter) !important;
+    font-size: 16px !important;
+}
+
+#PersonalToolbar .toolbarbutton-1,
+#PersonalToolbar toolbarbutton.bookmark-item {
+    border-radius: 0 !important;
+}
+
+toolbarbutton.bookmark-item:not(.subviewbutton):hover {
+    background-color: var(--d-band) !important;
+}
+
+/* ---------------------------------------------------------------------------------------
+ * Menus and panels
+ * ------------------------------------------------------------------------------------ */
+menupopup,
+panel {
+    --panel-background-color: var(--d-bg) !important;
+    --panel-border-color: var(--d-bronze) !important;
+    --panel-border-radius: 0 !important;
+    --panel-padding: 4px !important;
+    --menu-background-color: var(--d-bg) !important;
+    --menu-color: var(--d-fg) !important;
+    --menu-border-color: var(--d-bronze) !important;
+    --menuitem-hover-background-color: var(--d-band) !important;
+    --menu-disabled-color: var(--d-comment) !important;
+    --panel-menuitem-border-radius: 0 !important;
+}
+
+menupopup::part(content),
+panel::part(content) {
+    border-radius: 0 !important;
+    border: 4px solid var(--d-band) !important;
+    border-image: var(--d-frame-image) 4 / 4px stretch !important;
+    background-color: var(--d-bg) !important;
+    color: var(--d-fg) !important;
+}
+
+menupopup,
+.panel-subview-body,
+.panel-header,
+panelview,
+.subviewbutton,
+.toolbarbutton-1.subviewbutton,
+menuitem,
+menu {
+    font-family: var(--d-blackletter) !important;
+    font-size: 17px !important;
+    font-weight: normal !important;
+}
+
+/* items: band behind the hovered row and a brass edge on its left, as in rofi */
+menupopup > :is(menuitem, menu),
+.subviewbutton {
+    border-radius: 0 !important;
+    border-inline-start: 3px solid transparent !important;
+}
+
+menupopup > :is(menuitem, menu):where([_moz-menuactive]:not([disabled])),
+.subviewbutton:not([disabled]):hover,
+.subviewbutton:not([disabled]):focus-visible {
+    background-color: var(--d-band) !important;
+    border-inline-start-color: var(--d-brass) !important;
+    color: var(--d-fg) !important;
+}
+
+menuseparator,
+toolbarseparator {
+    --panel-separator-color: var(--d-band);
+}
+
+/* keyboard shortcuts on the right of menu items */
+.menu-accel,
+.menu-iconic-accel,
+.subviewbutton[shortcut]::after {
+    font-family: var(--d-mono) !important;
+    font-size: 12px !important;
+    color: var(--d-comment) !important;
+}
+
+/* the "Sync your data" card at the top of the main menu */
+#appMenu-fxa-sign-in-promo {
+    background-color: var(--d-surface) !important;
+    border: 1px solid var(--d-band) !important;
+    border-radius: 0 !important;
+    color: var(--d-fg) !important;
+}
+.fxa-menu-sign-in-promo-heading {
+    color: var(--d-brass) !important;
+}
+
+/* ---------------------------------------------------------------------------------------
+ * Tooltips
+ * ------------------------------------------------------------------------------------ */
+tooltip {
+    appearance: none !important;
+    background-color: var(--d-bg) !important;
+    color: var(--d-fg) !important;
+    border: 1px solid var(--d-bronze) !important;
+    border-radius: 0 !important;
+    font-family: var(--d-blackletter) !important;
+    font-size: 16px !important;
+}
+
+/* ---------------------------------------------------------------------------------------
+ * Find bar, sidebar, content edge
+ * ------------------------------------------------------------------------------------ */
+findbar {
+    background: var(--d-bg) !important;
+    border-top: 1px solid var(--d-band) !important;
+    color: var(--d-fg) !important;
+    font-family: var(--d-blackletter) !important;
+    font-size: 16px !important;
+}
+
+/* Nova floats the page on a rounded card with a shadow; make it a plain square cut-out */
+#tabbrowser-tabbox,
+#tabbrowser-tabpanels,
+.browserContainer,
+.browserStack,
+browser[type="content"] {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+#browser,
+#tabbrowser-tabbox {
+    background-color: var(--d-bg-dark) !important;
+}
+
+/* the blank page shown before a site paints (stops the white flash) */
+#tabbrowser-tabpanels {
+    background-color: var(--d-bg) !important;
+}

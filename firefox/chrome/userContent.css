@@ -1,0 +1,282 @@
+/* dungeonOS for Firefox: Firefox's own pages (new tab, Settings, Add-ons, about:*).
+ * Websites are left alone. The browser UI is in userChrome.css; the palette is the same:
+ *
+ *   bg #1A1816  bg_dark #141210  surface #24201C  band #463D34  border #7E705D
+ *   fg #C8B8A0  fg_muted #9D8E7C  comment #6F675E
+ *   moss #6E7F5A  sage #879376  brass #A88A5B  clay #7A5E47  steel #8F8B81  rust #7B4A3E
+ *
+ * Everything here is !important: these pages set the same tokens themselves, and a user
+ * stylesheet only wins over a page's own rules with !important.
+ */
+
+@-moz-document url-prefix("about:") {
+    :root,
+    moz-page-nav,
+    moz-page-nav-button,
+    moz-card,
+    moz-box-item,
+    moz-box-group,
+    moz-toggle,
+    moz-button,
+    moz-message-bar,
+    moz-input-search,
+    moz-input-text,
+    moz-select {
+        --d-bg-dark:  #141210;
+        --d-bg:       #1A1816;
+        --d-surface:  #24201C;
+        --d-band:     #463D34;
+        --d-bronze:   #7E705D;
+        --d-fg:       #C8B8A0;
+        --d-bright:   #DDD0BD;
+        --d-muted:    #9D8E7C;
+        --d-comment:  #6F675E;
+        --d-moss:     #6E7F5A;
+        --d-sage:     #879376;
+        --d-brass:    #A88A5B;
+        --d-brass-hi: #B79B6B;
+        --d-clay:     #7A5E47;
+        --d-rust:     #7B4A3E;
+
+        /* page and text */
+        --background-color-canvas:          var(--d-bg) !important;
+        --background-color-box:             var(--d-surface) !important;
+        --background-color-list-item-hover: var(--d-band) !important;
+        --background-color-overlay:         rgba(20, 18, 16, 0.7) !important;
+        --text-color:                       var(--d-fg) !important;
+        --text-color-deemphasized:          var(--d-muted) !important;
+        --text-color-disabled:              var(--d-comment) !important;
+        --text-color-list-item-hover:       var(--d-fg) !important;
+        --text-color-accent-primary-selected: var(--d-bg) !important;
+        --text-color-error:                 #B0705F !important;
+        --icon-color:                       var(--d-muted) !important;
+        --link-color:                       var(--d-brass) !important;
+        --link-color-hover:                 var(--d-brass-hi) !important;
+        --link-color-active:                var(--d-clay) !important;
+        --link-color-visited:               var(--d-clay) !important;
+
+        /* accents and outlines */
+        --color-accent-primary:          var(--d-brass) !important;
+        --color-accent-primary-hover:    var(--d-brass-hi) !important;
+        --color-accent-primary-active:   var(--d-clay) !important;
+        --color-accent-primary-selected: var(--d-brass) !important;
+        --color-accent-attention:        var(--d-brass) !important;
+        --focus-outline-color:           var(--d-brass) !important;
+        --border-color:                  var(--d-band) !important;
+        --border-color-deemphasized:     var(--d-band) !important;
+        --border-color-interactive:      var(--d-bronze) !important;
+        --border-color-interactive-hover: var(--d-brass) !important;
+        --border-color-interactive-active: var(--d-brass) !important;
+        --border-color-selected:         var(--d-brass) !important;
+
+        /* cards: a surface panel with the band as its edge */
+        --card-background-color: var(--d-surface) !important;
+        --card-border-color:     var(--d-band) !important;
+        --card-border-radius:    0 !important;
+        --card-box-shadow:       none !important;
+        --card-box-shadow-hover: none !important;
+
+        /* buttons */
+        --button-border-radius:             0 !important;
+        --button-background-color:          #332D27 !important;   /* between surface and band */
+        --button-background-color-hover:    var(--d-band) !important;
+        --button-background-color-active:   #5E5246 !important;
+        --button-text-color:                var(--d-fg) !important;
+        --button-text-color-hover:          var(--d-fg) !important;
+        --button-text-color-active:         var(--d-fg) !important;
+        --button-border-color:              transparent !important;
+        --button-background-color-primary:        var(--d-brass) !important;
+        --button-background-color-primary-hover:  var(--d-brass-hi) !important;
+        --button-background-color-primary-active: var(--d-clay) !important;
+        --button-text-color-primary:              var(--d-bg) !important;
+        --button-text-color-primary-hover:        var(--d-bg) !important;
+        --button-text-color-primary-active:       var(--d-bg) !important;
+        --button-border-color-primary:            transparent !important;
+        --button-background-color-ghost-hover:    var(--d-band) !important;
+        --button-background-color-ghost-active:   var(--d-band) !important;
+        --button-background-color-destructive:        var(--d-rust) !important;
+        --button-background-color-destructive-hover:  #8A5748 !important;
+        --button-text-color-destructive:              var(--d-bright) !important;
+
+        /* text fields */
+        --input-background-color:  var(--d-bg-dark) !important;
+        --input-border-color:      var(--d-band) !important;
+        --input-text-color:        var(--d-fg) !important;
+        --input-border-radius:     0 !important;
+        --input-search-border-radius: 0 !important;
+
+        /* the Settings / Add-ons side menu */
+        --page-nav-button-border-radius:             0 !important;
+        --page-nav-button-background-color:          transparent !important;
+        --page-nav-button-background-color-hover:    var(--d-surface) !important;
+        --page-nav-button-background-color-active:   var(--d-band) !important;
+        --page-nav-button-background-color-selected: var(--d-band) !important;
+        --page-nav-button-text-color:                var(--d-muted) !important;
+        --page-nav-button-text-color-hover:          var(--d-fg) !important;
+        --page-nav-button-text-color-active:         var(--d-fg) !important;
+        --page-nav-button-text-color-selected:       var(--d-fg) !important;
+        --page-nav-button-indicator-background-color: var(--d-brass) !important;
+        --page-nav-border-color:                     var(--d-band) !important;
+
+        /* tables (about:config, about:support ...) */
+        --table-background-color:              var(--d-bg) !important;
+        --table-border-color:                  var(--d-band) !important;
+        --table-header-background-color:       var(--d-surface) !important;
+        --table-header-text-color:             var(--d-fg) !important;
+        --table-row-background-color:          var(--d-bg) !important;
+        --table-row-background-color-alternate: var(--d-surface) !important;
+
+        /* square corners */
+        --border-radius-xsmall: 0 !important;
+        --border-radius-small:  0 !important;
+        --border-radius-medium: 0 !important;
+        --border-radius-large:  0 !important;
+        --border-radius-xlarge: 0 !important;
+
+        /* older names some about: pages still use */
+        --in-content-page-background: var(--d-bg) !important;
+        --in-content-page-color:      var(--d-fg) !important;
+        --in-content-box-background:  var(--d-surface) !important;
+        --in-content-box-border-color: var(--d-band) !important;
+        --in-content-border-color:    var(--d-band) !important;
+        --in-content-item-hover:      var(--d-band) !important;
+        --in-content-item-selected:   var(--d-brass) !important;
+        --in-content-accent-color:    var(--d-brass) !important;
+        --in-content-link-color:      var(--d-brass) !important;
+        --in-content-primary-button-background: var(--d-brass) !important;
+        --in-content-primary-button-text-color: var(--d-bg) !important;
+        --in-content-button-background: var(--d-band) !important;
+    }
+
+    ::selection {
+        background-color: var(--d-band) !important;
+        color: var(--d-bright) !important;
+    }
+
+    /* page headings in the desktop's blackletter */
+    h1,
+    .main-heading,
+    .header-name {
+        font-family: "Cloister Black", "CloisterBlack", serif !important;
+        font-weight: normal !important;
+        letter-spacing: 0.02em;
+    }
+
+    /* the side menu in blackletter too, like rofi */
+    moz-page-nav,
+    moz-page-nav-button {
+        font-family: "Cloister Black", "CloisterBlack", serif !important;
+        font-size: 17px !important;
+    }
+}
+
+/* ---------------------------------------------------------------------------------------
+ * New tab / home page
+ * ------------------------------------------------------------------------------------ */
+@-moz-document url("about:home"), url("about:newtab"), url("about:privatebrowsing") {
+    :root,
+    body {
+        --newtab-background-color:            #1A1816 !important;
+        --newtab-background-color-secondary:  #24201C !important;
+        --newtab-background-card:             #24201C !important;
+        --newtab-text-primary-color:          #C8B8A0 !important;
+        --newtab-text-secondary-color:        #9D8E7C !important;
+        --newtab-text-secondary-text:         #9D8E7C !important;
+        --newtab-contextual-text-primary-color: #C8B8A0 !important;
+        --newtab-contextual-text-secondary-color: #9D8E7C !important;
+        --newtab-primary-action-background:   #A88A5B !important;
+        --newtab-primary-action-background-dimmed: rgba(168, 138, 91, 0.25) !important;
+        --newtab-primary-action-background-pocket: #A88A5B !important;
+        --newtab-primary-element-text-color:  #1A1816 !important;
+        --newtab-element-hover-color:         #463D34 !important;
+        --newtab-element-active-color:        #54493E !important;
+        --newtab-element-secondary-color:     #24201C !important;
+        --newtab-element-secondary-hover-color: #463D34 !important;
+        --newtab-element-secondary-active-color: #54493E !important;
+        --newtab-button-static-background:    #24201C !important;
+        --newtab-button-static-hover-background: #463D34 !important;
+        --newtab-button-static-active-background: #54493E !important;
+        --newtab-button-focus-border:         #A88A5B !important;
+        --newtab-wordmark-color:              #C8B8A0 !important;
+        --newtab-weather-background-color:    #24201C !important;
+        --newtab-overlay-color:               rgba(20, 18, 16, 0.85) !important;
+        --newtab-section-card-box-shadow-color: transparent !important;
+        --newtab-border-radius-card: 0 !important;
+        --lists-button-background:        #A88A5B !important;
+        --lists-button-background-hover:  #B79B6B !important;
+        --lists-button-background-active: #7A5E47 !important;
+        --lists-button-text-color:        #1A1816 !important;
+        --newtab-border-radius: 0 !important;
+    }
+
+    body {
+        background-color: #1A1816 !important;
+    }
+
+    /* the search box: a framed panel, the same frame as the address bar when it is focused */
+    .search-wrapper .search-inner-wrapper,
+    .search-handoff-button,
+    .fake-textbox,
+    .search-wrapper input {
+        border-radius: 0 !important;
+    }
+
+    .search-handoff-button {
+        background-color: #141210 !important;
+        border: 1px solid #463D34 !important;
+        box-shadow: none !important;
+    }
+
+    .search-handoff-button:hover,
+    .search-wrapper.fake-focus .search-handoff-button {
+        border-color: #7E705D !important;
+        box-shadow: inset 0 0 0 3px #463D34 !important;
+    }
+
+    .fake-textbox,
+    .search-wrapper input::placeholder {
+        font-family: "Cloister Black", "CloisterBlack", serif !important;
+        font-size: 19px !important;
+        color: #6F675E !important;
+    }
+
+    /* shortcuts (top sites): square tiles, the band behind the hovered one */
+    .top-site-outer .tile,
+    .top-site-outer .top-site-icon,
+    .top-site-outer .screenshot,
+    .top-site-outer .top-site-inner > a,
+    .top-site-outer:is(:hover, :focus-within) .tile,
+    .top-site-outer .context-menu-button,
+    .ds-card,
+    .card-outer,
+    .card-outer .card,
+    .card-outer .card-preview-image-outer,
+    .weather .weatherCard,
+    .context-menu,
+    .context-menu > ul > li > button {
+        border-radius: 0 !important;
+    }
+
+    .top-site-outer .tile {
+        background-color: #24201C !important;
+        box-shadow: none !important;
+        outline: 1px solid #463D34 !important;
+    }
+
+    .top-site-outer:is(:hover, :focus-within) .tile {
+        outline-color: #7E705D !important;
+        box-shadow: inset 0 0 0 3px #463D34 !important;
+    }
+
+    .top-site-outer .title,
+    .top-site-outer .title span {
+        font-family: "Cloister Black", "CloisterBlack", serif !important;
+        font-size: 15px !important;
+        color: #9D8E7C !important;
+    }
+
+    /* the Firefox wordmark above the search box */
+    .logo-and-wordmark .wordmark {
+        fill: #C8B8A0 !important;
+    }
+}

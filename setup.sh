@@ -258,6 +258,16 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+section "Firefox theme"
+# ---------------------------------------------------------------------------
+# chrome/ (userChrome.css, userContent.css) and user.js, linked into the profile Firefox starts with
+if command -v firefox >/dev/null; then
+    "$DOTFILES/firefox/install.sh" || echo "  Firefox theme failed; run firefox/install.sh later"
+else
+    echo "  Firefox not installed; skipped"
+fi
+
+# ---------------------------------------------------------------------------
 section "KiCad plugins"
 # ---------------------------------------------------------------------------
 # kicad/plugins (the LCSC Part Finder) is linked as a whole folder so that a backup of an old
