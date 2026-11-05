@@ -254,10 +254,18 @@
     color: var(--d-fg) !important;
 }
 
-/* close button: a small square */
+/* close button: a small square. Its hover square is the frame's own colour, so it sits 2px clear
+ * of the frame on every side: a 16px square, drawn inside a transparent border that keeps the
+ * 20px click target. (A collapsed vertical tab strip has its own smaller button, left alone.) */
 .tab-close-button {
     border-radius: 0 !important;
     fill: var(--d-comment) !important;
+}
+#tabbrowser-tabs:is([orient="horizontal"], [expanded]) .tab-close-button {
+    margin-inline-end: -2px !important;
+    border: 2px solid transparent !important;
+    padding: 2px !important;
+    background-clip: padding-box !important;
 }
 .tab-close-button:hover {
     background-color: var(--d-band) !important;
