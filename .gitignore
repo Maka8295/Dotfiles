@@ -1,2 +1,4 @@
 __pycache__/
 fcitx5/conf/cached_layouts
+# fontconfig writes one into every font folder (fc-cache)
+.uuid
