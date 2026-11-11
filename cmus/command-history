@@ -1,10 +1,10 @@
-add ~/Music/ds
-clear
-add ~/Music/nometal
 add ~/Music/ds/
-add ~/Music/nometal/2025NewMusic/
+clear
 add ~/Music/
+add ~/Music/ds
 add ~/Music/metal
+add ~/Music/nometal
+add ~/Music/nometal/2025NewMusic/
 add ~/Music/metal/
 clear all
 add ~/Music

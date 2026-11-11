@@ -164,15 +164,15 @@
         },
         "wxNotebook_0": "General",
         "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0": "0 1 2 3 4 5 6 7",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0": "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "R48",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0": "parts:hotswap_reversible",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "parts:hotswap_reversible",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "SW29",
         "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_1": "",
         "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_0": false,
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_1": true,
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_1": false,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_0": -1,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_1": -1,
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_2": 0,
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_2": 2,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_3": 0,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_0": false,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_1": false,
@@ -182,7 +182,7 @@
         "wxNotebook_0wxPanel_1wxGrid_0": "0 1 2 3 4",
         "wxNotebook_0wxPanel_2wxCheckBox_0": false,
         "wxNotebook_0wxPanel_2wxGrid_0": "0 1",
-        "wxTextCtrl_0": "PCM_JLCPCB-Resistors:0805,51kΩ"
+        "wxTextCtrl_0": "Switch:SW_Push"
       },
       "Board Setup": {
         "__geometry": {
@@ -864,14 +864,14 @@
         },
         "wxNotebook_0": "General",
         "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0": "0 1 2 3 4 5 7",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0": "http://www.mouser.com/ds/2/268/22090a-52174.pdf",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "http://www.mouser.com/ds/2/268/22090a-52174.pdf",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0": "https://datasheet.lcsc.com/datasheet/pdf/bc5e7877266d415ca8ece03f4a021f3e.pdf?productCode=C32854",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "https://datasheet.lcsc.com/datasheet/pdf/bc5e7877266d415ca8ece03f4a021f3e.pdf?productCode=C32854",
         "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "VISHAY TSOP38238",
         "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_0": false,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_0": 0,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxComboBox_0": "0",
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxTextCtrl_0": 86930000,
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxTextCtrl_1": 186810000,
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxTextCtrl_0": 221834999,
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxTextCtrl_1": 120670007,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_0": false,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_1": false,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_2": false,
@@ -892,10 +892,10 @@
         "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_1wxTextCtrl_0": "0.00°",
         "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_1wxTextCtrl_1": "0.00°",
         "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_1wxTextCtrl_2": "0.00°",
-        "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_2wxTextCtrl_0": "0.000000 mm",
-        "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_2wxTextCtrl_1": "0.000000 mm",
+        "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_2wxTextCtrl_0": "-3.400000 mm",
+        "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_2wxTextCtrl_1": "4.760001 mm",
         "wxNotebook_0wxPanel_3wxSplitterWindow_0wxPanel_1wxPanel_0wxStaticBox_2wxTextCtrl_2": "0.000000 mm",
-        "wxTextCtrl_0": "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+        "wxTextCtrl_0": "parts:D_SOD-123_reversible"
       },
       "Footprint Reference Properties": {
         "__geometry": {
@@ -1286,6 +1286,29 @@
         "wxPanel_0wxTreebook_0wxPanel_55wxFilePickerCtrl_0wxTextCtrl_0": "/usr/bin/python3",
         "wxPanel_0wxTreebook_0wxPanel_56wxSpinCtrl_0": 30
       },
+      "Rule Area PropertiesSchematicFrame": {
+        "__geometry": {
+          "h": 340,
+          "w": 687,
+          "x": 947,
+          "y": 477
+        },
+        "wxBitmapComboBox_0": "Dashed",
+        "wxBookCtrlBase_0wxPanel_0wxChoice_0": 0,
+        "wxBookCtrlBase_0wxPanel_1wxStaticBox_0wxRadioButton_0": true,
+        "wxBookCtrlBase_0wxPanel_1wxStaticBox_0wxRadioButton_1": false,
+        "wxBookCtrlBase_0wxPanel_1wxStaticBox_0wxRadioButton_2": false,
+        "wxBookCtrlBase_0wxPanel_1wxStaticBox_0wxRadioButton_3": false,
+        "wxCheckBox_0": false,
+        "wxCheckBox_1": true,
+        "wxCheckBox_2": true,
+        "wxCheckBox_3": true,
+        "wxCheckBox_4": true,
+        "wxCheckBox_5": false,
+        "wxCheckBox_6": false,
+        "wxCheckBox_7": false,
+        "wxTextCtrl_0": 0
+      },
       "Schematic Setup": {
         "__geometry": {
           "h": 606,
@@ -1365,15 +1388,17 @@
         },
         "wxNotebook_0": "General",
         "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0": "0 1 2 3 4 5 6 7",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0": "https://www.ti.com.cn/cn/lit/ds/symlink/tps56a37.pdf?ts=1739433904040&ref_url=https%253A%252F%252Fwww.ti.com.cn%252Fsitesearch%252Fzh-cn%252Fdocs%252Funiversalsearch.tsp%253FlangPref%253Dzh-CN%2526nr%253D12%2526searchTerm%253DTPS56A37RPAR",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "https://www.ti.com.cn/cn/lit/ds/symlink/tps56a37.pdf?ts=1739433904040&ref_url=https%253A%252F%252Fwww.ti.com.cn%252Fsitesearch%252Fzh-cn%252Fdocs%252Funiversalsearch.tsp%253FlangPref%253Dzh-CN%2526nr%253D12%2526searchTerm%253DTPS56A37RPAR",
-        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "C27",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0": "parts:hotswap_reversible",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_0wxTextCtrl_0": "parts:hotswap_reversible",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_1": "http://www.mouser.com/ds/2/268/22090a-52174.pdf",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxComboCtrl_1wxTextCtrl_0": "http://www.mouser.com/ds/2/268/22090a-52174.pdf",
+        "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_0": "SW28",
         "wxNotebook_0wxPanel_0wxStaticBox_0wxGrid_0wxWindow_3wxTextCtrl_1": "200mA, Adjustable, Ultralow Noise, Ultrahigh PSRR RF Linear Regulator, MSOP-10",
         "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_0": false,
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_1": true,
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxCheckBox_1": false,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_0": -1,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_1": -1,
-        "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_2": 0,
+        "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_2": 2,
         "wxNotebook_0wxPanel_0wxStaticBox_1wxChoice_3": 0,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_0": false,
         "wxNotebook_0wxPanel_0wxStaticBox_2wxCheckBox_1": false,
@@ -1383,7 +1408,29 @@
         "wxNotebook_0wxPanel_1wxGrid_0": "0 1 2 3 4",
         "wxNotebook_0wxPanel_2wxCheckBox_0": false,
         "wxNotebook_0wxPanel_2wxGrid_0": "0 1",
-        "wxTextCtrl_0": "PCM_JLCPCB-Capacitors:0805,10uF"
+        "wxTextCtrl_0": "Switch:SW_Push"
+      },
+      "Text Box PropertiesSchematicFrame": {
+        "__geometry": {
+          "h": 475,
+          "w": 740,
+          "x": 84,
+          "y": 482
+        },
+        "wxBitmapComboBox_0": "Solid",
+        "wxCheckBox_0": false,
+        "wxCheckBox_1": true,
+        "wxCheckBox_2": false,
+        "wxCheckBox_3": false,
+        "wxCheckBox_4": false,
+        "wxCheckBox_5": false,
+        "wxCheckBox_6": false,
+        "wxOwnerDrawnComboBox_0": 0,
+        "wxOwnerDrawnComboBox_0wxTextCtrl_0": "Default Font",
+        "wxOwnerDrawnComboBox_1": -1,
+        "wxOwnerDrawnComboBox_1wxTextCtrl_0": "",
+        "wxTextCtrl_0": 12700,
+        "wxTextCtrl_1": 0
       },
       "Text Properties": {
         "__geometry": {
@@ -1392,19 +1439,19 @@
           "x": 830,
           "y": 244
         },
-        "wxBitmapComboBox_0": "F.Silkscreen",
+        "wxBitmapComboBox_0": "User.Comments",
         "wxCheckBox_0": false,
         "wxCheckBox_1": false,
         "wxCheckBox_2": false,
         "wxCheckBox_3": false,
         "wxComboBox_0": "0",
-        "wxOwnerDrawnComboBox_0": 723,
-        "wxOwnerDrawnComboBox_0wxTextCtrl_0": "scientifica",
+        "wxOwnerDrawnComboBox_0": 0,
+        "wxOwnerDrawnComboBox_0wxTextCtrl_0": "KiCad Font",
         "wxTextCtrl_0": "",
-        "wxTextCtrl_1": 1000000,
-        "wxTextCtrl_2": 1000000,
-        "wxTextCtrl_3": 99172651,
-        "wxTextCtrl_4": 83711105,
+        "wxTextCtrl_1": 1500000,
+        "wxTextCtrl_2": 1500000,
+        "wxTextCtrl_3": 411810000,
+        "wxTextCtrl_4": 151040000,
         "wxTextCtrl_5": 300000
       },
       "Text PropertiesSchematicFrame": {
@@ -1426,7 +1473,7 @@
         "wxOwnerDrawnComboBox_0wxTextCtrl_0": "scientifica",
         "wxOwnerDrawnComboBox_1": -1,
         "wxOwnerDrawnComboBox_1wxTextCtrl_0": "",
-        "wxTextCtrl_0": 25400,
+        "wxTextCtrl_0": 80000,
         "wxTextCtrl_1": 0
       },
       "Track & Via Properties": {
@@ -1434,20 +1481,20 @@
           "h": 354,
           "w": 1033,
           "x": 188,
-          "y": 306
+          "y": 278
         },
         "wxStaticBox_0wxCheckBox_0": true,
         "wxStaticBox_0wxCheckBox_1": false,
-        "wxStaticBox_0wxComboCtrl_0": "OSCO",
+        "wxStaticBox_0wxComboCtrl_0": "ROW2",
         "wxStaticBox_0wxComboCtrl_0wxPopupTransientWindow_0wxPanel_0wxTextCtrl_0": "",
         "wxStaticBox_1wxBitmapComboBox_0": "F.Cu",
         "wxStaticBox_1wxCheckBox_0": false,
-        "wxStaticBox_1wxChoice_0": 0,
-        "wxStaticBox_1wxTextCtrl_0": 77332788,
-        "wxStaticBox_1wxTextCtrl_1": 122214049,
-        "wxStaticBox_1wxTextCtrl_2": 77332788,
-        "wxStaticBox_1wxTextCtrl_3": 119964049,
-        "wxStaticBox_1wxTextCtrl_4": 200000,
+        "wxStaticBox_1wxChoice_0": 6,
+        "wxStaticBox_1wxTextCtrl_0": 110520000,
+        "wxStaticBox_1wxTextCtrl_1": 92410013,
+        "wxStaticBox_1wxTextCtrl_2": 110520000,
+        "wxStaticBox_1wxTextCtrl_3": 97230013,
+        "wxStaticBox_1wxTextCtrl_4": 800000,
         "wxStaticBox_1wxTextCtrl_5": 0,
         "wxStaticBox_2wxBitmapComboBox_0": "F.Cu",
         "wxStaticBox_2wxBitmapComboBox_1": "B.Cu",
@@ -1543,7 +1590,7 @@
         "wxPanel_0wxStaticBox_0wxCheckBox_2": true,
         "wxPanel_0wxStaticBox_0wxCheckBox_3": true,
         "wxPanel_0wxStaticBox_0wxCheckBox_4": true,
-        "wxPanel_0wxStaticBox_0wxHtmlWindow_0": 321,
+        "wxPanel_0wxStaticBox_0wxHtmlWindow_0": 200,
         "wxStaticBox_0wxCheckBox_0": false,
         "wxStaticBox_0wxCheckBox_1": false,
         "wxStaticBox_0wxCheckBox_2": false,
@@ -1649,6 +1696,6 @@
     "pdf_viewer_name": "",
     "text_editor": "",
     "use_system_pdf_viewer": true,
-    "working_dir": "/home/maka/PCBs/Badge2026"
+    "working_dir": "/home/maka/PCBs/lazydragon64"
   }
 }
