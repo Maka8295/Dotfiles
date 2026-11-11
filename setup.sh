@@ -56,6 +56,8 @@ PACMAN_PKGS=(
     pipewire pipewire-pulse wireplumber pavucontrol
     # apps
     kitty fish neovim btop cava cmus yazi firefox signal-desktop
+    # Nemo, and what it needs to extract archives on double-click (scripts/extract-here.sh)
+    nemo file-roller 7zip unrar unzip xdg-utils
     # waybar popups (scripts/music-panel.py, calendar-panel.py, temp-panel.py: GTK 3 + layer
     # shell from Python)
     python-gobject gtk3 gtk-layer-shell
@@ -201,6 +203,73 @@ chmod +x "$DOTFILES"/scripts/*.sh "$DOTFILES"/hypr/plugins/build.sh
 echo "  marked executable"
 if [ "$DOTFILES" != "$HOME/Dotfiles" ]; then
     echo "  WARNING: configs expect this repo at ~/Dotfiles (it is at $DOTFILES)"
+fi
+
+# ---------------------------------------------------------------------------
+section "File associations"
+# ---------------------------------------------------------------------------
+# Double-click in Nemo: archives extract next to themselves, text opens in nvim.
+mkdir -p "$DATA/applications"
+
+# nvim's own launcher says Terminal=true, which GLib can't follow here: kitty isn't one of the
+# terminals it looks for. Made from the installed launcher, so it follows nvim updates; delete
+# ~/.local/share/applications/nvim.desktop to undo. The +cd starts nvim in the file's folder
+# (silent! because there is no file when it's opened from a launcher).
+if [ -e /usr/share/applications/nvim.desktop ]; then
+    sed -e 's|^Exec=.*|Exec=kitty nvim "+silent! cd %%:p:h" %F|' -e 's/^Terminal=true/Terminal=false/' \
+        /usr/share/applications/nvim.desktop > "$DATA/applications/nvim.desktop"
+    echo "  nvim launcher (runs in kitty)"
+fi
+
+# NoDisplay: only a file handler, so it stays out of rofi and fuzzel
+cat > "$DATA/applications/extract-here.desktop" <<EOF
+[Desktop Entry]
+Type=Application
+Name=Extract Here
+Comment=Extract archives into the folder they are in
+Exec=$DOTFILES/scripts/extract-here.sh %F
+Icon=org.gnome.FileRoller
+Terminal=false
+NoDisplay=true
+EOF
+echo "  extract-here launcher"
+
+# Merged into ~/.config/mimeapps.list instead of linked: Discord and others write to that file,
+# and GLib replaces a link when it does.
+# Keep in step with the types in scripts/extract-here.sh. Formats that are zips underneath (.docx,
+# .epub, ...) inherit this default too, and that script sends them to File Roller.
+ARCHIVE_TYPES=(
+    application/zip application/x-7z-compressed application/vnd.rar
+    application/x-tar application/x-tarz application/x-tzo
+    application/x-compressed-tar application/x-bzip1-compressed-tar application/x-bzip2-compressed-tar
+    application/x-bzip3-compressed-tar application/x-xz-compressed-tar application/x-zstd-compressed-tar
+    application/x-lz4-compressed-tar application/x-lzma-compressed-tar application/x-lzip-compressed-tar
+    application/x-lrzip-compressed-tar application/x-brotli-compressed-tar
+    application/gzip application/zstd application/x-xz application/x-bzip1 application/x-bzip2
+    application/x-lz4 application/x-lzma application/x-lzip application/x-lzop application/x-lrzip
+    application/x-brotli application/x-compress
+)
+# The first line covers nearly everything by inheritance. The rest are named because an installed
+# app (micro, kitty, Firefox) claims them directly, or because they inherit from nothing.
+NVIM_TYPES=(
+    text/plain application/json application/xml application/x-zerosize
+    application/rdf+xml application/rss+xml application/sql application/x-perl application/x-php
+    text/css text/jscript.encode text/tcl text/x-awk text/x-c++hdr text/x-c++src text/x-chdr
+    text/x-csh text/x-csrc text/x-devicetree-binary text/x-dsrc text/x-gawk text/x-gcode-gx
+    text/x-gradle text/x-java text/x-makefile text/x-moc text/x-mof text/x-nawk text/x-opencl-c++src
+    text/x-opencl-csrc text/x-pascal text/x-patch text/x-python text/x-python2 text/x-python3
+    text/x-sagemath text/x-scons text/x-sed text/x-shellscript text/x-tex text/x-vpy
+)
+# These would otherwise inherit nvim from application/xml
+FIREFOX_TYPES=(text/html application/xhtml+xml image/svg+xml)
+
+if command -v xdg-mime >/dev/null; then
+    xdg-mime default extract-here.desktop "${ARCHIVE_TYPES[@]}"
+    xdg-mime default nvim.desktop "${NVIM_TYPES[@]}"
+    xdg-mime default firefox.desktop "${FIREFOX_TYPES[@]}"
+    echo "  default apps set"
+else
+    echo "  xdg-mime not found; default apps not set"
 fi
 
 # ---------------------------------------------------------------------------
