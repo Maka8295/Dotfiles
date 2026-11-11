@@ -90,3 +90,16 @@
     margin: 2px 1px;
     padding: 8px 6px;
 }
+
+/* Waybar 0.16+ puts a custom module's label inside a box that only gives it its natural
+   width at the left, so the custom icons and temperatures sat left of centre (built-in
+   modules like the clock still fill the bar). Each min-width makes the label fill the
+   57px panel again, so the text centres in it as before:
+   57 - side margins - side paddings (set above). */
+#custom-screenshot { min-width: 25px; }   /* 57 - 10 - 10 - 2 - 10 */
+#custom-lock       { min-width: 24px; }   /* 57 - 10 - 10 - 5 - 8  */
+#custom-suspend    { min-width: 24px; }   /* 57 - 10 - 10 - 3 - 10 */
+#custom-power      { min-width: 25px; }   /* 57 - 10 - 10 - 6 - 6  */
+#custom-cputemp,
+#custom-gputemp    { min-width: 45px; }   /* 57 - 0 - 0 - 6 - 6    */
+#custom-cava       { min-width: 43px; }   /* 57 - 1 - 1 - 6 - 6    */
