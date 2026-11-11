@@ -102,7 +102,7 @@ deleted. It:
 1. installs the packages (`pacman -Syu`, plus `paru` for AUR ones),
 2. links every config folder into `~/.config`,
 3. installs the fonts, the cursor and the GTK theme,
-4. builds the Hyprland border plugin,
+4. builds the Hyprland border plugin (only when it is missing or Hyprland changed),
 5. installs the login screen and the Signal theme (these two ask for your password), and links the
    Firefox theme into your Firefox profile (start Firefox once first so the profile exists),
 6. turns on CoolerControl's daemon for waybar's fan slider, and says how to make the token it needs,
@@ -115,8 +115,10 @@ in to the Hyprland session.
 pixel art stays crisp; any other monitor gets its best mode and automatic scale. The login screen
 doubles its size on 4K, and btop picks a smaller font on smaller screens.
 
-**After updates:** the border plugin is compiled for one exact Hyprland version, so rerun
-`hypr/plugins/build.sh` after updating Hyprland. Several themes are generated from the apps' own
+**After updates:** the border plugin is compiled for one exact Hyprland version. After updating
+Hyprland, rerun `setup.sh` (it rebuilds the plugin only when it no longer matches) or
+`hypr/plugins/build.sh`; otherwise Hyprland shows "unknown config key 'plugin.borders_plus_plus...'"
+errors at the top of the screen. Several themes are generated from the apps' own
 files and can be rebuilt with:
 
 - `gtk/make-theme.py` (after a GTK update),

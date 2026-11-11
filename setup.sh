@@ -300,9 +300,11 @@ fi
 # ---------------------------------------------------------------------------
 section "Hyprland plugins"
 # ---------------------------------------------------------------------------
-# borders-plus-plus is compiled for the installed Hyprland; rerun build.sh after Hyprland updates
+# borders-plus-plus is compiled for one exact Hyprland build, so it is rebuilt when it is missing
+# or the packages above updated Hyprland, and left alone otherwise. To rebuild it by hand after
+# updating some other way (paru, pacman -Syu): rerun this, or run build.sh.
 if command -v Hyprland >/dev/null; then
-    "$DOTFILES/hypr/plugins/build.sh" || echo "  plugin build failed; Hyprland will fall back to the plain border"
+    "$DOTFILES/hypr/plugins/build.sh" --if-needed || echo "  plugin build failed; Hyprland will fall back to the plain border"
 else
     echo "  Hyprland not installed; skipped"
 fi
