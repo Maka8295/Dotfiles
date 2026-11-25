@@ -256,6 +256,11 @@ hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), { locked = true, repeating = true })
 hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
 
+-- Music: the media keys drive cmus (the Lazy Dragon's top-left two keys, and Play/Prev/Next on FN)
+hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("cmus-remote -u"), { locked = true })
+hl.bind("XF86AudioNext", hl.dsp.exec_cmd("cmus-remote -n"), { locked = true })
+hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("cmus-remote -r"), { locked = true })
+
 -- Macro for bluetooth <-> DAC
 hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("~/Dotfiles/scripts/toggle-audio.sh"))
 
