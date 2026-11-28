@@ -32,10 +32,17 @@ HL_COMMIT=$(Hyprland --version | grep -oE 'at commit [0-9a-f]{40}' | awk '{print
 HL_VERSION=$(pkg-config --modversion hyprland)
 echo "Hyprland $HL_VERSION ($HL_COMMIT)"
 
-# Each .so carries the commit of the Hyprland it was built against (the same one Hyprland checks
-# when loading it), so a plugin is current when that commit is in the file.
+# The key Hyprland compares when loading a plugin: the commit PLUS major.minor of aquamarine,
+# hyprutils, hyprgraphics, hyprcursor and hyprlang. A package rebuild against a new library
+# (e.g. hyprland 0.57.2-1 -> 0.57.2-2 for hyprgraphics 0.7) keeps the commit but changes this,
+# and the old .so is refused with "[bpp] Version mismatch".
+abi_of() { sed -n 's/^Version ABI string: //p'; }
+HL_ABI=$(Hyprland --version | abi_of)
+HL_ABI=${HL_ABI:-$HL_COMMIT}   # older Hyprland without an ABI string: the commit was the key
+
+# Each build records the key it was built for next to the .so.
 is_current() {
-    [ -n "$HL_COMMIT" ] && grep -qaF "$HL_COMMIT" "$OUT/$1.so" 2>/dev/null
+    [ -n "$HL_ABI" ] && [ -f "$OUT/$1.so" ] && [ "$(cat "$OUT/$1.so.abi" 2>/dev/null)" = "$HL_ABI" ]
 }
 
 # Load the plugins into the running Hyprland. hyprctl reload doesn't do it: it skips a plugin that
@@ -43,7 +50,12 @@ is_current() {
 load_plugins() {
     [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ] || return 0
     # right after an update the session is still running the old Hyprland, which refuses them
-    if ! hyprctl version 2>/dev/null | grep -qF "$HL_COMMIT"; then
+    # (same commit isn't enough: a package rebuild against new libraries changes the ABI key)
+    local info running
+    info=$(hyprctl version 2>/dev/null || true)
+    running=$(abi_of <<<"$info")
+    [ -n "$running" ] || running=$(grep -oE 'at commit [0-9a-f]{40}' <<<"$info" | awk '{print $3}' || true)
+    if [ "$running" != "$HL_ABI" ]; then
         echo "The running Hyprland is an older build: log out and back in to load the plugins."
         return 0
     fi
@@ -97,6 +109,7 @@ for plugin in "${PLUGINS[@]}"; do
     echo "Building $plugin..."
     make -C "$SRC/$plugin" all >/dev/null
     install -m 755 "$SRC/$plugin/$plugin.so" "$OUT/$plugin.so"
+    echo "$HL_ABI" > "$OUT/$plugin.so.abi"
     echo "  -> $OUT/$plugin.so"
 done
 
